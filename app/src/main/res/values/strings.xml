@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">HSPM</string>
+    <string name="log_in">LOG IN</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="todo">TODO</string>
+    <string name="register">REGISTER</string>
+    <string name="name">Name</string>
+    <string name="phone_no">Phone No</string>
+    <string name="already_a_member_login_here">Already a member? Login Here</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="dont_have_an_account_sign_up">Dont have an account? Sign Up</string>
 </resources>
