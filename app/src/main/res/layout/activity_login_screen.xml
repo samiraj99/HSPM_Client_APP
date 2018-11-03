@@ -154,7 +154,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/button_signin"
+                android:id="@+id/button_signIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativeLayout3"
@@ -169,7 +169,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_below="@+id/button_signin"
+                android:layout_below="@+id/button_signIn"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"

@@ -5,9 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-public class SignUp_Screen extends AppCompatActivity {
+public class SignUpScreen extends AppCompatActivity {
 
     //TV = TextView
     //BT = Button
@@ -20,7 +19,7 @@ public class SignUp_Screen extends AppCompatActivity {
         BT_LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent LogIn = new Intent(SignUp_Screen.this,LoginScreen.class);
+                Intent LogIn = new Intent(SignUpScreen.this,LoginScreen.class);
                 startActivity(LogIn);
                 finish();
             }

@@ -22,8 +22,9 @@
             android:name=".LoginScreen"
             android:theme="@style/NoActionBarAppTheme" />
         <activity
-            android:name=".SignUp_Screen"
-            android:theme="@style/NoActionBarAppTheme"></activity>
+            android:name=".SignUpScreen"
+            android:theme="@style/NoActionBarAppTheme" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
