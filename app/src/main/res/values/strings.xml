@@ -15,4 +15,6 @@
     <string name="current_service">Current Service</string>
     <string name="history">History</string>
     <string name="profile">Profile</string>
+    <string name="hardware">Hardware</string>
+    <string name="software">Software</string>
 </resources>
