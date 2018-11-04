@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Profile:
-                firebaseAuth.signOut();
-                Intent Login = new Intent(this,LoginScreen.class);
-                startActivity(Login);
+
+                Intent Profile = new Intent(this,Profile.class);
+                startActivity(Profile);
                 break;
         }
         return super.onOptionsItemSelected(item);

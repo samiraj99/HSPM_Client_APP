@@ -1,11 +1,12 @@
 package com.sam.hspm;
 
 class RegistrationData {
-    String Name,Email,PhoneNo;
+    String Name,Email,PhoneNo,Address;
 
-    RegistrationData(String name, String email, String phoneNo) {
+    RegistrationData(String name, String email, String phoneNo, String address) {
         Name = name;
         Email = email;
         PhoneNo = phoneNo;
+        Address = address;
     }
 }

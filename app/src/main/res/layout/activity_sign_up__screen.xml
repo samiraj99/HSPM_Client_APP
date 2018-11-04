@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="false"
@@ -173,6 +173,42 @@
                 android:layout_marginTop="15dp">
 
                 <ImageView
+                    android:id="@+id/imgView_Address"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_location_city_black_24dp"
+                    android:tint="@color/white" />
+
+                <EditText
+                    android:id="@+id/EditText_Address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imgView_Address"
+                    android:background="@color/editTextBG"
+                    android:hint="@string/address"
+                    android:inputType="textMultiLine"
+                    android:paddingLeft="20dp"
+                    android:textSize="15sp"
+                    android:maxLines="4"
+                    android:minLines="2"
+                    android:scrollbars="vertical"
+                    android:maxLength="150"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/relativeLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayout4"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp">
+
+                <ImageView
                     android:id="@+id/imgView_emailIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -200,7 +236,7 @@
                 android:id="@+id/Button_SignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayout4"
+                android:layout_below="@+id/relativeLayout5"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="15dp"
@@ -226,4 +262,4 @@
 
 
     </android.support.v7.widget.CardView>
-</RelativeLayout>
+</ScrollView>

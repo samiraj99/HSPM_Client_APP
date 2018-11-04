@@ -17,4 +17,6 @@
     <string name="profile">Profile</string>
     <string name="hardware">Hardware</string>
     <string name="software">Software</string>
+    <string name="address">Address</string>
+    <string name="log_out">LOG OUT</string>
 </resources>

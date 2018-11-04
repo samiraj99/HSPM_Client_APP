@@ -38,7 +38,7 @@ public class LoginScreen extends AppCompatActivity {
         ET_Email=findViewById(R.id.EditText_Email);
         ET_Pass=findViewById(R.id.EditText_Password);
         firebaseAuth= FirebaseAuth.getInstance();
-
+        dialog = new ProgressDialog(this);
         if(firebaseAuth.getCurrentUser()!=null) {
             finish();
             Intent MainActivityPage = new Intent(this,MainActivity.class);

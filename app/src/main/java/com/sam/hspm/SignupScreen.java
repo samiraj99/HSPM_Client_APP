@@ -27,11 +27,11 @@ public class SignUpScreen extends AppCompatActivity {
     //TV = TextView
     //BT = Button
     Button BT_LogIn, BT_SignUp;
-    EditText ET_Name, ET_Email, ET_PhoneNo, ET_Password;
+    EditText ET_Name, ET_Email, ET_PhoneNo, ET_Password,ET_Address;
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
     ProgressDialog dialog;
-    String St_Name, St_Email, St_PhoneNo, St_Password;
+    String St_Name, St_Email, St_PhoneNo, St_Password,St_Address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class SignUpScreen extends AppCompatActivity {
         ET_Name = findViewById(R.id.EditText_Name);
         ET_PhoneNo = findViewById(R.id.EditText_PhoneNo);
         ET_Password = findViewById(R.id.EditText_Password);
+        ET_Address=findViewById(R.id.EditText_Address);
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         dialog = new ProgressDialog(this);
@@ -79,7 +80,7 @@ public class SignUpScreen extends AppCompatActivity {
     }
 
     private void Registration() {
-        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo);
+        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo,St_Address);
         try {
             databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -106,7 +107,7 @@ public class SignUpScreen extends AppCompatActivity {
         St_Password = ET_Password.getText().toString().trim();
         St_Name = ET_Name.getText().toString().trim();
         St_PhoneNo = ET_PhoneNo.getText().toString().trim();
-
+        St_Address = ET_Address.getText().toString();
         if (TextUtils.isEmpty(St_Name)) {
             ET_Name.setError("Fields can't be empty.");
             ET_Name.requestFocus();
@@ -130,6 +131,11 @@ public class SignUpScreen extends AppCompatActivity {
         if (St_PhoneNo.length() != 10) {
             ET_PhoneNo.setError("Please enter Valid PhoneNo.");
             ET_PhoneNo.requestFocus();
+            return false;
+        }
+        if (TextUtils.isEmpty(St_Address)) {
+            ET_Password.setError("Please enter Address.");
+            ET_Password.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(St_Password)) {
