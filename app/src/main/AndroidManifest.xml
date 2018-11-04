@@ -24,7 +24,8 @@
         <activity
             android:name=".SignUpScreen"
             android:theme="@style/NoActionBarAppTheme" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SignUp_MobileVerification"></activity>
     </application>
 
 </manifest>

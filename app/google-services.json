@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "638610105243",
+    "firebase_url": "https://hspm-client-app.firebaseio.com",
+    "project_id": "hspm-client-app",
+    "storage_bucket": "hspm-client-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638610105243:android:9f969d33e4861427",
+        "android_client_info": {
+          "package_name": "com.sam.hspm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638610105243-a5a9hi719cq672381417q45qg7fqed60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sam.hspm",
+            "certificate_hash": "524c3d34a4e301c9aabe3cb40da02b014878ef1a"
+          }
+        },
+        {
+          "client_id": "638610105243-9aicfh2e6ddvocc5r9smnlkhkp8llfq0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhVq8gMPJMA0-JH3cToIWE82X-glDfrW4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638610105243-9aicfh2e6ddvocc5r9smnlkhkp8llfq0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

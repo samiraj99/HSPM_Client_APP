@@ -1,5 +1,6 @@
 package com.sam.hspm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,16 +10,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     android.support.v7.widget.Toolbar toolbar;
+    FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
-
+        firebaseAuth=FirebaseAuth.getInstance();
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FragmentHome()).commit();
@@ -61,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Profile:
-                Toast.makeText(this, "Profile is Clicked", Toast.LENGTH_SHORT).show();
+                firebaseAuth.signOut();
+                Intent Login = new Intent(this,LoginScreen.class);
+                startActivity(Login);
                 break;
         }
         return super.onOptionsItemSelected(item);

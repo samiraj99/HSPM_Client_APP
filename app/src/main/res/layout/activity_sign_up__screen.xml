@@ -80,6 +80,7 @@
                     android:tint="@color/white" />
 
                 <EditText
+                    android:id="@+id/EditText_Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_userIcon"
@@ -115,6 +116,7 @@
                     android:tint="@color/white" />
 
                 <EditText
+                    android:id="@+id/EditText_Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_passwordIcon"
@@ -147,6 +149,7 @@
                     android:tint="@color/white" />
 
                 <EditText
+                    android:id="@+id/EditText_PhoneNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_repasswordIcon"
@@ -154,7 +157,7 @@
                     android:layout_toRightOf="@+id/imgView_repasswordIcon"
                     android:background="@color/editTextBG"
                     android:hint="@string/phone_no"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:paddingLeft="20dp"
                     android:textSize="15sp" />
 
@@ -179,6 +182,7 @@
                     android:tint="@color/white" />
 
                 <EditText
+                    android:id="@+id/EditText_Password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgView_emailIcon"
@@ -186,13 +190,14 @@
                     android:layout_toRightOf="@+id/imgView_emailIcon"
                     android:background="@color/editTextBG"
                     android:hint="@string/password"
+                    android:inputType="textPassword"
                     android:paddingLeft="20dp"
                     android:textSize="15sp" />
 
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_signUp"
+                android:id="@+id/Button_SignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/relativeLayout4"
@@ -204,10 +209,10 @@
                 android:textColor="@color/white" />
 
             <Button
-                android:id="@+id/ButtonLogIn"
+                android:id="@+id/Button_LogIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_signUp"
+                android:layout_below="@+id/Button_SignUp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="15dp"
