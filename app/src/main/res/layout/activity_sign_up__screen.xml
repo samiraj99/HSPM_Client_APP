@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SignUpScreen">
+    tools:context=".SignUpScreen"
+    android:background="#b2e4fa"
+    >
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

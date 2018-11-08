@@ -42,7 +42,7 @@ public class LoginScreen extends AppCompatActivity {
     //TV = TextView
     //BT = Button
 
-    TextView TV_SignUp;
+    TextView TV_SignUp,TV_ForgotPass;
     Button BT_SignIn;
     EditText ET_Email, ET_Pass;
     ProgressDialog dialog;
@@ -62,6 +62,7 @@ public class LoginScreen extends AppCompatActivity {
         ET_Pass = findViewById(R.id.EditText_Password);
         firebaseAuth = FirebaseAuth.getInstance();
         signInButton = findViewById(R.id.Google_sign_in_button);
+        TV_ForgotPass = findViewById(R.id.TextView_ForgotPass);
         dialog = new ProgressDialog(this);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         if (firebaseAuth.getCurrentUser() != null) {
@@ -105,6 +106,30 @@ public class LoginScreen extends AppCompatActivity {
 
             }
         });
+        TV_ForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.setMessage("Sending Email..!");
+                dialog.show();
+                St_Email = ET_Email.getText().toString();
+                if (TextUtils.isEmpty(St_Email)) {
+                    Toast.makeText(LoginScreen.this, "Enter Email ...", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    return;
+                }
+                if (St_Email!=null){
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(St_Email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(LoginScreen.this, "Reset mail successful send.", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            }
+        });
         TV_SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +142,8 @@ public class LoginScreen extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.setMessage("Log In....");
+                dialog.show();
                 signIn();
             }
         });
@@ -179,6 +206,7 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    dialog.dismiss();
                     Intent I = new Intent(LoginScreen.this, MainActivity.class);
                     startActivity(I);
                     finish();
