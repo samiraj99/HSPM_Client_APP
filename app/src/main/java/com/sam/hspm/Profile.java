@@ -140,9 +140,9 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 auth.signOut();
-                Intent LogIn = new Intent(Profile.this, LoginScreen.class);
-                startActivity(LogIn);
-                finish();
+                Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
     }

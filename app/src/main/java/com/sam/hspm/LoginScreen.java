@@ -189,19 +189,19 @@ public class LoginScreen extends AppCompatActivity {
                             if (user != null) {
                                 St_Google_email = user.getEmail();
                                 St_Google_Name = user.getDisplayName();
-                                St_Google_PhoneNo = user.getPhoneNumber();
-                                addData(St_Google_Name, St_Google_email, St_Google_PhoneNo);
+                                addData(St_Google_Name, St_Google_email);
                             }
                         } else {
                             Toast.makeText(LoginScreen.this, "Failed To Log In ", Toast.LENGTH_SHORT).show();
+
                         }
 
                     }
                 });
     }
 
-    private void addData(String st_Google_Name, String st_google_email, String st_Google_PhoneNo) {
-        RegistrationData data = new RegistrationData(st_Google_Name, st_google_email, st_Google_PhoneNo);
+    private void addData(String st_google_Name, String st_google_email) {
+        RegistrationData data = new RegistrationData(st_google_Name, st_google_email);
         databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -213,6 +213,7 @@ public class LoginScreen extends AppCompatActivity {
                     Toast.makeText(LoginScreen.this, "Log In Successful ...!", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("Database", "Failed to write data");
+                    firebaseAuth.getCurrentUser().delete();
                 }
             }
         });

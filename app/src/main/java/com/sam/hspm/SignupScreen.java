@@ -70,6 +70,7 @@ public class SignUpScreen extends AppCompatActivity {
                                 Registration();
                             } else {
                                 Toast.makeText(SignUpScreen.this, "Failed To Register", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
                             }
                         }
                     });
@@ -92,6 +93,7 @@ public class SignUpScreen extends AppCompatActivity {
                         startActivity(MainActivity);
                         finish();
                     } else {
+                        firebaseAuth.getCurrentUser().delete();
                         Toast.makeText(SignUpScreen.this, "Registration Failed !", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
