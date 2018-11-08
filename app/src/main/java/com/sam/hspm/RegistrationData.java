@@ -9,4 +9,11 @@ class RegistrationData {
         PhoneNo = phoneNo;
         Address = address;
     }
+
+
+    public RegistrationData(String name, String email, String phoneNo) {
+        Name = name;
+        Email = email;
+        PhoneNo = phoneNo;
+    }
 }

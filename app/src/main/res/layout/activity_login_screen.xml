@@ -74,7 +74,7 @@
                     android:id="@+id/imageView_userIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorPrimaryDark"
                     android:padding="8dp"
                     android:src="@drawable/img_user"
                     android:tint="@color/white"
@@ -109,7 +109,7 @@
                     android:id="@+id/imageView_passwordIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@color/colorPrimary"
+                    android:background="@color/colorPrimaryDark"
                     android:padding="8dp"
                     android:src="@drawable/img_authentication"
                     android:tint="@color/white"
@@ -195,28 +195,11 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp">
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@color/facebookBlue"
-                    android:padding="10dp"
-                    android:src="@drawable/img_facebook" />
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@color/twitterBlue"
-                    android:padding="10dp"
-                    android:src="@drawable/img_twitter" />
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@color/googleRed"
-                    android:padding="10dp"
-                    android:src="@drawable/img_googleplus" />
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/Google_sign_in_button"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    />
 
             </LinearLayout>
 
