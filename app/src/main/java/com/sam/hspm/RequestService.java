@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class RequestService extends AppCompatActivity {
 
     String type, uid, problem;
-    int id;
+    String id;
     Button Submit;
     TextView RequestType;
     FirebaseAuth mauth;
@@ -44,22 +44,6 @@ public class RequestService extends AppCompatActivity {
         mreference = FirebaseDatabase.getInstance().getReference();
         uid = mauth.getUid();
 
-        mreference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    id = ((int) dataSnapshot.child("Services").getChildrenCount());
-                } catch (Exception e) {
-                    Log.e("Exception", "" + e);
-                    id = 1;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         mreference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -80,12 +64,10 @@ public class RequestService extends AppCompatActivity {
                 problem = ET_Problem.getText().toString();
                 if (ProfileIsComplete.equals("True")) {
                     RequestData data = new RequestData(uid, problem, type);
-                    if (id == 0) {
-                        id = 1;
-                    } else {
-                        id++;
-                    }
-                    mreference.child("Services").child(String.valueOf(id)).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    id = mreference.child("Services").push().getKey();
+
+                    mreference.child("Services").child(id).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
@@ -100,7 +82,7 @@ public class RequestService extends AppCompatActivity {
         });
     }
 
-    private void SaveService(int id) {
+    private void SaveService(String id) {
         mreference.child("Users").child(uid).child("Current_Service_Id").setValue(id).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
