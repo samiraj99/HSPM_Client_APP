@@ -19,4 +19,6 @@
     <string name="software">Software</string>
     <string name="address">Address</string>
     <string name="log_out">LOG OUT</string>
+    <string name="what_s_the_problem">What\'s the Problem?</string>
+    <string name="submit">Submit</string>
 </resources>

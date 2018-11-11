@@ -212,8 +212,13 @@ public class LoginScreen extends AppCompatActivity {
                     finish();
                     Toast.makeText(LoginScreen.this, "Log In Successful ...!", Toast.LENGTH_SHORT).show();
                 } else {
+                    try{
                     Log.d("Database", "Failed to write data");
                     firebaseAuth.getCurrentUser().delete();
+                }catch (Exception e)
+                    {
+                        Log.e("Exception",""+e);
+                    }
                 }
             }
         });

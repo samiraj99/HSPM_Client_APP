@@ -24,9 +24,11 @@
         <activity
             android:name=".SignUpScreen"
             android:theme="@style/NoActionBarAppTheme" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/NoActionBarAppTheme" />
-        <activity android:name=".Profile"></activity>
+        <activity android:name=".Profile" />
+        <activity android:name=".RequestService"></activity>
     </application>
 
 </manifest>
