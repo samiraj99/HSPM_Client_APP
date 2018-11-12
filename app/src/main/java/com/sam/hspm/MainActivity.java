@@ -3,12 +3,17 @@ package com.sam.hspm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,99 +24,113 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawerLayout;
     android.support.v7.widget.Toolbar toolbar;
+    NavigationView navigationView;
     FirebaseAuth firebaseAuth;
     DatabaseReference mdDatabaseReference;
     String uid;
     int count;
+    String ST_ProfileName;
+    TextView ProfileName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.Toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        firebaseAuth=FirebaseAuth.getInstance();
-        uid=firebaseAuth.getUid();
+        firebaseAuth = FirebaseAuth.getInstance();
+        uid = firebaseAuth.getUid();
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new FragmentHome()).commit();
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        ProfileName = header.findViewById(R.id.TextView_UserName);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.opendrawer, R.string.closedrawer);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commit();
+            navigationView.setCheckedItem(R.id.Nav_Home);
+        }
         CheckedProfileIsComplete();
-         }
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent Profile = new Intent(MainActivity.this, Profile.class);
+                startActivity(Profile);
+            }
+        });
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    Fragment selectedFragment = null;
-
-                    switch (menuItem.getItemId()){
-                        case R.id.nav_Home:
-                            selectedFragment= new FragmentHome();
-                            break;
-                        case R.id.nav_Service:
-                            selectedFragment= new FragmentCurrentServices();
-                            break;
-                        case R.id.nav_History:
-                            selectedFragment= new FragmentHistory();
-                            break;
-                    }
-
-                    if (selectedFragment != null) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                selectedFragment).commit();
-                    }
-                    return true;
-                }
-            };
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
-        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Profile:
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-                Intent Profile = new Intent(this,Profile.class);
-                startActivity(Profile);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment selectedFragment = null;
+        switch (menuItem.getItemId()) {
+            case R.id.Nav_Home:
+                selectedFragment = new FragmentHome();
+                break;
+            case R.id.Nav_History:
+                selectedFragment = new FragmentHistory();
+                break;
+            case R.id.Nav_Help:
+                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+
+        if (selectedFragment != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container,
+                    selectedFragment).commit();
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+
     }
-   void CheckedProfileIsComplete(){
+
+    void CheckedProfileIsComplete() {
 
         mdDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("Name").getValue().toString();
+                ProfileName.setText(ST_ProfileName);
                 count = (int) dataSnapshot.child("Users").child(uid).child("Profile").getChildrenCount();
-                if (count == 4){
+                if (count == 4) {
                     mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("True").addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Log.e("Profile","Profile is complete.");
+                            if (task.isSuccessful()) {
+                                Log.e("Profile", "Profile is complete.");
                             }
                         }
                     });
-                }else {
+                } else {
                     mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("False").addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.e("Profile","Profile is not complete."+count);
+                            Log.e("Profile", "Profile is not complete." + count);
                         }
                     });
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
-   }
+    }
 }

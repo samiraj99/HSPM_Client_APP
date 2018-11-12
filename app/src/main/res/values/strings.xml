@@ -23,4 +23,7 @@
     <string name="submit">Submit</string>
     <string name="problem_is">Problem is :-</string>
     <string name="no_current_service_add_any_service">No Current Service request any service …!</string>
+    <string name="help">Help</string>
+    <string name="opendrawer">Open Drawer</string>
+    <string name="closedrawer">Close Drawer</string>
 </resources>
