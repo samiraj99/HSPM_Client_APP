@@ -1,5 +1,6 @@
 package com.sam.hspm;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int count;
     String ST_ProfileName;
     TextView ProfileName;
-
+    boolean ServiceId;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +48,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        dialog = new ProgressDialog(this);
         View header = navigationView.getHeaderView(0);
         ProfileName = header.findViewById(R.id.TextView_UserName);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.opendrawer, R.string.closedrawer);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commit();
-            navigationView.setCheckedItem(R.id.Nav_Home);
-        }
+        dialog.setMessage("Loading...!");
+        dialog.show();
+        dialog.setCancelable(false);
         CheckedProfileIsComplete();
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment selectedFragment = null;
         switch (menuItem.getItemId()) {
             case R.id.Nav_Home:
-                selectedFragment = new FragmentHome();
+                if (ServiceId) {
+                    selectedFragment = new FragmentCurrentServices();
+                } else {
+                    selectedFragment = new FragmentHome();
+                }
                 break;
             case R.id.Nav_History:
                 selectedFragment = new FragmentHistory();
@@ -125,6 +131,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     });
                 }
+                ServiceId = dataSnapshot.child("Users").child(uid).hasChild("Current_Service_Id");
+                dialog.dismiss();
+                onStart();
+
             }
 
             @Override
@@ -132,5 +142,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        if (ServiceId) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
+            navigationView.setCheckedItem(R.id.Nav_Home);
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
+            navigationView.setCheckedItem(R.id.Nav_Home);
+        }
+        super.onStart();
     }
 }

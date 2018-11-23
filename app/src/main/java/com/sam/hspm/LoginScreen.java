@@ -2,9 +2,9 @@ package com.sam.hspm;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -82,6 +82,8 @@ public class LoginScreen extends AppCompatActivity {
                 }
                 dialog.setMessage("Log In ...!");
                 dialog.show();
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
 
                 firebaseAuth.signInWithEmailAndPassword(St_Email, St_Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -107,6 +109,9 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 dialog.setMessage("Sending Email..!");
                 dialog.show();
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+
                 St_Email = ET_Email.getText().toString();
                 if (TextUtils.isEmpty(St_Email)) {
                     Toast.makeText(LoginScreen.this, "Enter Email ...", Toast.LENGTH_SHORT).show();
@@ -140,6 +145,8 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View view) {
                 dialog.setMessage("Log In....");
                 dialog.show();
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
                 signIn();
             }
         });

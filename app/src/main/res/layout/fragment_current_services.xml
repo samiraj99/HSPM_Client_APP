@@ -3,42 +3,41 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     >
 
-    <TextView
-        android:id="@+id/TextView_NoService"
+    <Button
+        android:id="@+id/Button_Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_current_service_add_any_service"
-        android:textSize="25sp"
-        android:textColor="@color/primaryText"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/cancel"
+        android:background="@color/colorPrimaryDark"
         android:layout_marginRight="10dp"
-        android:visibility="gone"
-        />
+        android:textColor="@color/white"
+        android:layout_marginEnd="10dp" />
+
     <TextView
+        android:layout_below="@id/Button_Cancel"
         android:id="@+id/TextView_P1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/problem_is"
         android:textSize="25sp"
         android:textColor="@color/primaryText"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:visibility="visible"
+        android:layout_margin="10dp"
         />
 
     <TextView
+        android:layout_below="@id/Button_Cancel"
         android:id="@+id/TextView_Problem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="160dp"
-        android:layout_marginTop="50dp"
         android:textColor="@color/secondaryText"
         android:textSize="25sp"
-        android:visibility="visible"
         android:layout_marginStart="160dp"
         android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>

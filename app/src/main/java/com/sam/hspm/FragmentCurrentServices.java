@@ -1,5 +1,8 @@
 package com.sam.hspm;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,32 +24,32 @@ import com.google.firebase.database.ValueEventListener;
 public class FragmentCurrentServices extends Fragment {
     @Nullable
     View v;
-    TextView TV_p1, TV_Problem, TV_NoService;
+    TextView TV_p1, TV_Problem;
     String uid, ST_Problem;
     String serviceId;
     FirebaseAuth mAuth;
     DatabaseReference mdatabaseReference;
+    Button BT_Cancel;
+    ProgressDialog progressdialog;
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_current_services, container, false);
         TV_p1 = v.findViewById(R.id.TextView_P1);
         TV_Problem = v.findViewById(R.id.TextView_Problem);
-        TV_NoService = v.findViewById(R.id.TextView_NoService);
+        BT_Cancel = v.findViewById(R.id.Button_Cancel);
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getUid();
         mdatabaseReference = FirebaseDatabase.getInstance().getReference();
-
+        progressdialog = new ProgressDialog(getContext());
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     serviceId =  dataSnapshot.child("Users").child(uid).child("Current_Service_Id").getValue().toString();
-                    Log.v("ServiceId",""+serviceId);
+
                 } catch (Exception e) {
                     Log.e("DataNotFound", "" + e);
-                    serviceId = "0";
                 }
-
                 DisplayProblem(serviceId);
             }
 
@@ -55,21 +59,47 @@ public class FragmentCurrentServices extends Fragment {
             }
         });
 
+        BT_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressdialog.setMessage("Canceling");
+                progressdialog.show();
+
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Canceling Service")
+                        .setMessage("Are you sure you want to cancel the Service")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog, int which) {
+                                mdatabaseReference.child("Services").child(serviceId).removeValue();
+                                mdatabaseReference.child("Users").child(uid).child("Current_Service_Id").setValue(null);
+                                progressdialog.dismiss();
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        progressdialog.dismiss();
+                    }
+                })
+                        .show();
+            }
+        });
 
         return v;
     }
 
     private void DisplayProblem(final String id) {
-        if (!id.equals("0")) {
-            TV_NoService.setVisibility(View.GONE);
-            TV_p1.setVisibility(View.VISIBLE);
-            TV_Problem.setVisibility(View.VISIBLE);
 
             mdatabaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ST_Problem = dataSnapshot.child("Services").child(id).child("Problem").getValue().toString();
-                    TV_Problem.setText(ST_Problem);
+                    try {
+                        ST_Problem = dataSnapshot.child("Services").child(id).child("Problem").getValue().toString();
+                        TV_Problem.setText(ST_Problem);
+                    } catch (Exception e) {
+                        Log.e("Error", "" + e);
+                    }
                 }
 
                 @Override
@@ -77,11 +107,7 @@ public class FragmentCurrentServices extends Fragment {
 
                 }
             });
-        } else {
-            TV_NoService.setVisibility(View.VISIBLE);
-            TV_p1.setVisibility(View.GONE);
-            TV_Problem.setVisibility(View.GONE);
-        }
+
 
     }
 }

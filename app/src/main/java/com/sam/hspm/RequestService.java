@@ -1,9 +1,11 @@
 package com.sam.hspm;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +31,7 @@ public class RequestService extends AppCompatActivity {
     DatabaseReference mreference;
     EditText ET_Problem;
     String ProfileIsComplete;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class RequestService extends AppCompatActivity {
         mauth = FirebaseAuth.getInstance();
         mreference = FirebaseDatabase.getInstance().getReference();
         uid = mauth.getUid();
-
+        progressDialog = new ProgressDialog(this);
 
         mreference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -60,6 +63,10 @@ public class RequestService extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                progressDialog.setMessage("Sending Request");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+
                 problem = ET_Problem.getText().toString();
                 if (ProfileIsComplete.equals("True")) {
                     RequestData data = new RequestData(uid, problem, type);
@@ -71,6 +78,8 @@ public class RequestService extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 SaveService(id);
+                            } else {
+                                Log.e("Error", "Failed to write in users data");
                             }
                         }
                     });
@@ -86,8 +95,11 @@ public class RequestService extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    progressDialog.dismiss();
+                    Toast.makeText(RequestService.this, "Request Send.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(RequestService.this, MainActivity.class);
                     startActivity(i);
+                    finish();
                 }
             }
         });
