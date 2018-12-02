@@ -83,7 +83,6 @@ public class LoginScreen extends AppCompatActivity {
                 dialog.setMessage("Log In ...!");
                 dialog.show();
                 dialog.setCancelable(false);
-                dialog.setCanceledOnTouchOutside(false);
 
                 firebaseAuth.signInWithEmailAndPassword(St_Email, St_Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -110,7 +109,6 @@ public class LoginScreen extends AppCompatActivity {
                 dialog.setMessage("Sending Email..!");
                 dialog.show();
                 dialog.setCancelable(false);
-                dialog.setCanceledOnTouchOutside(false);
 
                 St_Email = ET_Email.getText().toString();
                 if (TextUtils.isEmpty(St_Email)) {
@@ -146,7 +144,6 @@ public class LoginScreen extends AppCompatActivity {
                 dialog.setMessage("Log In....");
                 dialog.show();
                 dialog.setCancelable(false);
-                dialog.setCanceledOnTouchOutside(false);
                 signIn();
             }
         });

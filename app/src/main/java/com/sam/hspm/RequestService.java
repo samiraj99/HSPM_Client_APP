@@ -68,6 +68,10 @@ public class RequestService extends AppCompatActivity {
                 progressDialog.setCancelable(false);
 
                 problem = ET_Problem.getText().toString();
+                if (problem.isEmpty()) {
+                    ET_Problem.setError("Request can't be empty ..!");
+                    return;
+                }
                 if (ProfileIsComplete.equals("True")) {
                     RequestData data = new RequestData(uid, problem, type);
 
