@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mdDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("Name").getValue().toString();
+                try {
+                    ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("Name").getValue().toString();
+                } catch (Exception e) {
+                    Log.d("Exception", "" + e);
+                }
                 ProfileName.setText(ST_ProfileName);
                 count = (int) dataSnapshot.child("Users").child(uid).child("Profile").getChildrenCount();
                 if (count == 4) {

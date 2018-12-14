@@ -26,8 +26,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginScreen extends AppCompatActivity {
     private static final int RC_SIGN_IN = 2;
@@ -35,7 +38,7 @@ public class LoginScreen extends AppCompatActivity {
     //TV = TextView
     //BT = Button
 
-    TextView TV_SignUp,TV_ForgotPass;
+    TextView TV_SignUp, TV_ForgotPass;
     Button BT_SignIn;
     EditText ET_Email, ET_Pass;
     ProgressDialog dialog;
@@ -116,11 +119,11 @@ public class LoginScreen extends AppCompatActivity {
                     dialog.dismiss();
                     return;
                 }
-                if (St_Email!=null){
+                if (St_Email != null) {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(St_Email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Toast.makeText(LoginScreen.this, "Reset mail successful send.", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
@@ -185,11 +188,29 @@ public class LoginScreen extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            final FirebaseUser user = firebaseAuth.getCurrentUser();
                             if (user != null) {
-                                St_Google_email = user.getEmail();
-                                St_Google_Name = user.getDisplayName();
-                                addData(St_Google_Name, St_Google_email);
+                                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        boolean flag = dataSnapshot.child(user.getUid()).exists();
+                                        if (!flag) {
+                                            St_Google_email = user.getEmail();
+                                            St_Google_Name = user.getDisplayName();
+                                            addData(St_Google_Name, St_Google_email);
+                                        } else {
+                                            dialog.dismiss();
+                                            Intent I = new Intent(LoginScreen.this, MainActivity.class);
+                                            startActivity(I);
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.e("Database Error", "Failed to retrieve data");
+                                    }
+                                });
                             }
                         } else {
                             Toast.makeText(LoginScreen.this, "Failed To Log In ", Toast.LENGTH_SHORT).show();
@@ -212,12 +233,11 @@ public class LoginScreen extends AppCompatActivity {
                     finish();
                     Toast.makeText(LoginScreen.this, "Log In Successful ...!", Toast.LENGTH_SHORT).show();
                 } else {
-                    try{
-                    Log.d("Database", "Failed to write data");
-                    firebaseAuth.getCurrentUser().delete();
-                }catch (Exception e)
-                    {
-                        Log.e("Exception",""+e);
+                    try {
+                        Log.d("Database", "Failed to write data");
+                        firebaseAuth.getCurrentUser().delete();
+                    } catch (Exception e) {
+                        Log.e("Exception", "" + e);
                     }
                 }
             }
