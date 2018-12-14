@@ -68,7 +68,7 @@ public class FragmentCurrentServices extends Fragment {
 
                 new AlertDialog.Builder(getContext())
                         .setTitle("Canceling Service")
-                        .setMessage("Are you sure you want to cancel the Service")
+                        .setMessage("Are you sure you want to cancel the Service?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialog, int which) {
@@ -81,7 +81,7 @@ public class FragmentCurrentServices extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         progressdialog.dismiss();
                     }
-                })
+                }).setCancelable(false)
                         .show();
             }
         });

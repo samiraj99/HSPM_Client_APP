@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(Profile);
             }
         });
-
     }
 
     @Override
@@ -135,10 +134,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     });
                 }
-                ServiceId = dataSnapshot.child("Users").child(uid).hasChild("Current_Service_Id");
-                dialog.dismiss();
-                onStart();
-
             }
 
             @Override
@@ -150,13 +145,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onStart() {
-        if (ServiceId) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
-            navigationView.setCheckedItem(R.id.Nav_Home);
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
-            navigationView.setCheckedItem(R.id.Nav_Home);
-        }
+        mdDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ServiceId = dataSnapshot.child("Users").child(uid).hasChild("Current_Service_Id");
+                dialog.dismiss();
+                if (ServiceId) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
+                    navigationView.setCheckedItem(R.id.Nav_Home);
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
+                    navigationView.setCheckedItem(R.id.Nav_Home);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         super.onStart();
     }
 }
