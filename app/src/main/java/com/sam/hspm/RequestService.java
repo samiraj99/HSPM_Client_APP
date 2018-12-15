@@ -89,6 +89,7 @@ public class RequestService extends AppCompatActivity {
                     });
                 }else {
                     Toast.makeText(RequestService.this, "Complete Profile ..!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
             }
         });
