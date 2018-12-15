@@ -69,6 +69,7 @@ public class RequestService extends AppCompatActivity {
                 problem = ET_Problem.getText().toString();
                 if (problem.isEmpty()) {
                     ET_Problem.setError("Request can't be empty ..!");
+                    progressDialog.dismiss();
                     return;
                 }
                 if (ProfileIsComplete.equals("True")) {
