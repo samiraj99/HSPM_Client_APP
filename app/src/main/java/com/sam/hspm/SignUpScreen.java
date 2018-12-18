@@ -83,7 +83,7 @@ public class SignUpScreen extends AppCompatActivity {
     private void Registration() {
         RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo,St_Address);
         try {
-            databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {

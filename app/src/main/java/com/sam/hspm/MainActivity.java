@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -114,28 +112,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("Name").getValue().toString();
+                    ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("ProfileInfo").child("Name").getValue().toString();
                 } catch (Exception e) {
                     Log.d("Exception", "" + e);
                 }
                 ProfileName.setText(ST_ProfileName);
-                count = (int) dataSnapshot.child("Users").child(uid).child("Profile").getChildrenCount();
-                if (count == 4) {
-                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("True").addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.e("Profile", "Profile is complete.");
-                            }
-                        }
-                    });
+                count = (int) dataSnapshot.child("Users").child(uid).child("Profile").child("ProfileInfo").getChildrenCount();
+                if (count >= 4) {
+                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("True");
                 } else {
-                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("False").addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Log.e("Profile", "Profile is not complete." + count);
-                        }
-                    });
+                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("False");
                 }
             }
 

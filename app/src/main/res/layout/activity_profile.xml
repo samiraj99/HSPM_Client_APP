@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Profile">
 
     <LinearLayout
@@ -10,44 +11,73 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <RelativeLayout
             android:id="@+id/Relative_Layout"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:background="@color/colorPrimaryDark"
+            android:layout_height="wrap_content"
+            android:background="@drawable/grad"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:paddingBottom="20dp">
+
             <ImageView
-                android:id="@+id/Profile_Image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:id="@+id/ImageView_Arrow_Back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_arrow_24dp" />
+
+            <RelativeLayout
+                android:id="@+id/imgUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/profile_image"
-                android:background="@drawable/square_shape"
-                android:padding="5dp"
-                />
+                android:layout_marginTop="20dp"
+                android:background="@drawable/circle_border">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/ImageView_Profile"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="9dp"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_user"
+                    app:civ_border_color="#FFF"
+                    app:civ_border_width="4dp" />
+
+                <ImageView
+                    android:id="@+id/ImageView_Edit_Profile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="120dp"
+                    android:layout_marginLeft="120dp"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_mode_edit_white_24dp" />
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/Profile_Image_first_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/lightPrimary"
-                android:textSize="20sp"
+                android:layout_below="@id/imgUser"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="165dp"
-                />
+                android:layout_marginTop="15dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Joey Tribbiani"
+                android:textColor="@color/white"
+                android:textSize="32sp" />
             <TextView
                 android:id="@+id/Profile_image_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/Profile_Image_first_name"
                 android:layout_centerHorizontal="true"
-                android:textSize="20sp"
+                android:fontFamily="sans-serif"
+                android:text="@string/email"
                 android:textStyle="italic"
-                android:text=""
-                android:textColor="@color/lightPrimary"
-                android:layout_marginTop="5dp"
+                android:textColor="@color/address"
+                android:textSize="18sp"
                 />
 
         </RelativeLayout>
@@ -57,7 +87,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,128 +102,207 @@
                     android:textSize="20sp"
                     android:padding="5dp"
                     android:textStyle="normal"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_margin="10dp"
+                    android:textAllCaps="true"
                     android:textColor="@color/colorPrimaryDark"
-                    />
-                <TextView
-                    android:id="@+id/Profile_button_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EDIT"
-                    android:layout_marginLeft="295dp"
-                    android:layout_marginStart="295dp"
-                    android:layout_marginTop="6dp"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:visibility="visible"
                     />
 
-                <TextView
-                    android:id="@+id/Profile_button_done"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DONE"
-                    android:layout_marginLeft="290dp"
-                    android:layout_marginStart="290dp"
-                    android:layout_marginTop="6dp"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorPrimaryDark"
+                <ImageView
+                    android:id="@+id/ImageView_Edit"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:visibility="visible"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_edit_black_24dp" />
+
+                <ImageView
+                    android:id="@+id/ImageView_Done"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
                     android:visibility="invisible"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_done_black_24dp"
                     />
-                <android.support.design.widget.TextInputLayout
+
+
+                <RelativeLayout
                     android:id="@+id/TextInputLayout_first_name"
                     android:layout_below="@id/Profile_text_view_acc_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     >
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/Profile_first_name"
-                        android:layout_width="match_parent"
+
+                    <TextView
+                        android:id="@+id/TextView_name"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/name"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/imgView_userIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/TextView_name"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gradStart"
+                        android:padding="8dp"
+                        android:src="@drawable/img_user"
+                        android:tint="@color/white" />
+
+                    <EditText
+                        android:id="@+id/Profile_first_name"
+                        android:layout_width="317dp"
+                        android:layout_height="39dp"
+                        android:layout_below="@+id/TextView_name"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toEndOf="@id/imgView_userIcon"
+                        android:layout_toRightOf="@id/imgView_userIcon"
+                        android:background="@color/transparent"
+                        android:enabled="false"
                         android:hint="@string/name"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:textSize="18sp"
-                        android:enabled="false"
                         android:textColor="#1e1e1e"
-                        />
-                </android.support.design.widget.TextInputLayout>
+                        android:textSize="18sp" />
+                </RelativeLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <RelativeLayout
                     android:id="@+id/TextInputLayout_PhoneNo"
                     android:layout_below="@+id/TextInputLayout_first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp">
 
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/Profile_PhoneNo"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/TextView_phoneNo"
+                        android:layout_width="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/phone_no"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:textSize="18sp"
-                        android:enabled="false"
-                        android:textColor="#1e1e1e"
-                        />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/phone_no"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/TextView_Address"
-                    android:layout_below="@+id/TextInputLayout_PhoneNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/address"
-                   android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:textSize="18sp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    />
-
+                    <ImageView
+                        android:id="@+id/imgView_PhoneIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/TextView_phoneNo"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gradStart"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_phone_black_24dp"
+                        android:tint="@color/white" />
 
                     <EditText
-                        android:layout_below="@+id/TextView_Address"
+                        android:id="@+id/Profile_PhoneNo"
+                        android:layout_width="317dp"
+                        android:layout_height="41dp"
+                        android:layout_below="@+id/TextView_phoneNo"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toEndOf="@id/imgView_PhoneIcon"
+                        android:layout_toRightOf="@id/imgView_PhoneIcon"
+                        android:background="@color/transparent"
+                        android:enabled="false"
+                        android:hint="@string/phone_no"
+                        android:inputType="phone"
+                        android:maxLines="1"
+                        android:textColor="#1e1e1e"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/TextInput_Profile_Address"
+                    android:layout_below="@+id/TextInputLayout_PhoneNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/TextView_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/address"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/imgView_Address"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@+id/TextView_address"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/gradStart"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_location_city_black_24dp"
+                        android:tint="@color/white" />
+
+                    <EditText
                         android:id="@+id/Profile_Address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/TextView_address"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toEndOf="@+id/imgView_Address"
+                        android:layout_toRightOf="@+id/imgView_Address"
+                        android:background="@color/transparent"
+                        android:enabled="false"
                         android:hint="@string/address"
                         android:inputType="textMultiLine"
-                        android:maxLines="3"
-                        android:minLines="1"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="20dp"
-                        android:textSize="18sp"
-                        android:enabled="false"
+                        android:maxLines="4"
+                        android:minLines="2"
                         android:textColor="@color/primaryText"
-
-                        />
+                        android:textSize="18sp" />
+                </RelativeLayout>
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
         <Button
             android:id="@+id/Button_LogOut"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:background="@color/colorPrimaryDark"
-            android:textColor="@color/white"
+            android:layout_height="wrap_content"
             android:text="@string/log_out"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:background="@color/gradStart"
+            android:textColor="@color/white"
             />
     </LinearLayout>
 </ScrollView>

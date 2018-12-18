@@ -223,7 +223,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private void addData(String st_google_Name, String st_google_email) {
         RegistrationData data = new RegistrationData(st_google_Name, st_google_email);
-        databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+        databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
