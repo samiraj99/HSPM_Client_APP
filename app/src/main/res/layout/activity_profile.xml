@@ -289,6 +289,28 @@
                         android:minLines="2"
                         android:textColor="@color/primaryText"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/TextView_Auto_Loc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_toStartOf="@+id/ImageView_Auto_Location"
+                        android:layout_toLeftOf="@+id/ImageView_Auto_Location"
+                        android:text="@string/auto_detect"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="12sp"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/ImageView_Auto_Location"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_add_location_blue_24dp"
+                        android:visibility="invisible" />
                 </RelativeLayout>
 
             </RelativeLayout>

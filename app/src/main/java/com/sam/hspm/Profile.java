@@ -1,13 +1,19 @@
 package com.sam.hspm;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +44,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class Profile extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -45,12 +59,15 @@ public class Profile extends AppCompatActivity {
     DatabaseReference databaseReference;
     String St_Name, St_PhoneNo, uid, St_Email, St_Address, St_ProfileUrl, St_ProfileImageFileName;
     StorageReference storageReference;
-    TextView TV_Email, TV_Name;
+    public FusedLocationProviderClient client;
     ProgressDialog dialog;
     Button BT_LogOut;
     FirebaseAuth auth;
-    ImageView IV_Edit, IV_Done, IV_Back, IV_Edit_Profile, IV_Profile;
+    TextView TV_Email, TV_Name, TV_Auto_Loc;
     Uri imageUri;
+    ImageView IV_Edit, IV_Done, IV_Back, IV_Edit_Profile, IV_Profile, IV_Auto_Loc_Fetch;
+    List<Address> ST_location;
+    Geocoder geocoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +89,15 @@ public class Profile extends AppCompatActivity {
         IV_Back = findViewById(R.id.ImageView_Arrow_Back);
         IV_Edit = findViewById(R.id.ImageView_Edit);
         IV_Done = findViewById(R.id.ImageView_Done);
+        IV_Auto_Loc_Fetch = findViewById(R.id.ImageView_Auto_Location);
+        TV_Auto_Loc = findViewById(R.id.TextView_Auto_Loc);
         TV_Email = findViewById(R.id.Profile_image_email);
         TV_Name = findViewById(R.id.Profile_Image_first_name);
+
+        geocoder = new Geocoder(this, Locale.getDefault());
+        client = LocationServices.getFusedLocationProviderClient(this);
+        requestPermission();
+
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading..!");
         dialog.show();
@@ -126,13 +150,43 @@ public class Profile extends AppCompatActivity {
                 ET_Address.setEnabled(true);
                 IV_Done.setVisibility(View.VISIBLE);
                 IV_Edit.setVisibility(View.INVISIBLE);
+                IV_Auto_Loc_Fetch.setVisibility(View.VISIBLE);
+                TV_Auto_Loc.setVisibility(View.VISIBLE);
 
                 TIET_Name.setFocusable(true);
                 TIET_Name.setFocusableInTouchMode(true);
                 TIET_Name.requestFocus();
 
+                IV_Auto_Loc_Fetch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ActivityCompat.checkSelfPermission(Profile.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        client.getLastLocation().addOnSuccessListener(Profile.this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    try {
+                                        ST_location = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                        String address = ST_location.get(0).getAddressLine(0);
+                                        String area = ST_location.get(0).getLocality();
+                                        String city = ST_location.get(0).getAdminArea();
+                                        String Country = ST_location.get(0).getCountryName();
+                                        String PostalCode = ST_location.get(0).getPostalCode();
+                                        String FullAddress = address + ", " + area + ", " + city + ", " + Country + ", " + PostalCode;
+                                        ET_Address.setText(FullAddress);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
+
 
         IV_Done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,6 +334,12 @@ public class Profile extends AppCompatActivity {
         });
 
     }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
+
+    }
+
 
 
 }
