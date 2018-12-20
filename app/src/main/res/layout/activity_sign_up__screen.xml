@@ -165,14 +165,42 @@
 
             </RelativeLayout>
 
+
+            <TextView
+                android:id="@+id/Textview_Auto_detect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relativeLayout3"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toStartOf="@id/ImageView_location_Auto"
+                android:layout_toLeftOf="@id/ImageView_location_Auto"
+                android:text="@string/auto_detect"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/ImageView_location_Auto"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/relativeLayout3"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/ic_add_location_blue_24dp"
+                android:visibility="gone" />
+
             <RelativeLayout
                 android:id="@+id/relativeLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relativeLayout3"
+                android:layout_below="@+id/Textview_Auto_detect"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="10dp">
 
                 <ImageView
                     android:id="@+id/imgView_Address"
@@ -198,6 +226,7 @@
                     android:minLines="2"
                     android:scrollbars="vertical"
                     android:maxLength="150"
+                    android:focusableInTouchMode="false"
                     />
 
             </RelativeLayout>

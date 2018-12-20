@@ -99,7 +99,7 @@ public class Profile extends AppCompatActivity {
         requestPermission();
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading..!");
+        dialog.setMessage("Setting up Profile..!");
         dialog.show();
         databaseReference.child("Users").child(uid).child("Profile").addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,7 +160,11 @@ public class Profile extends AppCompatActivity {
                 IV_Auto_Loc_Fetch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        dialog.setMessage("Loading Address");
+                        dialog.show();
                         if (ActivityCompat.checkSelfPermission(Profile.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            dialog.dismiss();
+                            Toast.makeText(Profile.this, "Failed to Detect Address.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         client.getLastLocation().addOnSuccessListener(Profile.this, new OnSuccessListener<Location>() {
@@ -176,8 +180,10 @@ public class Profile extends AppCompatActivity {
                                         String PostalCode = ST_location.get(0).getPostalCode();
                                         String FullAddress = address + ", " + area + ", " + city + ", " + Country + ", " + PostalCode;
                                         ET_Address.setText(FullAddress);
+                                        dialog.dismiss();
                                     } catch (IOException e) {
-                                        e.printStackTrace();
+                                        Toast.makeText(Profile.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
                                     }
                                 }
                             }
@@ -238,7 +244,8 @@ public class Profile extends AppCompatActivity {
         IV_Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent i = new Intent(Profile.this, MainActivity.class);
+                startActivity(i);
             }
         });
         IV_Edit_Profile.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +257,15 @@ public class Profile extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
+        try {
+            String Id = getIntent().getExtras().getString("ACTIVITY_ID");
+            if (Id != null && Id.equals("Login")) {
+                Toast.makeText(this, "Id Match", Toast.LENGTH_SHORT).show();
+                IV_Edit.performClick();
+            }
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+        }
     }
 
     @Override
@@ -340,6 +356,10 @@ public class Profile extends AppCompatActivity {
 
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Profile.this, MainActivity.class);
+        startActivity(i);
+        super.onBackPressed();
+    }
 }

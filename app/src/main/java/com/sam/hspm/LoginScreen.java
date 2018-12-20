@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +32,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class LoginScreen extends AppCompatActivity {
     private static final int RC_SIGN_IN = 2;
@@ -69,6 +72,7 @@ public class LoginScreen extends AppCompatActivity {
             Intent MainActivityPage = new Intent(this, MainActivity.class);
             startActivity(MainActivityPage);
         }
+        requestPermission();
 
         BT_SignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +232,8 @@ public class LoginScreen extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     dialog.dismiss();
-                    Intent I = new Intent(LoginScreen.this, MainActivity.class);
+                    Intent I = new Intent(LoginScreen.this, Profile.class);
+                    I.putExtra("ACTIVITY_ID", "Login");
                     startActivity(I);
                     finish();
                     Toast.makeText(LoginScreen.this, "Log In Successful ...!", Toast.LENGTH_SHORT).show();
@@ -243,4 +248,10 @@ public class LoginScreen extends AppCompatActivity {
             }
         });
     }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
+
+    }
+
 }
