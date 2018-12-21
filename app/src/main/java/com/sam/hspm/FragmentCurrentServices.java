@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +32,7 @@ public class FragmentCurrentServices extends Fragment {
     String serviceId;
     FirebaseAuth mAuth;
     DatabaseReference mdatabaseReference;
-    Button BT_Cancel;
+    Button BT_Cancel, BT_Edit;
     ProgressDialog progressdialog;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class FragmentCurrentServices extends Fragment {
         TV_p1 = v.findViewById(R.id.TextView_P1);
         TV_Problem = v.findViewById(R.id.TextView_Problem);
         BT_Cancel = v.findViewById(R.id.Button_Cancel);
+        BT_Edit = v.findViewById(R.id.Button_Edit);
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getUid();
         mdatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -68,7 +72,7 @@ public class FragmentCurrentServices extends Fragment {
 
                 new AlertDialog.Builder(getContext())
                         .setTitle("Canceling Service")
-                        .setMessage("Are you sure you want to cancel the Service?")
+                        .setMessage("Are you sure you want to cancel the Service? ")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface dialog, int which) {
@@ -83,6 +87,48 @@ public class FragmentCurrentServices extends Fragment {
                     }
                 }).setCancelable(false)
                         .show();
+            }
+        });
+        BT_Edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getContext());
+                View mView = getLayoutInflater().inflate(R.layout.layout_dialog, null);
+                mBuilder.setView(mView);
+                final AlertDialog dialog = mBuilder.create();
+                dialog.show();
+                final EditText ET_Updated_Problem = mView.findViewById(R.id.EditText_Dialog_Problem);
+                ET_Updated_Problem.setText(ST_Problem);
+                Button BT_Update, BT_Cancel;
+                BT_Update = mView.findViewById(R.id.Button_dialog_Update);
+                BT_Cancel = mView.findViewById(R.id.Button_dialog_Cancel);
+                final Spinner sp = mView.findViewById(R.id.Spinner_Services);
+                String[] ServiceType = {"Hardware", "Software"};
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, ServiceType);
+                sp.setAdapter(adapter);
+
+                BT_Update.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String Problem = ET_Updated_Problem.getText().toString();
+                        String ProbleType = sp.getSelectedItem().toString();
+                        if (!Problem.isEmpty()) {
+                            mdatabaseReference.child("Services").child(serviceId).child("ProblemType").setValue(ProbleType);
+                            mdatabaseReference.child("Services").child(serviceId).child("Problem").setValue(Problem);
+                            dialog.dismiss();
+                        } else {
+                            ET_Updated_Problem.setError("Fields Can't be Empty");
+                        }
+                    }
+                });
+                BT_Cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+
             }
         });
 

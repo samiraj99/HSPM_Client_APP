@@ -28,4 +28,7 @@
     <string name="closedrawer">Close Drawer</string>
     <string name="cancel">Cancel</string>
     <string name="auto_detect">Auto detect</string>
+    <string name="edit">Edit</string>
+    <string name="update_request">Update Request</string>
+    <string name="update">Update</string>
 </resources>

@@ -68,7 +68,7 @@ public class Profile extends AppCompatActivity {
     ImageView IV_Edit, IV_Done, IV_Back, IV_Edit_Profile, IV_Profile, IV_Auto_Loc_Fetch;
     List<Address> ST_location;
     Geocoder geocoder;
-
+    String Id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,8 +244,11 @@ public class Profile extends AppCompatActivity {
         IV_Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Profile.this, MainActivity.class);
-                startActivity(i);
+                if (Id != null && Id.equals("Login")) {
+                    Intent i = new Intent(Profile.this, MainActivity.class);
+                    startActivity(i);
+                }
+                finish();
             }
         });
         IV_Edit_Profile.setOnClickListener(new View.OnClickListener() {
@@ -258,7 +261,7 @@ public class Profile extends AppCompatActivity {
             }
         });
         try {
-            String Id = getIntent().getExtras().getString("ACTIVITY_ID");
+            Id = getIntent().getExtras().getString("ACTIVITY_ID");
             if (Id != null && Id.equals("Login")) {
                 Toast.makeText(this, "Id Match", Toast.LENGTH_SHORT).show();
                 IV_Edit.performClick();
@@ -358,8 +361,11 @@ public class Profile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(Profile.this, MainActivity.class);
-        startActivity(i);
         super.onBackPressed();
+        if (Id != null && Id.equals("Login")) {
+            Intent i = new Intent(Profile.this, MainActivity.class);
+            startActivity(i);
+        }
+        finish();
     }
 }

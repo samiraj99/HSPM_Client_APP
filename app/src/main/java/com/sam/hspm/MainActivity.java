@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 Intent Profile = new Intent(MainActivity.this, Profile.class);
                 startActivity(Profile);
-                finish();
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }

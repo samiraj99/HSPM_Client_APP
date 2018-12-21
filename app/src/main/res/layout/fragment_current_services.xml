@@ -4,6 +4,14 @@
     >
 
     <Button
+        android:id="@+id/Button_Edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/edit"
+        android:textColor="@color/white" />
+    <Button
         android:id="@+id/Button_Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +32,9 @@
         android:text="@string/problem_is"
         android:textSize="25sp"
         android:textColor="@color/primaryText"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
         />
 
     <TextView
@@ -32,12 +42,14 @@
         android:id="@+id/TextView_Problem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="160dp"
         android:textColor="@color/secondaryText"
         android:textSize="25sp"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp" />
+        android:layout_toEndOf="@id/TextView_P1"
+        android:layout_toRightOf="@id/TextView_P1" />
 
 </RelativeLayout>
