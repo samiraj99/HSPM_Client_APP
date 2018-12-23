@@ -68,9 +68,9 @@ public class LoginScreen extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         if (firebaseAuth.getCurrentUser() != null) {
-            finish();
             Intent MainActivityPage = new Intent(this, MainActivity.class);
             startActivity(MainActivityPage);
+            finish();
         }
         requestPermission();
 

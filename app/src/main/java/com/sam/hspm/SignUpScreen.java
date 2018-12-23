@@ -127,12 +127,7 @@ public class SignUpScreen extends AppCompatActivity {
                             try {
                                 ST_location = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 String address = ST_location.get(0).getAddressLine(0);
-                                String area = ST_location.get(0).getLocality();
-                                String city = ST_location.get(0).getAdminArea();
-                                String Country = ST_location.get(0).getCountryName();
-                                String PostalCode = ST_location.get(0).getPostalCode();
-                                String FullAddress = address + ", " + area + ", " + city + ", " + Country + ", " + PostalCode;
-                                ET_Address.setText(FullAddress);
+                                ET_Address.setText(address);
                                 dialog.dismiss();
                             } catch (IOException e) {
                                 Toast.makeText(SignUpScreen.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
