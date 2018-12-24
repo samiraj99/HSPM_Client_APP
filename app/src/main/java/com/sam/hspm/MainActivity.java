@@ -2,6 +2,7 @@ package com.sam.hspm;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -145,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
                     navigationView.setCheckedItem(R.id.Nav_Home);
+                }
+                if (!ServiceId) {
+                    SharedPreferences preferences = getSharedPreferences("Prefs", 0);
+                    preferences.edit().clear().apply();
                 }
             }
 

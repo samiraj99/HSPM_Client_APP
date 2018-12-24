@@ -29,6 +29,9 @@ allprojects {
                 }
             }
         }
+        maven {
+            url "http://dl.bintray.com/jlmd/maven"
+        }
         google()
         jcenter()
     }

@@ -31,4 +31,5 @@
     <string name="edit">Edit</string>
     <string name="update_request">Update Request</string>
     <string name="update">Update</string>
+    <string name="finding_nearest_employ">Finding nearest employ...!</string>
 </resources>

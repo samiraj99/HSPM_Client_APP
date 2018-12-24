@@ -3,7 +3,9 @@ package com.sam.hspm;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,16 +27,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
+
 public class FragmentCurrentServices extends Fragment {
     @Nullable
     View v;
-    TextView TV_p1, TV_Problem;
+    public static final long START_TIME_IN_MILLIS = 600000;
     String uid, ST_Problem;
     String serviceId;
     FirebaseAuth mAuth;
     DatabaseReference mdatabaseReference;
     Button BT_Cancel, BT_Edit;
     ProgressDialog progressdialog;
+    TextView TV_p1, TV_Problem, TimerText, TV_FindEmp;
+    AnimatedCircleLoadingView animatedCircle;
+    CountDownTimer countDownTimer;
+    private long millisLeft = START_TIME_IN_MILLIS;
+    private long endTime = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_current_services, container, false);
@@ -41,6 +51,9 @@ public class FragmentCurrentServices extends Fragment {
         TV_Problem = v.findViewById(R.id.TextView_Problem);
         BT_Cancel = v.findViewById(R.id.Button_Cancel);
         BT_Edit = v.findViewById(R.id.Button_Edit);
+        animatedCircle = v.findViewById(R.id.AnimatedCircleView);
+        TimerText = v.findViewById(R.id.TimerText);
+        TV_FindEmp = v.findViewById(R.id.TextView_findingEmp);
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getUid();
         mdatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -132,28 +145,86 @@ public class FragmentCurrentServices extends Fragment {
             }
         });
 
+
         return v;
+    }
+
+    private void startTimer() {
+        animatedCircle.startIndeterminate();
+        countDownTimer = new CountDownTimer(millisLeft, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                millisLeft = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                animatedCircle.stopFailure();
+                TimerText.setVisibility(View.INVISIBLE);
+                TV_FindEmp.setText("Unable to find nearest employ..!");
+
+            }
+        }.start();
+    }
+
+    private void updateCountDownText() {
+        int minutes = (int) (millisLeft / 1000) / 60;
+        int seconds = (int) (millisLeft / 1000) % 60;
+
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+
+        TimerText.setText(timeLeftFormatted);
     }
 
     private void DisplayProblem(final String id) {
 
-            mdatabaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    try {
-                        ST_Problem = dataSnapshot.child("Services").child(id).child("Problem").getValue().toString();
-                        TV_Problem.setText(ST_Problem);
-                    } catch (Exception e) {
-                        Log.e("Error", "" + e);
-                    }
+        mdatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    ST_Problem = dataSnapshot.child("Services").child(id).child("Problem").getValue().toString();
+                    TV_Problem.setText(ST_Problem);
+                } catch (Exception e) {
+                    Log.e("Error", "" + e);
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (serviceId != null) {
+            endTime = System.currentTimeMillis();
+            SharedPreferences preferences = this.getActivity().getSharedPreferences("Prefs", 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong("millisLeft", millisLeft);
+            editor.putLong("lastTime", endTime);
+            editor.apply();
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("Prefs", 0);
+        millisLeft = preferences.getLong("millisLeft", START_TIME_IN_MILLIS);
+        endTime = preferences.getLong("lastTime", 0);
+        if (endTime != 0) {
+            long diff = System.currentTimeMillis() - endTime;
+            millisLeft = millisLeft - diff;
+        }
+        startTimer();
     }
 }
