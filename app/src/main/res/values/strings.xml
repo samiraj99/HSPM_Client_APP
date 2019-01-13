@@ -32,4 +32,27 @@
     <string name="update_request">Update Request</string>
     <string name="update">Update</string>
     <string name="finding_nearest_employ">Finding nearest employ...!</string>
+    <string name="select_a_service_address">Select a service address</string>
+    <string name="next">Next</string>
+    <string name="edit_address">Edit Address</string>
+    <string name="what_do_you_need_help_with">What do you need help with?</string>
+    <string name="not_working">Not working</string>
+    <string name="os_installation">OS installation</string>
+    <string name="monitor_display">Monitor/Display</string>
+    <string name="motherboard">Motherboard</string>
+    <string name="software_installation">Software installation</string>
+    <string name="mouse">Mouse</string>
+    <string name="chip_level_servicing">Chip level servicing</string>
+    <string name="laptop">Laptop</string>
+    <string name="desktop">Desktop</string>
+    <string name="submit_request">Submit Request</string>
+    <string name="specify_problem">Specify Problem</string>
+    <string name="complete_profile">Complete Profile</string>
+    <string name="google_maps_api_key">AIzaSyCS8yW1qB8qvVVgIiVO_u3e2xJ23xUqIKY</string>
+    <string name="select_address">Select Address</string>
+    <string name="location">LOCATION</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="area">AREA</string>
+    <string name="landmark">LANDMARK</string>
+    <string name="house_flat_no">HOUSE/FLAT NO.</string>
 </resources>

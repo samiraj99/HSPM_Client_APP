@@ -232,8 +232,7 @@ public class LoginScreen extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     dialog.dismiss();
-                    Intent I = new Intent(LoginScreen.this, Profile.class);
-                    I.putExtra("ACTIVITY_ID", "Login");
+                    Intent I = new Intent(LoginScreen.this, MainActivity.class);
                     startActivity(I);
                     finish();
                     Toast.makeText(LoginScreen.this, "Log In Successful ...!", Toast.LENGTH_SHORT).show();

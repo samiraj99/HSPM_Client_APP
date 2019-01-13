@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +39,6 @@ public class FragmentCurrentServices extends Fragment {
     Button BT_Cancel, BT_Edit;
     ProgressDialog progressdialog;
     TextView TV_p1, TV_Problem, TimerText, TV_FindEmp;
-    AnimatedCircleLoadingView animatedCircle;
     CountDownTimer countDownTimer;
     private long millisLeft = START_TIME_IN_MILLIS;
     private long endTime = 0;
@@ -51,7 +49,6 @@ public class FragmentCurrentServices extends Fragment {
         TV_Problem = v.findViewById(R.id.TextView_Problem);
         BT_Cancel = v.findViewById(R.id.Button_Cancel);
         BT_Edit = v.findViewById(R.id.Button_Edit);
-        animatedCircle = v.findViewById(R.id.AnimatedCircleView);
         TimerText = v.findViewById(R.id.TimerText);
         TV_FindEmp = v.findViewById(R.id.TextView_findingEmp);
         mAuth = FirebaseAuth.getInstance();
@@ -150,7 +147,6 @@ public class FragmentCurrentServices extends Fragment {
     }
 
     private void startTimer() {
-        animatedCircle.startIndeterminate();
         countDownTimer = new CountDownTimer(millisLeft, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -160,7 +156,6 @@ public class FragmentCurrentServices extends Fragment {
 
             @Override
             public void onFinish() {
-                animatedCircle.stopFailure();
                 TimerText.setVisibility(View.INVISIBLE);
                 TV_FindEmp.setText("Unable to find nearest employ..!");
 

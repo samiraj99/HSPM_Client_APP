@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ServiceForm2">
+
+
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        app:progress_current="0"
+        app:progress_max="100"
+        app:progress_reached_bar_height="10dp"
+        app:progress_reached_color="@color/colorPrimaryDark"
+        app:progress_text_size="20dp"
+        app:progress_unreached_bar_height="5dp" />
+
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="What type of PC needs repair?"
+        android:textColor="@color/primaryText"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/RadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView1"
+        android:layout_alignStart="@+id/TextView1"
+        android:layout_alignLeft="@+id/TextView1"
+        android:layout_marginTop="20dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/RadioButtonDesktop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:text="@string/desktop"
+            android:textColor="@color/secondaryText"
+            android:textSize="25sp"
+            tools:ignore="RtlSymmetry" />
+
+        <RadioButton
+            android:id="@+id/RadioButtonLaptop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:text="@string/laptop"
+            android:textColor="@color/secondaryText"
+            android:textSize="25sp"
+            tools:ignore="RtlSymmetry" />
+
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/Button_Next1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+</RelativeLayout>

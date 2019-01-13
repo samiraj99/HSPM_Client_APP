@@ -216,6 +216,8 @@ public class Profile extends AppCompatActivity {
                                 ET_Address.setEnabled(false);
                                 IV_Done.setVisibility(View.INVISIBLE);
                                 IV_Edit.setVisibility(View.VISIBLE);
+                                IV_Auto_Loc_Fetch.setVisibility(View.INVISIBLE);
+                                TV_Auto_Loc.setVisibility(View.INVISIBLE);
                                 TIET_Name.setFocusable(false);
                                 TIET_PhoneNO.setFocusable(false);
                                 Toast.makeText(Profile.this, "Profile has been updated.", Toast.LENGTH_SHORT).show();
@@ -255,15 +257,6 @@ public class Profile extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-        try {
-            Id = getIntent().getExtras().getString("ACTIVITY_ID");
-            if (Id != null && Id.equals("Login")) {
-                Toast.makeText(this, "Id Match", Toast.LENGTH_SHORT).show();
-                IV_Edit.performClick();
-            }
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-        }
     }
 
     @Override
@@ -309,7 +302,6 @@ public class Profile extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
-                        Log.d("DATA", filename + " " + downloadUri.toString());
                         UploadImageData upload = new UploadImageData(filename + "." + getFileExtension(imageUri), downloadUri.toString());
                         databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage")
                                 .setValue(upload).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -333,8 +325,8 @@ public class Profile extends AppCompatActivity {
     }
 
     private void DeleteProfile() {
-        StorageReference dstorageref = storageReference.child(St_ProfileImageFileName);
-        dstorageref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        StorageReference dbStorageRef = storageReference.child(St_ProfileImageFileName);
+        dbStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage").removeValue();

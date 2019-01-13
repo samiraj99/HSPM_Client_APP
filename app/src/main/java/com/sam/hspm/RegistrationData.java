@@ -14,4 +14,10 @@ public class RegistrationData {
         Name = name;
         Email = email;
     }
+
+    public RegistrationData(String st_name, String st_email, String st_phoneNo) {
+        Name = st_name;
+        Email = st_email;
+        PhoneNo = st_phoneNo;
+    }
 }

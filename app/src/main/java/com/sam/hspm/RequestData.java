@@ -1,11 +1,13 @@
 package com.sam.hspm;
 
 public class RequestData {
-  public   String UserId,Problem,ProblemType;
+    public String PcType, ProblemType, SpecifiedProblem;
 
-    public RequestData(String uid, String problem,String problemType) {
-        UserId = uid;
-        Problem = problem;
+    public RequestData(String pcType, String problemType, String specifiedProblem) {
+        PcType = pcType;
         ProblemType = problemType;
+        SpecifiedProblem = specifiedProblem;
     }
+
+
 }

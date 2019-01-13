@@ -44,8 +44,10 @@ public class FragmentHome extends Fragment {
         BT_Hardware.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(),RequestService.class);
-                i.putExtra("Value","Hardware");
+//                Intent i = new Intent(getActivity(),RequestService.class);
+//                i.putExtra("Value","Hardware");
+//                startActivity(i);
+                Intent i = new Intent(getActivity(), ServiceForm1.class);
                 startActivity(i);
             }
         });
@@ -53,9 +55,9 @@ public class FragmentHome extends Fragment {
         BT_Software.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(),RequestService.class);
-                i.putExtra("Value","Software");
-                startActivity(i);
+//                Intent i = new Intent(getActivity(),RequestService.class);
+//                i.putExtra("Value","Software");
+//                startActivity(i);
             }
         });
 
