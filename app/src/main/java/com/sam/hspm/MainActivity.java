@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int count;
     String ST_ProfileName;
     TextView ProfileName;
-    boolean ServiceId;
+    String ServiceId,EmployeeId;
     ProgressDialog dialog;
+    private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment selectedFragment = null;
         switch (menuItem.getItemId()) {
             case R.id.Nav_Home:
-                if (ServiceId) {
+                if (!ServiceId.equals("0")) {
                     selectedFragment = new FragmentCurrentServices();
                 } else {
                     selectedFragment = new FragmentHome();
@@ -119,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 ProfileName.setText(ST_ProfileName);
                 count = (int) dataSnapshot.child("Users").child(uid).child("Profile").child("ProfileInfo").getChildrenCount();
-                if (count >= 4) {
+                if (count >= 3) {
                     mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("True");
                 } else {
                     mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("False");
@@ -135,21 +137,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onStart() {
-        mdDatabaseReference.addValueEventListener(new ValueEventListener() {
+        Log.d(TAG, "onStart: Called");
+        mdDatabaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ServiceId = dataSnapshot.child("Users").child(uid).hasChild("Current_Service_Id");
+                ServiceId = dataSnapshot.child("Current_Service_Id").getValue().toString();
                 dialog.dismiss();
-                if (ServiceId) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
-                    navigationView.setCheckedItem(R.id.Nav_Home);
+                if (!ServiceId.equals("0")) {
+                    EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
+                    if (!EmployeeId.equals("0")) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
+                        navigationView.setCheckedItem(R.id.Nav_Home);
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
+                        navigationView.setCheckedItem(R.id.Nav_Home);
+                    }
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
                     navigationView.setCheckedItem(R.id.Nav_Home);
-                }
-                if (!ServiceId) {
-                    SharedPreferences preferences = getSharedPreferences("Prefs", 0);
-                    preferences.edit().clear().apply();
                 }
             }
 
@@ -160,4 +165,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         super.onStart();
     }
+
 }

@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "638610105243-nuii55db2o1i66vkc8v7so1aj43nkepu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sam.hspm",
+            "certificate_hash": "447025f11cf5e3f57d4804ee9555bcb99f1fb365"
+          }
+        },
+        {
           "client_id": "638610105243-9aicfh2e6ddvocc5r9smnlkhkp8llfq0.apps.googleusercontent.com",
           "client_type": 3
         }

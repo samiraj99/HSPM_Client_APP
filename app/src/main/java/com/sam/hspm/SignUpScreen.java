@@ -144,7 +144,10 @@ public class SignUpScreen extends AppCompatActivity {
         RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo,St_Address);
         try {
             if (firebaseAuth.getUid() != null) {
-                databaseReference.child("Users").child(firebaseAuth.getUid()).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                String uid = firebaseAuth.getUid();
+                databaseReference.child("Users").child(uid).child("Current_Service_Id").setValue(0);
+                databaseReference.child("Users").child(uid).child("RequestAcceptedBy").setValue(0);
+                databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {

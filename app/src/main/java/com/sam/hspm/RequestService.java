@@ -73,6 +73,7 @@ public class RequestService extends AppCompatActivity {
     RelativeLayout ButtonLayout;
     ImageView IV_gps;
     FirebaseUser user;
+    String address;
     private GoogleMap map;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -112,7 +113,7 @@ public class RequestService extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
-                final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
+                Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
                 AddressData addressData = new AddressData(coordinates);
                 AllData allData = new AllData(data, addressData, uid, "false");
                 id = mreference.child("Services").push().getKey();
@@ -236,7 +237,7 @@ public class RequestService extends AppCompatActivity {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> St_Location = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            String address = St_Location.get(0).getAddressLine(0);
+        address = St_Location.get(0).getAddressLine(0);
             ET_Address.setText(address);
         } catch (IOException e) {
             e.printStackTrace();
@@ -395,7 +396,7 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class Coordinates {
-        double Lat, Lng;
+      public   double Lat, Lng;
 
         public Coordinates(double lat, double lng) {
             Lat = lat;
@@ -404,8 +405,8 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class AddressData {
-        String Area, HouseNo, Landmark;
-        Coordinates Co_Ordinates;
+     public    String Area, HouseNo, Landmark;
+      public   Coordinates Co_Ordinates;
 
         public AddressData(String area, String houseNo, String landmark, Coordinates coordinates) {
             Area = area;
@@ -420,9 +421,9 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class AllData {
-        RequestData Problem;
-        AddressData Address;
-        String Uid, Status;
+       public RequestData Problem;
+      public   AddressData Address;
+      public   String Uid, Status;
 
 
         public AllData(RequestData requestData, AddressData addressData, String uid, String aFalse) {

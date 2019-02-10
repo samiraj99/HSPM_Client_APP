@@ -14,17 +14,6 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/Button_Edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_margin="10dp"
-                android:background="@color/colorPrimaryDark"
-                android:text="@string/edit"
-                android:textColor="@color/white" />
-
-            <Button
                 android:id="@+id/Button_Cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,16 +71,8 @@
                 android:layout_margin="10dp"
                 android:text="@string/finding_nearest_employ"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/TimerText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_findingEmp"
-                android:layout_centerInParent="true"
-                android:layout_margin="10dp"
-                android:textSize="50sp" />
         </RelativeLayout>
     </LinearLayout>
 </ScrollView>

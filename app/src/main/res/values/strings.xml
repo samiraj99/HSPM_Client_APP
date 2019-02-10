@@ -16,7 +16,7 @@
     <string name="history">History</string>
     <string name="profile">Profile</string>
     <string name="hardware">Hardware</string>
-    <string name="software">Software</string>
+    <string name="software">Request Service</string>
     <string name="address">Address</string>
     <string name="log_out">LOG OUT</string>
     <string name="what_s_the_problem">What\'s the Problem?</string>
@@ -31,7 +31,7 @@
     <string name="edit">Edit</string>
     <string name="update_request">Update Request</string>
     <string name="update">Update</string>
-    <string name="finding_nearest_employ">Finding nearest employ...!</string>
+    <string name="finding_nearest_employ">Finding nearest employee...!</string>f
     <string name="select_a_service_address">Select a service address</string>
     <string name="next">Next</string>
     <string name="edit_address">Edit Address</string>

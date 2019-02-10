@@ -11,35 +11,15 @@
         android:layout_below="@+id/Recycler_View"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <Button
-            android:id="@+id/Button_HardWare"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/hardware"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="60dp"
-            android:layout_marginStart="60dp" />
-            <TextView
-                android:id="@+id/textViewHW"
-                android:layout_below="@id/Button_HardWare"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content"
-                android:text="@string/hardware"
-                android:textSize="25sp"
-                android:textColor="@color/primaryText"
-                android:layout_marginStart="60dp" />
+
         <Button
             android:id="@+id/Button_Software"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/software"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="60dp"
-            android:layout_marginEnd="60dp" />
+            android:layout_centerHorizontal="true"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,11 +28,8 @@
             android:text="@string/software"
             android:textColor="@color/primaryText"
             android:textSize="25sp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="60dp"
-            android:layout_marginEnd="60dp"
             android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
             />
 
     </RelativeLayout>
