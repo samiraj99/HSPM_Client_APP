@@ -29,7 +29,7 @@ public class FragmentAcceptedService extends Fragment {
     FirebaseApp employeeApp;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    String uid, RequestId;
+    String uid;
     String EmpID, Name, PhoneNo;
     TextView TV_Name, TV_PhoneNo;
     ProgressDialog progressDialog;

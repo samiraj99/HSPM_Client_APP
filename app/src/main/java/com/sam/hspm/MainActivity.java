@@ -86,11 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment selectedFragment = null;
         switch (menuItem.getItemId()) {
             case R.id.Nav_Home:
-                if (!ServiceId.equals("0")) {
-                    selectedFragment = new FragmentCurrentServices();
-                } else {
-                    selectedFragment = new FragmentHome();
-                }
+                onStart();
                 break;
             case R.id.Nav_History:
                 selectedFragment = new FragmentHistory();
