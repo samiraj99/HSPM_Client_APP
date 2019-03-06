@@ -1,12 +1,16 @@
 package com.sam.hspm;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -112,22 +116,26 @@ public class RequestService extends AppCompatActivity {
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
-                Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
-                AddressData addressData = new AddressData(coordinates);
-                AllData allData = new AllData(data, addressData, uid, "false");
-                id = mreference.child("Services").push().getKey();
+                if (LatLng != null) {
+                    RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
+                    Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
+                    AddressData addressData = new AddressData(coordinates);
+                    AllData allData = new AllData(data, addressData, uid, "false");
+                    id = mreference.child("Services").push().getKey();
 
-                mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            SaveService(id);
-                        } else {
-                            Log.e("Error", "Failed to write in users data");
+                    mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                SaveService(id);
+                            } else {
+                                Log.e("Error", "Failed to write in users data");
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    Toast.makeText(RequestService.this, "Something went wrong unable to detect location", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -183,8 +191,7 @@ public class RequestService extends AppCompatActivity {
             }
         });
 
-        IsServiceOK();
-        getLocationPermission();
+
 
     }
 
@@ -202,8 +209,10 @@ public class RequestService extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location");
                             Location curruentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(curruentLocation.getLatitude(), curruentLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
-                            displayLocation(new LatLng(curruentLocation.getLatitude(), curruentLocation.getLongitude()));
+                            if (curruentLocation != null) {
+                                moveCamera(new LatLng(curruentLocation.getLatitude(), curruentLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
+                                displayLocation(new LatLng(curruentLocation.getLatitude(), curruentLocation.getLongitude()));
+                            }
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(RequestService.this, "Unable to find current location", Toast.LENGTH_SHORT).show();
@@ -237,7 +246,7 @@ public class RequestService extends AppCompatActivity {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> St_Location = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-        address = St_Location.get(0).getAddressLine(0);
+            address = St_Location.get(0).getAddressLine(0);
             ET_Address.setText(address);
         } catch (IOException e) {
             e.printStackTrace();
@@ -349,6 +358,7 @@ public class RequestService extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
+                checkLocationState();
             }
         });
         ET_searchText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -380,6 +390,31 @@ public class RequestService extends AppCompatActivity {
 
     }
 
+    private void checkLocationState() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @Override
     public void onBackPressed() {
@@ -396,7 +431,7 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class Coordinates {
-      public   double Lat, Lng;
+        public double Lat, Lng;
 
         public Coordinates(double lat, double lng) {
             Lat = lat;
@@ -405,8 +440,8 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class AddressData {
-     public    String Area, HouseNo, Landmark;
-      public   Coordinates Co_Ordinates;
+        public String Area, HouseNo, Landmark;
+        public Coordinates Co_Ordinates;
 
         public AddressData(String area, String houseNo, String landmark, Coordinates coordinates) {
             Area = area;
@@ -421,9 +456,9 @@ public class RequestService extends AppCompatActivity {
     }
 
     public static class AllData {
-       public RequestData Problem;
-      public   AddressData Address;
-      public   String Uid, Status;
+        public RequestData Problem;
+        public AddressData Address;
+        public String Uid, Status;
 
 
         public AllData(RequestData requestData, AddressData addressData, String uid, String aFalse) {
@@ -432,5 +467,15 @@ public class RequestService extends AppCompatActivity {
             Uid = uid;
             Status = aFalse;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IsServiceOK();
+        checkLocationState();
+        getLocationPermission();
+
     }
 }

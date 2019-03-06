@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -74,17 +73,17 @@ public class FragmentHistory extends Fragment {
         }
 
         //Employee Database
-
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId(getString(R.string.ApplicationId))
-                .setApiKey(getString(R.string.ApiKey))
-                .setDatabaseUrl(getString(R.string.DatabaseUrl))
-                .build();
-        FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
-        employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
-        firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
-        employeeDatabase = firebaseDatabase.getReference();
-
+        if(employeeApp == null){
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setApplicationId(getString(R.string.ApplicationId))
+                    .setApiKey(getString(R.string.ApiKey))
+                    .setDatabaseUrl(getString(R.string.DatabaseUrl))
+                    .build();
+            FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
+            employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
+            firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
+            employeeDatabase = firebaseDatabase.getReference();
+        }
 
         listView = v1.findViewById(R.id.ListView);
 
