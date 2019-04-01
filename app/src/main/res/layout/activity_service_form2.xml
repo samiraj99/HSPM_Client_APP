@@ -134,6 +134,7 @@
             android:background="@color/colorPrimary"
             android:text="@string/next"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            />
     </RelativeLayout>
 </ScrollView>

@@ -202,7 +202,6 @@ public class FragmentAcceptedService extends Fragment {
                     }
                     map.setMyLocationEnabled(true);
                 }
-                Toast.makeText(getContext(), "Map is Ready", Toast.LENGTH_SHORT).show();
             }
         });
     }

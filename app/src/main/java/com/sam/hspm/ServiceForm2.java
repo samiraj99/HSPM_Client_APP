@@ -91,7 +91,8 @@ public class ServiceForm2 extends AppCompatActivity {
                     Toast.makeText(ServiceForm2.this, "Please select any one option.", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (SpecifiedProblem.isEmpty()) {
-                    SpecifiedProblem = " ";
+                    ET_SpecifiedProblem.setError("Please Specify Problem.");
+                    return;
                 }
 
 
@@ -101,15 +102,23 @@ public class ServiceForm2 extends AppCompatActivity {
                     i.putExtra("Problem Types", ProblemType);
                     i.putExtra("Specified Problem", SpecifiedProblem);
                     startActivity(i);
+                    Bt_Next.setEnabled(false);
                 } else {
                     Intent i = new Intent(ServiceForm2.this, CompleteProfile.class);
                     i.putExtra("PC Type", PcType);
                     i.putExtra("Problem Types", ProblemType);
                     i.putExtra("Specified Problem", SpecifiedProblem);
                     startActivity(i);
+                    Bt_Next.setEnabled(false);
                 }
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        Bt_Next.setEnabled(true);
+        super.onStart();
     }
 }

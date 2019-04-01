@@ -21,12 +21,12 @@
     <string name="log_out">LOG OUT</string>
     <string name="what_s_the_problem">What\'s the Problem?</string>
     <string name="submit">Submit</string>
-    <string name="problem_is">Problem is :-</string>
+    <string name="problem_is">PROBLEM</string>
     <string name="no_current_service_add_any_service">No Current Service request any service …!</string>
     <string name="help">Help</string>
     <string name="opendrawer">Open Drawer</string>
     <string name="closedrawer">Close Drawer</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Cancel Service</string>
     <string name="auto_detect">Auto detect</string>
     <string name="edit">Edit</string>
     <string name="update_request">Update Request</string>
@@ -54,4 +54,8 @@
     <string name="area">AREA</string>
     <string name="landmark">LANDMARK</string>
     <string name="house_flat_no">HOUSE/FLAT NO.</string>
+    <string name="service_is_accept_by">Service is Accept by:-</string>
+    <string name="nam_e">Name :-</string>
+    <string name="phoneno">PhoneNo :-</string>
+    <string name="no_services_yet">No services yet</string>
 </resources>

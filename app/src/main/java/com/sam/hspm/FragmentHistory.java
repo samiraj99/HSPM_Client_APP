@@ -46,11 +46,13 @@ public class FragmentHistory extends Fragment {
     ArrayList<String> PcTypeList = new ArrayList<>();
     ArrayList<String> ProblemTypeList = new ArrayList<>();
     ArrayList<String> EmployeeName = new ArrayList<>();
+    ArrayList<String> AcceptDate = new ArrayList<>();
     private static final String TAG = "FragmentHistory";
     String RequestAcceptedBy;
     CustomAdapter customAdapter;
     ProgressDialog progressDialog;
-
+    TextView TextView_NoService;
+    boolean flag;
     @Override
     public void onDestroy() {
         employeeApp.delete();
@@ -86,40 +88,59 @@ public class FragmentHistory extends Fragment {
         }
 
         listView = v1.findViewById(R.id.ListView);
+        TextView_NoService = v1.findViewById(R.id.TextView_NoService);
 
-         customAdapter = new CustomAdapter();
-
-        listView.setAdapter(customAdapter);
+        if (EmployeeName!=null) {
+            customAdapter = new CustomAdapter();
+            listView.setAdapter(customAdapter);
+        }
         progressDialog  = new ProgressDialog(getContext());
         progressDialog.setMessage("Loading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         return v1;
     }
 
     @Override
     public void onStart() {
-        databaseReference.child("Users").child(uid).child("History").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
-                    retrieveData(dataSnapshot);
 
+        databaseReference.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild("History")){
+                    databaseReference.child("Users").child(uid).child("History").addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            if (dataSnapshot.exists()) {
+                                retrieveData(dataSnapshot);
+                            }
+
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d(TAG, "onCancelled: DatabaseError "+databaseError);
+                        }
+                    });
+                }else{
+                    progressDialog.dismiss();
+                    TextView_NoService.setVisibility(View.VISIBLE);
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -127,8 +148,11 @@ public class FragmentHistory extends Fragment {
 
             }
         });
+
         super.onStart();
     }
+
+
 
     private void retrieveData(DataSnapshot dataSnapshot) {
 
@@ -144,6 +168,7 @@ public class FragmentHistory extends Fragment {
                 Log.d(TAG, "retrieveData: Exception " + e.getMessage());
             }
         }
+        AcceptDate.add(dataSnapshot.child("DateTime").child("Date").getValue().toString()+ " " +dataSnapshot.child("DateTime").child("Time").getValue().toString());
         PcTypeList.add(dataSnapshot.child("Problem").child("PcType").getValue().toString());
         ProblemTypeList.add(dataSnapshot.child("Problem").child("ProblemType").getValue().toString());
 
@@ -190,13 +215,15 @@ public class FragmentHistory extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             view = getLayoutInflater().inflate(R.layout.history_custom_listview, null);
-            TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType;
+            TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate;
 
+            TV_AcceptDate = view.findViewById(R.id.AcceptDate);
             TV_Address = view.findViewById(R.id.Address);
             TV_ProblemType = view.findViewById(R.id.ProblemType);
             TV_Employee_Name = view.findViewById(R.id.Name);
             TV_PcType = view.findViewById(R.id.PcType);
 
+            TV_AcceptDate.setText(AcceptDate.get(position));
             TV_Address.setText(AddressList.get(position));
             TV_ProblemType.setText(ProblemTypeList.get(position));
             TV_PcType.setText(PcTypeList.get(position));

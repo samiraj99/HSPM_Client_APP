@@ -38,30 +38,34 @@ public class FragmentCurrentServices extends Fragment {
     DatabaseReference mdatabaseReference;
     Button BT_Cancel;
     ProgressDialog progressdialog;
-    TextView TV_p1;
-    TextView TV_Problem;
-    TextView TV_FindEmp;
+    TextView TV_p1, TV_FindEmp, pctypedetails, problemtypedetails, specifiedproblemdetails;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_current_services, container, false);
         TV_p1 = v.findViewById(R.id.TextView_P1);
-        TV_Problem = v.findViewById(R.id.TextView_Problem);
         BT_Cancel = v.findViewById(R.id.Button_Cancel);
         TV_FindEmp = v.findViewById(R.id.TextView_findingEmp);
+        pctypedetails = v.findViewById(R.id.pctypedetails);
+        problemtypedetails = v.findViewById(R.id.problemtypedetails);
+        specifiedproblemdetails = v.findViewById(R.id.specifiedproblemdetails);
+
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getUid();
+
         mdatabaseReference = FirebaseDatabase.getInstance().getReference();
         progressdialog = new ProgressDialog(getContext());
         mdatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    serviceId =  dataSnapshot.child("Users").child(uid).child("Current_Service_Id").getValue().toString();
+                    serviceId = dataSnapshot.child("Users").child(uid).child("Current_Service_Id").getValue().toString();
 
                 } catch (Exception e) {
                     Log.e("DataNotFound", "" + e);
                 }
-                if (!serviceId.equals("0")){DisplayProblem(serviceId);}
+                if (!serviceId.equals("0")) {
+                    DisplayProblem(serviceId);
+                }
             }
 
             @Override
@@ -103,12 +107,14 @@ public class FragmentCurrentServices extends Fragment {
 
     private void DisplayProblem(final String id) {
 
-        mdatabaseReference.addValueEventListener(new ValueEventListener() {
+        mdatabaseReference.child("Services").child(id).child("Problem").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    ST_Problem = dataSnapshot.child("Services").child(id).child("Problem").getValue().toString();
-                    TV_Problem.setText(ST_Problem);
+                    ProblemDetails pd = dataSnapshot.getValue(ProblemDetails.class);
+                    pctypedetails.setText(pd.getPcType());
+                    problemtypedetails.setText(pd.getProblemType());
+                    specifiedproblemdetails.setText(pd.getSpecifiedProblem());
                 } catch (Exception e) {
                     Log.e("Error", "" + e);
                 }

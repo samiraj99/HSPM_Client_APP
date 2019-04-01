@@ -3,6 +3,7 @@ package com.sam.hspm;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rey.material.widget.ProgressView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class RequestService extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(23.63936, 68.14712), new LatLng(28.20453, 97.34466));
+            new LatLng(18.569871, 73.680315), new LatLng(18.580548, 73.993418));
     private static int flag = 0;
     private static LatLng LatLng;
     String PcType, uid, ProblemType, SpecifiedProblem;
@@ -78,11 +80,13 @@ public class RequestService extends AppCompatActivity {
     ImageView IV_gps;
     FirebaseUser user;
     String address;
+    String pincode;
     private GoogleMap map;
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
-
+    ProgressView progressView;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,30 +115,25 @@ public class RequestService extends AppCompatActivity {
         ET_Area = findViewById(R.id.EditText_Area);
         ET_HouseNo = findViewById(R.id.EditText_HouseNo);
         ET_Landmark = findViewById(R.id.EditText_Landmark);
-
+        progressView = findViewById(R.id.ProgressView);
         // methods
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Submitting..!");
+        dialog.setCancelable(false);
+        progressView.start();
+
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (LatLng != null) {
-                    RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
-                    Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
-                    AddressData addressData = new AddressData(coordinates);
-                    AllData allData = new AllData(data, addressData, uid, "false");
-                    id = mreference.child("Services").push().getKey();
+                if (AddressVerified()) {
+                      if ( ! pincode.equals("412115")){
+                          showServiceGuaranteeDialogBox("Submit");
+                      }else {
+                        showConfirmationDialogBox("Submit"); }
 
-                    mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                SaveService(id);
-                            } else {
-                                Log.e("Error", "Failed to write in users data");
-                            }
-                        }
-                    });
                 } else {
-                    Toast.makeText(RequestService.this, "Something went wrong unable to detect location", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -142,37 +141,14 @@ public class RequestService extends AppCompatActivity {
         BT_Submit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (AddressVerified()){
+                    if ( ! pincode.equals("412115")){
+                        showServiceGuaranteeDialogBox("Submit2");
+                    }else {
+                        showConfirmationDialogBox("Submit2"); }
 
-                try {
-                    Area = ET_Area.getText().toString();
-                    HouseNo = ET_HouseNo.getText().toString();
-                    Landdmark = ET_Landmark.getText().toString();
-                } catch (Exception e) {
-                    Log.e(TAG, "onClick: Exception" + e.getMessage());
-                }
-                if (Area.isEmpty()) {
-                    ET_Area.setError("Fields can't be empty");
-                } else if (HouseNo.isEmpty()) {
-                    ET_HouseNo.setError("Fields can't be empty");
-                } else if (Landdmark.isEmpty()) {
-                    ET_Landmark.setError("Fields can't be empty");
-                } else {
-                    RequestData requestData = new RequestData(PcType, ProblemType, SpecifiedProblem);
-                    final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
-                    final AddressData addressData = new AddressData(Area, HouseNo, Landdmark, coordinates);
-                    AllData allData = new AllData(requestData, addressData, uid, "false");
-                    id = mreference.child("Services").push().getKey();
-
-                    mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                SaveService(id);
-                            } else {
-                                Log.e("Error", "Failed to write in users data");
-                            }
-                        }
-                    });
+                }else {
+                    Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -193,6 +169,130 @@ public class RequestService extends AppCompatActivity {
 
 
 
+    }
+
+    public void showServiceGuaranteeDialogBox(final String btn){
+        final AlertDialog.Builder builder= new AlertDialog.Builder(RequestService.this);
+        builder.setTitle("Service Guarantee !")
+                .setMessage("Service within 90 Mins not applicable in your Address")
+                .setCancelable(false);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (btn.equals("Submit"))
+                    submit();
+                if (btn.equals("Submit2"))
+                    submit2();
+            }
+
+        });
+        builder.create();
+        builder.show();
+    }
+
+    private void showConfirmationDialogBox(final String btn){
+        //Alert dialog box to confirm order
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RequestService.this);
+        alertDialog.setTitle("Confirm Request !!")
+                .setMessage("Are you Sure?\nYou want to confirm request?")
+                .setCancelable(false);
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (btn.equals("Submit"))
+                    submit();
+                if (btn.equals("Submit2"))
+                    submit2();
+            }
+
+        });
+        alertDialog.create();
+        alertDialog.show();
+    }
+
+    private void submit(){
+        dialog.show();
+        RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
+        Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
+        AddressData addressData = new AddressData(coordinates);
+        AllData allData = new AllData(data, addressData, uid, "false");
+        id = mreference.child("Services").push().getKey();
+
+        mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    SaveService(id);
+                    dialog.dismiss();
+                } else {
+                    Log.e("Error", "Failed to write in users data");
+                }
+            }
+        });
+    }
+
+    private void submit2(){
+
+        try {
+            Area = ET_Area.getText().toString();
+            HouseNo = ET_HouseNo.getText().toString();
+            Landdmark = ET_Landmark.getText().toString();
+        } catch (Exception e) {
+            Log.e(TAG, "onClick: Exception" + e.getMessage());
+        }
+        if (Area.isEmpty()) {
+            ET_Area.setError("Fields can't be empty");
+        } else if (HouseNo.isEmpty()) {
+            ET_HouseNo.setError("Fields can't be empty");
+        } else if (Landdmark.isEmpty()) {
+            ET_Landmark.setError("Fields can't be empty");
+        }else {
+            dialog.show();
+            RequestData requestData = new RequestData(PcType, ProblemType, SpecifiedProblem);
+            final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
+            final AddressData addressData = new AddressData(Area, HouseNo, Landdmark, coordinates);
+            AllData allData = new AllData(requestData, addressData, uid, "false");
+            id = mreference.child("Services").push().getKey();
+
+            mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        SaveService(id);
+                        dialog.dismiss();
+                    } else {
+                        Log.e("Error", "Failed to write in users data");
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean AddressVerified() {
+
+        String[] AreaPinCodes  = {"411043", "412115", "411057", "411027", "411007", "411019 ", "411021", "411045", "411061", "411038","411033","411042" };
+
+        if (pincode != null) {
+            for (String AreaPinCode : AreaPinCodes) {
+                if (pincode.equals(AreaPinCode)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void getDeviceLocation() {
@@ -247,7 +347,9 @@ public class RequestService extends AppCompatActivity {
         try {
             List<Address> St_Location = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             address = St_Location.get(0).getAddressLine(0);
+            pincode = St_Location.get(0).getPostalCode();
             ET_Address.setText(address);
+            progressView.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -271,7 +373,8 @@ public class RequestService extends AppCompatActivity {
                     map.getUiSettings().setMyLocationButtonEnabled(false);
                     init();
                 }
-                Toast.makeText(RequestService.this, "Map is Ready", Toast.LENGTH_SHORT).show();
+
+                Log.d(TAG, "onMapReady: Map is ready");
             }
         });
     }
