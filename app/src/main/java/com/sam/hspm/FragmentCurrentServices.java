@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +49,8 @@ public class FragmentCurrentServices extends Fragment {
         pctypedetails = v.findViewById(R.id.pctypedetails);
         problemtypedetails = v.findViewById(R.id.problemtypedetails);
         specifiedproblemdetails = v.findViewById(R.id.specifiedproblemdetails);
+
+        FirebaseApp.initializeApp(getContext());
 
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getUid();

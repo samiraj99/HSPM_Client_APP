@@ -58,4 +58,8 @@
     <string name="nam_e">Name :-</string>
     <string name="phoneno">PhoneNo :-</string>
     <string name="no_services_yet">No services yet</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="solved_issue">Solved Issue</string>
+    <string name="amount">Amount</string>
+    <string name="total">Total :</string>
 </resources>

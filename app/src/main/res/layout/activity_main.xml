@@ -7,6 +7,7 @@
     tools:context=".MainActivity"
     android:id="@+id/drawer_layout"
     tools:openDrawer="end"
+    android:background="#bbdefb"
     >
 
     <LinearLayout

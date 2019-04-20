@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#bbdefb">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#bbdefb">
+            android:background="#bbdefb"
+            android:id="@+id/layout">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="256dp"
+                android:layout_height="250dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="10dp"
@@ -36,21 +38,24 @@
         </RelativeLayout>
 
         <Button
+            android:layout_below="@+id/layout"
             android:id="@+id/Button_Software"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="89dp"
-            android:background="@drawable/software" />
+            android:background="@drawable/software"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="100dp"
+            />
 
         <TextView
+            android:id="@+id/TextView_RequestService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
             android:text="@string/software"
             android:textColor="@color/primaryText"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:layout_below="@+id/Button_Software"
+            />
 </RelativeLayout>

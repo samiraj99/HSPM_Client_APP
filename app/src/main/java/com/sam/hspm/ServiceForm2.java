@@ -79,19 +79,15 @@ public class ServiceForm2 extends AppCompatActivity {
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 for (CheckBox item : ListOfCheckBox) {
                     if (item.isChecked()) {
-                        ProblemType = ProblemType + " " + item.getText().toString();
+                        ProblemType = ProblemType.concat(" "+item.getText().toString());
                     }
                 }
                 SpecifiedProblem = ET_SpecifiedProblem.getText().toString();
 
                 if (ProblemType.isEmpty()) {
                     Toast.makeText(ServiceForm2.this, "Please select any one option.", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (SpecifiedProblem.isEmpty()) {
-                    ET_SpecifiedProblem.setError("Please Specify Problem.");
                     return;
                 }
 

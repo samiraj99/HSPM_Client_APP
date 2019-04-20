@@ -158,8 +158,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                    if (!ServiceId.equals("0")) {
                        EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
                        if (!EmployeeId.equals("0")) {
-                           getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
-                           navigationView.setCheckedItem(R.id.Nav_Home);
+                           String Receipt = dataSnapshot.child("Receipt").getValue().toString();
+                           if (Receipt.equals("1")){
+                               getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
+                               navigationView.setCheckedItem(R.id.Nav_Home);
+                           }else {
+                               getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
+                               navigationView.setCheckedItem(R.id.Nav_Home);
+                           }
                        } else {
                            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
                            navigationView.setCheckedItem(R.id.Nav_Home);

@@ -63,7 +63,7 @@ public class FragmentAcceptedService extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v1 = inflater.inflate(R.layout.fragment_accepted_service, container, false);
-
+        FirebaseApp.initializeApp(getContext());
         clientDatabase = FirebaseDatabase.getInstance().getReference();
 
         FirebaseOptions options = new FirebaseOptions.Builder()

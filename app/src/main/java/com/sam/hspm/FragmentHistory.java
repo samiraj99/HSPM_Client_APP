@@ -52,7 +52,7 @@ public class FragmentHistory extends Fragment {
     CustomAdapter customAdapter;
     ProgressDialog progressDialog;
     TextView TextView_NoService;
-    boolean flag;
+
     @Override
     public void onDestroy() {
         employeeApp.delete();
@@ -64,6 +64,7 @@ public class FragmentHistory extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v1 = inflater.inflate(R.layout.fragment_history, container, false);
 
+        FirebaseApp.initializeApp(getContext());
         //Initialization
         Log.d(TAG, "onCreateView: Initializing variables");
 

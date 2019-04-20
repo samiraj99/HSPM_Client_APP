@@ -235,7 +235,6 @@ public class RequestService extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     SaveService(id);
-                    dialog.dismiss();
                 } else {
                     Log.e("Error", "Failed to write in users data");
                 }
@@ -580,5 +579,10 @@ public class RequestService extends AppCompatActivity {
         checkLocationState();
         getLocationPermission();
 
+    }
+    @Override
+    protected void onDestroy() {
+        dialog.dismiss();
+        super.onDestroy();
     }
 }

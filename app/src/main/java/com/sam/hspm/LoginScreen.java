@@ -230,6 +230,7 @@ public class LoginScreen extends AppCompatActivity {
         String uid = firebaseAuth.getUid();
         databaseReference.child("Users").child(uid).child("Current_Service_Id").setValue(0);
         databaseReference.child("Users").child(uid).child("RequestAcceptedBy").setValue(0);
+        databaseReference.child("Users").child(uid).child("Receipt").setValue(0);
         databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
