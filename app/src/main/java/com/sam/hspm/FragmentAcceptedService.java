@@ -58,7 +58,8 @@ public class FragmentAcceptedService extends Fragment {
     private boolean mLocationPermissionGranted = false;
     private GoogleMap map;
     private static final float DEFAULT_ZOOM = 15f;
-    double Lat=0, Lng=0;
+    double Lat = 0, Lng = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,14 +68,14 @@ public class FragmentAcceptedService extends Fragment {
         clientDatabase = FirebaseDatabase.getInstance().getReference();
 
         FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setApplicationId(getString(R.string.ApplicationId))
-                    .setApiKey(getString(R.string.ApiKey))
-                    .setDatabaseUrl(getString(R.string.DatabaseUrl))
-                    .build();
-            FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
-            employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
-            firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
-            employeeDatabase = firebaseDatabase.getReference();
+                .setApplicationId(getString(R.string.ApplicationId))
+                .setApiKey(getString(R.string.ApiKey))
+                .setDatabaseUrl(getString(R.string.DatabaseUrl))
+                .build();
+        FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
+        employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
+        firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
+        employeeDatabase = firebaseDatabase.getReference();
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
@@ -107,6 +108,7 @@ public class FragmentAcceptedService extends Fragment {
                         Log.d(TAG, "onDataChange: LAT" + Lat);
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -114,6 +116,7 @@ public class FragmentAcceptedService extends Fragment {
             });
         }
     }
+
     @Override
     public void onDestroy() {
         employeeApp.delete();
@@ -145,7 +148,9 @@ public class FragmentAcceptedService extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 EmpID = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-               if (!EmpID.equals("0")){RetrieveEmployeeData(EmpID);}
+                if (!EmpID.equals("0")) {
+                    RetrieveEmployeeData(EmpID);
+                }
             }
 
             @Override
@@ -172,29 +177,34 @@ public class FragmentAcceptedService extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
+
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: Clearing Previous location");
-        map.clear();
-        Log.d(TAG, "moveCamera: Moving Camera to current location");
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        if (map != null) {
+            map.clear();
+            Log.d(TAG, "moveCamera: Moving Camera to current location");
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if (!title.equals("My Location")) {
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.motor_sports));
-            map.addMarker(options);
+            if (!title.equals("My Location")) {
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title(title)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.motor_sports));
+                map.addMarker(options);
+            }
         }
     }
 
     private void initMap() {
-        SupportMapFragment mapFragment = (SupportMapFragment)  getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
                 if (mLocationPermissionGranted) {
-                  if (Lat != 0 ){ moveCamera(new LatLng(Lat, Lng), DEFAULT_ZOOM, Name);}
+                    if (Lat != 0) {
+                        moveCamera(new LatLng(Lat, Lng), DEFAULT_ZOOM, Name);
+                    }
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                             PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
                             (getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -225,8 +235,9 @@ public class FragmentAcceptedService extends Fragment {
 
         }
     }
+
     private void checkLocationState() {
-        final LocationManager manager = (LocationManager)  getActivity().getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();

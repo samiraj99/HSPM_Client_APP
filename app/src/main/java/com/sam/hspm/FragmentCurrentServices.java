@@ -92,6 +92,7 @@ public class FragmentCurrentServices extends Fragment {
                             public void onClick(final DialogInterface dialog, int which) {
                                 mdatabaseReference.child("Services").child(serviceId).removeValue();
                                 mdatabaseReference.child("Users").child(uid).child("Current_Service_Id").setValue(0);
+                                mdatabaseReference.child("Users").child(uid).child("CurrentService").setValue(0);
                                 progressdialog.dismiss();
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -383,6 +383,7 @@ public class RequestService extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    mreference.child("Users").child(uid).child("CurrentService").setValue(1);
                     Toast.makeText(RequestService.this, "Request Send.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(RequestService.this, MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -94,14 +94,4 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/CardView_receipt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/next"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"
-        />
 </RelativeLayout>

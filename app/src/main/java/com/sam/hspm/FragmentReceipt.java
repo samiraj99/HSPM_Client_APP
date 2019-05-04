@@ -1,5 +1,6 @@
 package com.sam.hspm;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,7 @@ public class FragmentReceipt extends Fragment {
     ReceiptListAdapter adapter;
     ListView listView;
     TextView TV_Total;
-    private static final String TAG = "FragmentReceipt";
+    ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -43,6 +44,10 @@ public class FragmentReceipt extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         listView = v1.findViewById(R.id.listview1);
         TV_Total = v1.findViewById(R.id.tvTotal);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Loading");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
 
         databaseReference.child("Users").child(uid).child("Current_Service_Id").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -65,19 +70,21 @@ public class FragmentReceipt extends Fragment {
     }
 
     public void retrieveReceiptData() {
-        databaseReference.child("Services").child(serviceId).child("Receipt").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Services").child(serviceId).child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
-                    IssuedListwithAmount.add(helper);
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
+                        IssuedListwithAmount.add(helper);
+                    }
+                    if (getActivity()!=null) {
+                        adapter = new ReceiptListAdapter(getContext(), R.layout.receipt_adapter_layout, IssuedListwithAmount);
+                        listView.setAdapter(adapter);
+                    }
+                    calculateTotal();
                 }
-
-                adapter = new ReceiptListAdapter(getContext(), R.layout.receipt_adapter_layout, IssuedListwithAmount);
-                listView.setAdapter(adapter);
-
-                calculateTotal();
             }
 
             @Override
@@ -87,12 +94,19 @@ public class FragmentReceipt extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+    }
+
     private void calculateTotal() {
-        int Total=0;
+        int Total = 0;
         for (int i = 0; i < IssuedListwithAmount.size(); i++) {
             ReceiptHelper helper = IssuedListwithAmount.get(i);
             Total = helper.getAmount() + Total;
         }
         TV_Total.setText(String.valueOf(Total));
+        progressDialog.dismiss();
     }
 }

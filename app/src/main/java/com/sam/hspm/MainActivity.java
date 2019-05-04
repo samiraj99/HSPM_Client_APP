@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.sam.hspm.Services.MyFirebaseInstanceIDService;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -39,13 +41,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     int count;
     String ST_ProfileName;
     TextView ProfileName;
-    String ServiceId,EmployeeId;
+    String ServiceId, EmployeeId, Payment;
     ProgressDialog dialog;
     private static final String TAG = "MainActivity";
     ImageView imageView;
+    MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    //    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,8 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         dialog.setMessage("Loading...!");
-        dialog.show();
         dialog.setCancelable(false);
+        dialog.show();
+
         CheckedProfileIsComplete();
         header.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+        initFCM();
     }
 
     @Override
@@ -137,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private boolean isInternetConnectionAvilable(){
+    private boolean isInternetConnectionAvilable() {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
@@ -149,54 +156,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         Log.d(TAG, "onStart: Called");
 
-       if (isInternetConnectionAvilable()) {
-           mdDatabaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-               @Override
-               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                   ServiceId = dataSnapshot.child("Current_Service_Id").getValue().toString();
-                   dialog.dismiss();
-                   if (!ServiceId.equals("0")) {
-                       EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-                       if (!EmployeeId.equals("0")) {
-                           String Receipt = dataSnapshot.child("Receipt").getValue().toString();
-                           if (Receipt.equals("1")){
-                               getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
-                               navigationView.setCheckedItem(R.id.Nav_Home);
-                           }else {
-                               getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
-                               navigationView.setCheckedItem(R.id.Nav_Home);
-                           }
-                       } else {
-                           getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
-                           navigationView.setCheckedItem(R.id.Nav_Home);
-                       }
-                   } else {
-                       getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
-                       navigationView.setCheckedItem(R.id.Nav_Home);
-                   }
-               }
+        if (isInternetConnectionAvilable()) {
+            mdDatabaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ServiceId = dataSnapshot.child("CurrentService").getValue().toString();
 
-               @Override
-               public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Payment = dataSnapshot.child("Payment").getValue().toString();
+                    dialog.dismiss();
+                    if (!ServiceId.equals("0")) {
+                        EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
+                        if (!EmployeeId.equals("0")) {
+                            String Receipt = dataSnapshot.child("Receipt").getValue().toString();
+                            if (Receipt.equals("1")) {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
+                            } else {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
+                            }
+                        } else {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
+                        }
+                    } else if (Payment.equals("1")) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentPaymentSuccess()).commitAllowingStateLoss();
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
+                    }
+                    navigationView.setCheckedItem(R.id.Nav_Home);
+                }
 
-               }
-           });
-       }else
-       {
-           dialog.dismiss();
-           imageView.setVisibility(View.VISIBLE);
-           Snackbar snackbar = Snackbar.make(findViewById(R.id.drawer_layout),"No Internet Connection" ,Snackbar.LENGTH_INDEFINITE)
-                   .setAction("RETRY", new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                           onStart();
-                           dialog.show();
-                           imageView.setVisibility(View.GONE);
-                       }
-                   });
-           snackbar.show();
-       }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            dialog.dismiss();
+            imageView.setVisibility(View.VISIBLE);
+            Snackbar snackbar = Snackbar.make(findViewById(R.id.drawer_layout), "No Internet Connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onStart();
+                            dialog.show();
+                            imageView.setVisibility(View.GONE);
+                        }
+                    });
+            snackbar.show();
+        }
         super.onStart();
     }
 
+    private void initFCM() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "initFCM: token: " + token);
+        myFirebaseInstanceIDService.sendRegistrationToServer(token);
+    }
 }
