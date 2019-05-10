@@ -1,4 +1,4 @@
-package com.sam.hspm;
+package com.sam.hspm.utils;
 
 public class ProblemDetails {
 

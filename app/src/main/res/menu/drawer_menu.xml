@@ -18,4 +18,9 @@
         android:id="@+id/Nav_Help"
         android:icon="@drawable/ic_help_black_24dp"
         android:title="@string/help" />
+
+    <item
+        android:id="@+id/Nav_Logout"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:title="LogOut" />
 </menu>

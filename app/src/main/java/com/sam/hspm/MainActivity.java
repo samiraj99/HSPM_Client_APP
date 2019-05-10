@@ -50,19 +50,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    //    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        //    FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setContentView(R.layout.activity_main);
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         imageView = findViewById(R.id.ImageView_NoInternet);
         dialog = new ProgressDialog(this);
         View header = navigationView.getHeaderView(0);
         ProfileName = header.findViewById(R.id.TextView_UserName);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.opendrawer, R.string.closedrawer);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -106,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.Nav_Help:
                 Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.Nav_Logout:
+                firebaseAuth.signOut();
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
                 break;
         }
 

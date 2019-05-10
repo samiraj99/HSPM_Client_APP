@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sam.hspm.utils.RegistrationData;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class Profile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
                 St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
-                St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(String.class);
+                St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(Long.class).toString();
                 St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
                 try {
                     St_ProfileUrl = dataSnapshot.child("ProfileImage").child("ProfileImageUri").getValue(String.class);

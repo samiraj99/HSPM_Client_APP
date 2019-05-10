@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,18 +18,22 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhoneActivity extends AppCompatActivity {
 
-    private String verificationId;
+    private String verificationId, ProfileIsComplete;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private EditText editText;
-
+    String phonenumber;
 
     DatabaseReference databaseReference;
 
@@ -39,12 +44,10 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
         progressBar = findViewById(R.id.progressbar);
         editText = findViewById(R.id.editTextCode);
 
-        String phonenumber = getIntent().getStringExtra("phonenumber");
+        phonenumber = getIntent().getStringExtra("phonenumber");
         sendVerificationCode(phonenumber);
 
         findViewById(R.id.buttonSignIn).setOnClickListener(new View.OnClickListener() {
@@ -78,19 +81,17 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             String uid = mAuth.getCurrentUser().getUid();
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
-                            databaseReference.child("Users").child(uid).child("Current_Service_Id").setValue(0);
-                            databaseReference.child("Users").child(uid).child("RequestAcceptedBy").setValue(0);
-                            databaseReference.child("Users").child(uid).child("Receipt").setValue(0);
-                            databaseReference.child("Users").child(uid).child("Payment").setValue(0);
-                            databaseReference.child("Users").child(uid).child("CurrentService").setValue(0);
+                            databaseReference.child("Current_Service_Id").setValue(0);
+                            databaseReference.child("RequestAcceptedBy").setValue(0);
+                            databaseReference.child("Receipt").setValue(0);
+                            databaseReference.child("Payment").setValue(0);
+                            databaseReference.child("CurrentService").setValue(0);
 
-
-                            Intent intent = new Intent(VerifyPhoneActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                            startActivity(intent);
-
+                            databaseReference.child("Profile").child("ProfileInfo").child("PhoneNo").setValue(phonenumber);
+                            Intent i = new Intent(VerifyPhoneActivity.this, FillProfile.class);
+                            startActivity(i);
                         } else {
                             Toast.makeText(VerifyPhoneActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -115,7 +116,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
+            //super.onCodeSent(s, forceResendingToken);
             verificationId = s;
         }
 

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +41,12 @@ public class FragmentHome extends Fragment {
     private ArrayList<String> imageURL = new ArrayList<>();
     int count;
     View v1;
-    Button BT_Software;
+    CardView BT_Software, Rent, Assemble;
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private FirebaseUser user;
+    private String uid;
+    private String ProfileIsComplete;
 
     @Nullable
     @Override
@@ -47,9 +56,18 @@ public class FragmentHome extends Fragment {
 
         viewPager = v1.findViewById(R.id.viewPager);
         sliderDotspanel = v1.findViewById(R.id.SliderDots);
+        BT_Software = v1.findViewById(R.id.services);
+        Rent = v1.findViewById(R.id.rent);
+        Assemble = v1.findViewById(R.id.assemble);
+
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDataset = new ArrayList<>();
-        BT_Software = v1.findViewById(R.id.Button_Software);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            uid = user.getUid();
+        }
 
         BT_Software.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +77,39 @@ public class FragmentHome extends Fragment {
             }
         });
 
+        Rent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Assemble.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Comming Soon", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        databaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    ProfileIsComplete = dataSnapshot.child("ProfileIsComplete").getValue().toString();
+                    if (ProfileIsComplete.equals("False")) {
+                        getFragmentManager().beginTransaction().replace(R.id.Fragment_Container,
+                                new FillProfile()).commit();
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", "" + e);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,7 +182,6 @@ public class FragmentHome extends Fragment {
 
         return v1;
     }
-
 
 
     private class SliderTimer extends TimerTask {

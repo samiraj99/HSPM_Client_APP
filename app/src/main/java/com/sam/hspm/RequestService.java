@@ -50,6 +50,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rey.material.widget.ProgressView;
+import com.sam.hspm.utils.PlaceAutocompleteAdapter;
+import com.sam.hspm.utils.RequestData;
 
 import java.io.IOException;
 import java.util.ArrayList;

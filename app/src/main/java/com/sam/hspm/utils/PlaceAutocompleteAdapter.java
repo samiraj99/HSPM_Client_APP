@@ -1,4 +1,4 @@
-package com.sam.hspm;
+package com.sam.hspm.utils;
 /*
  * Copyright (C) 2015 Google Inc. All Rights Reserved.
  *
