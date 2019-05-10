@@ -179,11 +179,11 @@ public class FragmentPaymentSuccess extends Fragment {
     //Fetch Current service Id from Employee database
     private void getEmployeeDetails(String eId) {
 
-        employeeDatabase.child("Users").child(eId).addListenerForSingleValueEvent(new ValueEventListener() {
+        employeeDatabase.child("Users").child(eId).child("Profile").child("ProfileDetails").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    EmpName = Objects.requireNonNull(dataSnapshot.child("Name").getValue()).toString();
+                    EmpName = Objects.requireNonNull(dataSnapshot.child("FullName").getValue()).toString();
                     String temp = "Please rate " + EmpName;
                     TV_Employee_Name.setText(temp);
                 }

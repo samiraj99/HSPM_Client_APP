@@ -59,6 +59,7 @@
             android:name=".ServiceForm2"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".CompleteProfile"></activity>
+        <activity android:name=".FillProfile"></activity>
     </application>
 
 </manifest>

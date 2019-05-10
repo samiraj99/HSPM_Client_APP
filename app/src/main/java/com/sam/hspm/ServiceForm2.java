@@ -34,7 +34,6 @@ public class ServiceForm2 extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String uid;
-    String ProfileIsComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,21 +58,7 @@ public class ServiceForm2 extends AppCompatActivity {
         if (user != null) {
             uid = user.getUid();
         }
-        databaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    ProfileIsComplete = dataSnapshot.child("ProfileIsComplete").getValue().toString();
-                } catch (Exception e) {
-                    Log.e("Error", "" + e);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         Bt_Next.setOnClickListener(new View.OnClickListener() {
@@ -91,22 +76,13 @@ public class ServiceForm2 extends AppCompatActivity {
                     return;
                 }
 
-
-                if (ProfileIsComplete.equals("True")) {
                     Intent i = new Intent(ServiceForm2.this, RequestService.class);
                     i.putExtra("PC Type", PcType);
                     i.putExtra("Problem Types", ProblemType);
                     i.putExtra("Specified Problem", SpecifiedProblem);
                     startActivity(i);
                     Bt_Next.setEnabled(false);
-                } else {
-                    Intent i = new Intent(ServiceForm2.this, CompleteProfile.class);
-                    i.putExtra("PC Type", PcType);
-                    i.putExtra("Problem Types", ProblemType);
-                    i.putExtra("Specified Problem", SpecifiedProblem);
-                    startActivity(i);
-                    Bt_Next.setEnabled(false);
-                }
+
 
             }
         });

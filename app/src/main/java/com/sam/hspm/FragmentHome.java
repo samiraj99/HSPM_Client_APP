@@ -46,7 +46,6 @@ public class FragmentHome extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseUser user;
     private String uid;
-    private String ProfileIsComplete;
 
     @Nullable
     @Override
@@ -91,25 +90,6 @@ public class FragmentHome extends Fragment {
             }
         });
 
-        databaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    ProfileIsComplete = dataSnapshot.child("ProfileIsComplete").getValue().toString();
-                    if (ProfileIsComplete.equals("False")) {
-                        getFragmentManager().beginTransaction().replace(R.id.Fragment_Container,
-                                new FillProfile()).commit();
-                    }
-                } catch (Exception e) {
-                    Log.e("Error", "" + e);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
             @Override

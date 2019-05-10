@@ -24,16 +24,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhoneActivity extends AppCompatActivity {
 
-    private String verificationId, ProfileIsComplete;
+    private String verificationId;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private EditText editText;
-    String phonenumber;
+    String phonenumber , number;
+    boolean IsProfileComplete;
+
 
     DatabaseReference databaseReference;
 
@@ -47,8 +48,13 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar);
         editText = findViewById(R.id.editTextCode);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
         phonenumber = getIntent().getStringExtra("phonenumber");
-        sendVerificationCode(phonenumber);
+
+        number = "+91" + phonenumber;
+
+        sendVerificationCode(number);
 
         findViewById(R.id.buttonSignIn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,18 +86,40 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            String uid = mAuth.getCurrentUser().getUid();
-                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                            final String uid = mAuth.getCurrentUser().getUid();
 
-                            databaseReference.child("Current_Service_Id").setValue(0);
-                            databaseReference.child("RequestAcceptedBy").setValue(0);
-                            databaseReference.child("Receipt").setValue(0);
-                            databaseReference.child("Payment").setValue(0);
-                            databaseReference.child("CurrentService").setValue(0);
+                            try {
 
-                            databaseReference.child("Profile").child("ProfileInfo").child("PhoneNo").setValue(phonenumber);
-                            Intent i = new Intent(VerifyPhoneActivity.this, FillProfile.class);
-                            startActivity(i);
+                                databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                           IsProfileComplete = dataSnapshot.hasChild(uid);
+
+                                        if (IsProfileComplete){
+                                            Intent i = new Intent(VerifyPhoneActivity.this,MainActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(i);
+                                            finish();
+                                        }else {
+                                            Intent i = new Intent(VerifyPhoneActivity.this, FillProfile.class);
+                                            i.putExtra("PhoneNo", phonenumber);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                            }catch (Exception e){
+                                Log.e("VerifyActivity", "onComplete: "+"User is not created"+e.getMessage());
+                            }
+
+
                         } else {
                             Toast.makeText(VerifyPhoneActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }

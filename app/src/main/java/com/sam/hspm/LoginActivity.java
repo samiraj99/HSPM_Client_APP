@@ -33,10 +33,8 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                String phoneNumber = "+91" + number;
-
                 Intent intent = new Intent(LoginActivity.this, VerifyPhoneActivity.class);
-                intent.putExtra("phonenumber", phoneNumber);
+                intent.putExtra("phonenumber", number);
                 startActivity(intent);
 
             }
@@ -50,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
             startActivity(intent);
         }
     }

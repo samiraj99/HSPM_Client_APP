@@ -124,10 +124,10 @@ public class FragmentAcceptedService extends Fragment {
     }
 
     private void RetrieveEmployeeData(String EmployeeId) {
-        employeeDatabase.child("Users").child(EmployeeId).addValueEventListener(new ValueEventListener() {
+        employeeDatabase.child("Users").child(EmployeeId).child("Profile").child("ProfileDetails").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Name = dataSnapshot.child("Name").getValue().toString();
+                Name = dataSnapshot.child("FullName").getValue().toString();
                 PhoneNo = dataSnapshot.child("PhoneNo").getValue().toString();
                 TV_Name.setText(Name);
                 TV_PhoneNo.setText(PhoneNo);

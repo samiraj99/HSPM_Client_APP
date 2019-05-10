@@ -3,7 +3,6 @@ package com.sam.hspm;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseAuth firebaseAuth;
     DatabaseReference mdDatabaseReference;
     String uid;
-    int count;
     String ST_ProfileName;
     TextView ProfileName;
     String ServiceId, EmployeeId, Payment;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainActivity";
     ImageView imageView;
     MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
-
+    FirebaseUser firebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         firebaseAuth = FirebaseAuth.getInstance();
         uid = firebaseAuth.getUid();
+        firebaseUser = firebaseAuth.getCurrentUser();
+
         mdDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.setCancelable(false);
         dialog.show();
 
-        CheckedProfileIsComplete();
+        setProfileName();
+
         header.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         initFCM();
+
     }
 
     @Override
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Nav_Logout:
                 firebaseAuth.signOut();
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(loginIntent);
                 break;
         }
@@ -127,23 +131,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    void CheckedProfileIsComplete() {
+    void setProfileName() {
 
-        mdDatabaseReference.addValueEventListener(new ValueEventListener() {
+        mdDatabaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").child("Name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    ST_ProfileName = dataSnapshot.child("Users").child(uid).child("Profile").child("ProfileInfo").child("Name").getValue().toString();
+                    ST_ProfileName = dataSnapshot.getValue().toString();
                 } catch (Exception e) {
                     Log.d("Exception", "" + e);
                 }
                 ProfileName.setText(ST_ProfileName);
-                count = (int) dataSnapshot.child("Users").child(uid).child("Profile").child("ProfileInfo").getChildrenCount();
-                if (count >= 3) {
-                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("True");
-                } else {
-                    mdDatabaseReference.child("Users").child(uid).child("ProfileIsComplete").setValue("False");
-                }
             }
 
             @Override

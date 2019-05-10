@@ -107,7 +107,7 @@ public class Profile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
                 St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
-                St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(Long.class).toString();
+                St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(String.class);
                 St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
                 try {
                     St_ProfileUrl = dataSnapshot.child("ProfileImage").child("ProfileImageUri").getValue(String.class);
@@ -234,7 +234,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 auth.signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

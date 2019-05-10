@@ -1,61 +1,68 @@
 package com.sam.hspm;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class FillProfile extends Fragment {
+public class FillProfile extends AppCompatActivity {
 
     private TextView backcolor;
     private FirebaseAuth mAuth;
-    private DatabaseReference UserRefs;
+    private DatabaseReference UserRefs , databaseReference;
     private EditText fname, email, address;
     private TextInputLayout fnamewrap, emailwrap, addwrap;
     private Button save;
-    private DatabaseReference databaseReference;
-    private View v1;
+    String phoneNumber;
+    private static final String TAG = "FillProfile";
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v1 = inflater.inflate(R.layout.activity_fill_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fill_profile);
 
-        backcolor = v1.findViewById(R.id.backcolor);
+        backcolor = findViewById(R.id.backcolor);
 
-        int height = getActivity().getWindowManager().getDefaultDisplay().getHeight();
+        int height = getWindowManager().getDefaultDisplay().getHeight();
         double h1 = height * 0.35;
         backcolor.setHeight((int) h1);
 
+        try {
+            phoneNumber = getIntent().getStringExtra("PhoneNo");
+        }catch (Exception e){
+            Log.e(TAG, "onCreate: "+e);
+        }
+
         mAuth = FirebaseAuth.getInstance();
-        String currentUser = mAuth.getCurrentUser().getUid();
+        final String currentUser = mAuth.getCurrentUser().getUid();
+
 
         UserRefs = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Profile").child("ProfileInfo");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser);
 
-        fname = v1.findViewById(R.id.fname);
-        email = v1.findViewById(R.id.email);
-        address = v1.findViewById(R.id.address);
-        fnamewrap = v1.findViewById(R.id.fnameWrapper);
-        emailwrap = v1.findViewById(R.id.emailWrapper);
-        addwrap = v1.findViewById(R.id.addWrapper);
-        save = v1.findViewById(R.id.save);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        fname = findViewById(R.id.fname);
+        email = findViewById(R.id.email);
+        address = findViewById(R.id.address);
+        fnamewrap = findViewById(R.id.fnameWrapper);
+        emailwrap = findViewById(R.id.emailWrapper);
+        addwrap = findViewById(R.id.addWrapper);
+        save = findViewById(R.id.save);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,17 +93,29 @@ public class FillProfile extends Fragment {
                 map.put("Name", fullname);
                 map.put("Email", emailid);
                 map.put("Address", homeaddress);
+                map.put("PhoneNo", phoneNumber);
                 UserRefs.updateChildren(map);
 
-                databaseReference.child("ProfileIsComplete").setValue("True");
+                databaseReference.child("Users").child(currentUser).child("Current_Service_Id").setValue(0);
+                databaseReference.child("Users").child(currentUser).child("RequestAcceptedBy").setValue(0);
+                databaseReference.child("Users").child(currentUser).child("Receipt").setValue(0);
+                databaseReference.child("Users").child(currentUser).child("Payment").setValue(0);
+                databaseReference.child("Users").child(currentUser).child("CurrentService").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Intent i = new Intent(FillProfile.this,MainActivity.class);
+                        startActivity(i);
+                    }
+                });
 
-                Fragment fragment = new FragmentHome();
-
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.Fragment_Container, fragment).commit();
             }
         });
+    }
 
-        return v1;
+
+    @Override
+    public void onBackPressed() {
+        FirebaseAuth.getInstance().getCurrentUser().delete();
+        super.onBackPressed();
     }
 }
