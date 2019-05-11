@@ -71,15 +71,14 @@
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
-    <string name="slide_1_title">Hello Food!</string>
-    <string name="slide_1_desc">The easiest way to order food from your favourite restaurant!</string>
+    <string name="slide_1_desc">Just getting started? Lets take a look at some of the great features of this app</string>
 
-    <string name="slide_2_title">Movie Tickets</string>
-    <string name="slide_2_desc">Book movie tickets for your family and friends!</string>
+    <string name="slide_2_title">Superfast Service</string>
+    <string name="slide_2_desc">Always on time because faster is better</string>
 
     <string name="slide_3_title">Great Offers</string>
     <string name="slide_3_desc">Best discounts on every single service we offer!</string>
 
-    <string name="slide_4_title">World Travel</string>
-    <string name="slide_4_desc">Book tickets of any transportation and travel the world!</string>
+    <string name="slide_4_title">Doorstep Services</string>
+    <string name="slide_4_desc">Thats right! Skip the queue and get services at your place</string>
 </resources>

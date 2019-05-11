@@ -14,6 +14,10 @@
         <ImageView
             android:layout_width="@dimen/img_width_height"
             android:layout_height="@dimen/img_width_height"
+            android:src="@drawable/doorstep"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_marginBottom="28dp"
             />
 
         <TextView
@@ -22,7 +26,8 @@
             android:text="@string/slide_4_title"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,6 +35,7 @@
             android:layout_marginTop="20dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"
+            android:textStyle="italic"
             android:text="@string/slide_4_desc"
             android:textAlignment="center"
             android:textColor="@android:color/white"
