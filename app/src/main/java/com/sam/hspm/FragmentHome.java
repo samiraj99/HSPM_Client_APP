@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -24,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sam.hspm.utils.SliderAdapter;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -90,75 +90,78 @@ public class FragmentHome extends Fragment {
             }
         });
 
+        try {
+            mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        count = (int) dataSnapshot.getChildrenCount();
+                        for (int i = 1; i <= count; i++) {
 
-                try {
-                    count = (int) dataSnapshot.getChildrenCount();
-                    for (int i = 1; i <= count; i++) {
+                            String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
+                            imageURL.add(s);
+                        }
 
-                        String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
-                        imageURL.add(s);
-                    }
+                        SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
 
-                    SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
+                        viewPager.setAdapter(viewPagerAdapter);
 
-                    viewPager.setAdapter(viewPagerAdapter);
+                        dotscount = count;
+                        dots = new ImageView[dotscount];
 
-                    dotscount = count;
-                    dots = new ImageView[dotscount];
+                        for (i = 0; i < dotscount; i++) {
 
-                    for (i = 0; i < dotscount; i++) {
+                            dots[i] = new ImageView(getContext());
+                            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
 
-                        dots[i] = new ImageView(getContext());
-                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(8, 0, 8, 0);
 
-                        params.setMargins(8, 0, 8, 0);
-
-                        sliderDotspanel.addView(dots[i], params);
-
-                    }
-
-                    dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
-                    Timer timer = new Timer();
-                    timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
-
-                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                        @Override
-                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            sliderDotspanel.addView(dots[i], params);
 
                         }
 
-                        @Override
-                        public void onPageSelected(int position) {
+                        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                        Timer timer = new Timer();
+                        timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
 
-                            for (int i = 0; i < dotscount; i++) {
-                                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                             }
 
-                            dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                            @Override
+                            public void onPageSelected(int position) {
 
-                        }
+                                for (int i = 0; i < dotscount; i++) {
+                                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                                }
 
-                        @Override
-                        public void onPageScrollStateChanged(int state) {
+                                dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
 
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
+                            }
+
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e("Error", e.getMessage());
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return v1;
     }

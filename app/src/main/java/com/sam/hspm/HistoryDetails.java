@@ -118,10 +118,8 @@ public class HistoryDetails extends AppCompatActivity {
 
                 }
             });
-
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         ViewReceipt.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +148,6 @@ public class HistoryDetails extends AppCompatActivity {
 
     private void retrieveEmployeeData(String requestAcceptedBy) {
         try {
-
             employeeDatabase.child("Users").child(requestAcceptedBy).child("Profile").child("ProfileDetails").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -170,28 +167,31 @@ public class HistoryDetails extends AppCompatActivity {
 
     public void retrieveReceiptData() {
         Log.d(TAG, "retrieveReceiptData: Called");
-        databaseReference.child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        try {
+            databaseReference.child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()) {
-                    Log.d(TAG, "onDataChange: In if");
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
-                        Log.d("RetriveEmpData", "onDataChange: " + helper.issuedProblem);
-                        IssuedListwithAmount.add(helper);
+                    if (dataSnapshot.exists()) {
+                        Log.d(TAG, "onDataChange: In if");
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
+                            IssuedListwithAmount.add(helper);
+                        }
+                        adapter = new ReceiptListAdapter(HistoryDetails.this, R.layout.receipt_adapter_layout, IssuedListwithAmount);
+                        listView.setAdapter(adapter);
+                        calculateTotal();
                     }
-                    adapter = new ReceiptListAdapter(HistoryDetails.this, R.layout.receipt_adapter_layout, IssuedListwithAmount);
-                    listView.setAdapter(adapter);
-                    calculateTotal();
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static class Co_Ordinates {

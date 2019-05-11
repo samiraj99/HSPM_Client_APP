@@ -44,8 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginScreen" />
-        <activity android:name=".SignUpScreen" />
         <activity android:name=".Profile" />
         <activity android:name=".RequestService" />
         <activity android:name=".MainActivity" />

@@ -33,7 +33,7 @@ public class FragmentPaymentSuccess extends Fragment {
     RatingBar ratingBar;
     TextView TV_RatingBar, TV_Employee_Name;
     FirebaseAuth firebaseAuth;
-    DatabaseReference clientDatabase, employeeDatabase ,UserRef;
+    DatabaseReference clientDatabase, employeeDatabase, UserRef;
     FirebaseDatabase firebaseDatabase;
     String uid, empId;
     FirebaseApp employeeApp;
@@ -107,50 +107,54 @@ public class FragmentPaymentSuccess extends Fragment {
             public void onClick(View v) {
 
 
-                final HashMap<String,Object> map = new HashMap<>();
-                map.put("Current_Service_Id","0");
-                map.put("RequestAcceptedBy","0");
-                map.put("Receipt","0");
-                map.put("Payment","0");
+                final HashMap<String, Object> map = new HashMap<>();
+                map.put("Current_Service_Id", "0");
+                map.put("RequestAcceptedBy", "0");
+                map.put("Receipt", "0");
+                map.put("Payment", "0");
 
                 progressDialog.setMessage("Submitting");
                 progressDialog.show();
                 rating = ((int) ratingBar.getRating());
                 if (rating != 0) {
-                    clientDatabase.child("Services").child(CurrentServiceId).child("Ratings").setValue(rating).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                //TODO: move service from services to history
-                                clientDatabase.child("Services").child(CurrentServiceId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        clientDatabase.child("CompletedServices").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                if (databaseError != null) {
-                                                    Log.e(TAG, "onComplete: Copy Failed");
-                                                } else {
-                                                    clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
-                                                    clientDatabase.child("Services").child(CurrentServiceId).removeValue();
-                                                    UserRef.child("History").push().setValue(CurrentServiceId);
-                                                    employeeDatabase.child("Users").child(empId).child("History").push().setValue(CurrentServiceId);
-                                                    UserRef.updateChildren(map);
-                                                    progressDialog.dismiss();
+                    try {
+                        clientDatabase.child("Services").child(CurrentServiceId).child("Ratings").setValue(rating).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    //TODO: move service from services to history
+                                    clientDatabase.child("Services").child(CurrentServiceId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            clientDatabase.child("CompletedServices").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                                                @Override
+                                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                                    if (databaseError != null) {
+                                                        Log.e(TAG, "onComplete: Copy Failed");
+                                                    } else {
+                                                        clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
+                                                        clientDatabase.child("Services").child(CurrentServiceId).removeValue();
+                                                        UserRef.child("History").push().setValue(CurrentServiceId);
+                                                        employeeDatabase.child("Users").child(empId).child("History").push().setValue(CurrentServiceId);
+                                                        UserRef.updateChildren(map);
+                                                        progressDialog.dismiss();
+                                                    }
                                                 }
-                                            }
-                                        });
-                                    }
+                                            });
+                                        }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
+                                        }
+                                    });
 
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -160,45 +164,51 @@ public class FragmentPaymentSuccess extends Fragment {
 
     // Fetching Employee ID from Client database
     private void getEmployeeId() {
-        clientDatabase.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    empId = Objects.requireNonNull(dataSnapshot.child("RequestAcceptedBy").getValue()).toString();
-                    CurrentServiceId = Objects.requireNonNull(dataSnapshot.child("Current_Service_Id").getValue()).toString();
-                    getEmployeeDetails(empId);
-                   // progressDialog.dismiss();
+        try {
+            clientDatabase.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        empId = Objects.requireNonNull(dataSnapshot.child("RequestAcceptedBy").getValue()).toString();
+                        CurrentServiceId = Objects.requireNonNull(dataSnapshot.child("Current_Service_Id").getValue()).toString();
+                        getEmployeeDetails(empId);
+                        // progressDialog.dismiss();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // Fetching Employee Details from Employee database.
     //                  OR
     //Fetch Current service Id from Employee database
     private void getEmployeeDetails(String eId) {
-
-        employeeDatabase.child("Users").child(eId).child("Profile").child("ProfileDetails").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    EmpName = Objects.requireNonNull(dataSnapshot.child("FullName").getValue()).toString();
-                    String temp = "Please rate " + EmpName;
-                    TV_Employee_Name.setText(temp);
+        try {
+            employeeDatabase.child("Users").child(eId).child("Profile").child("ProfileDetails").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        EmpName = Objects.requireNonNull(dataSnapshot.child("FullName").getValue()).toString();
+                        String temp = "Please rate " + EmpName;
+                        TV_Employee_Name.setText(temp);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

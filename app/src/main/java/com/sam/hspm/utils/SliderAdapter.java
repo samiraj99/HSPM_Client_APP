@@ -1,4 +1,4 @@
-package com.sam.hspm;
+package com.sam.hspm.utils;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.sam.hspm.R;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;

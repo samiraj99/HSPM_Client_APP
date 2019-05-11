@@ -50,25 +50,30 @@ public class FragmentCurrentServices extends Fragment {
 
         mdatabaseReference = FirebaseDatabase.getInstance().getReference();
         progressdialog = new ProgressDialog(getContext());
-        mdatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    serviceId = dataSnapshot.child("Users").child(uid).child("Current_Service_Id").getValue().toString();
 
-                } catch (Exception e) {
-                    Log.e("DataNotFound", "" + e);
+        try {
+            mdatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        serviceId = dataSnapshot.child("Users").child(uid).child("Current_Service_Id").getValue().toString();
+
+                    } catch (Exception e) {
+                        Log.e("DataNotFound", "" + e);
+                    }
+                    if (!serviceId.equals("0")) {
+                        DisplayProblem(serviceId);
+                    }
                 }
-                if (!serviceId.equals("0")) {
-                    DisplayProblem(serviceId);
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         BT_Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,31 +103,31 @@ public class FragmentCurrentServices extends Fragment {
             }
         });
 
-
         return v;
     }
 
     private void DisplayProblem(final String id) {
-
-        mdatabaseReference.child("Services").child(id).child("Problem").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    ProblemDetails pd = dataSnapshot.getValue(ProblemDetails.class);
-                    pctypedetails.setText(pd.getPcType());
-                    problemtypedetails.setText(pd.getProblemType());
-                    specifiedproblemdetails.setText(pd.getSpecifiedProblem());
-                } catch (Exception e) {
-                    Log.e("Error", "" + e);
+        try {
+            mdatabaseReference.child("Services").child(id).child("Problem").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        ProblemDetails pd = dataSnapshot.getValue(ProblemDetails.class);
+                        pctypedetails.setText(pd.getPcType());
+                        problemtypedetails.setText(pd.getProblemType());
+                        specifiedproblemdetails.setText(pd.getSpecifiedProblem());
+                    } catch (Exception e) {
+                        Log.e("Error", "" + e);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

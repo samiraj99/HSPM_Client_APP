@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sam.hspm.utils.PrefManager;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private ViewPager viewPager;

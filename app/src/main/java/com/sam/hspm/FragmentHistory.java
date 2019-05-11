@@ -94,52 +94,55 @@ public class FragmentHistory extends Fragment {
 
     @Override
     public void onStart() {
+        try {
+            databaseReference.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("History")) {
+                        databaseReference.child("Users").child(uid).child("History").addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                if (dataSnapshot.exists()) {
+                                    serviceId = dataSnapshot.getValue(String.class);
+                                    retrieveData(serviceId);
+                                }
 
-        databaseReference.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("History")) {
-                    databaseReference.child("Users").child(uid).child("History").addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            if (dataSnapshot.exists()) {
-                                serviceId = dataSnapshot.getValue(String.class);
-                                retrieveData(serviceId);
                             }
 
-                        }
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-                        }
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            }
 
-                        }
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            }
 
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.d(TAG, "onCancelled: DatabaseError " + databaseError);
-                        }
-                    });
-                } else {
-                    progressDialog.dismiss();
-                    TextView_NoService.setVisibility(View.VISIBLE);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.d(TAG, "onCancelled: DatabaseError " + databaseError);
+                            }
+                        });
+                    } else {
+                        progressDialog.dismiss();
+                        TextView_NoService.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.onStart();
     }
@@ -148,24 +151,26 @@ public class FragmentHistory extends Fragment {
     private void retrieveData(final String sid) {
 
         Log.d(TAG, "retrieveData: 1 " + sid);
+        try {
+            databaseReference.child("CompletedServices").child(sid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ServiceID.add(sid);
+                    ServiceStatus.add("Service Completed");
+                    DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
+                    Amount.add("₹" + dataSnapshot.child("Total").getValue().toString());
+                    customAdapter.notifyDataSetChanged();
+                    progressDialog.dismiss();
+                }
 
-        databaseReference.child("CompletedServices").child(sid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ServiceID.add(sid);
-                ServiceStatus.add("Service Completed");
-                DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
-                Amount.add("₹" + dataSnapshot.child("Total").getValue().toString());
-                customAdapter.notifyDataSetChanged();
-                progressDialog.dismiss();
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -32,10 +32,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     private EditText editText;
-    String phonenumber , number;
+    String phonenumber, number;
     boolean IsProfileComplete;
-
-
     DatabaseReference databaseReference;
 
     @Override
@@ -44,14 +42,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify_phone);
 
         mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         progressBar = findViewById(R.id.progressbar);
         editText = findViewById(R.id.editTextCode);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-
         phonenumber = getIntent().getStringExtra("phonenumber");
-
         number = "+91" + phonenumber;
 
         sendVerificationCode(number);
@@ -63,7 +59,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 String code = editText.getText().toString().trim();
 
                 if (code.isEmpty() || code.length() < 6) {
-
                     editText.setError("Enter code...");
                     editText.requestFocus();
                     return;
@@ -89,18 +84,17 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                             final String uid = mAuth.getCurrentUser().getUid();
 
                             try {
-
                                 databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                           IsProfileComplete = dataSnapshot.hasChild(uid);
+                                        IsProfileComplete = dataSnapshot.hasChild(uid);
 
-                                        if (IsProfileComplete){
-                                            Intent i = new Intent(VerifyPhoneActivity.this,MainActivity.class);
-                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        if (IsProfileComplete) {
+                                            Intent i = new Intent(VerifyPhoneActivity.this, MainActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                             startActivity(i);
                                             finish();
-                                        }else {
+                                        } else {
                                             Intent i = new Intent(VerifyPhoneActivity.this, FillProfile.class);
                                             i.putExtra("PhoneNo", phonenumber);
                                             startActivity(i);
@@ -113,13 +107,9 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
                                     }
                                 });
-
-
-                            }catch (Exception e){
-                                Log.e("VerifyActivity", "onComplete: "+"User is not created"+e.getMessage());
+                            } catch (Exception e) {
+                                Log.e("VerifyActivity", "onComplete: " + "User is not created" + e.getMessage());
                             }
-
-
                         } else {
                             Toast.makeText(VerifyPhoneActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }

@@ -26,13 +26,12 @@ public class FillProfile extends AppCompatActivity {
 
     private TextView backcolor;
     private FirebaseAuth mAuth;
-    private DatabaseReference UserRefs , databaseReference;
+    private DatabaseReference UserRefs, databaseReference;
     private EditText fname, email, address;
     private TextInputLayout fnamewrap, emailwrap, addwrap;
     private Button save;
     String phoneNumber;
     private static final String TAG = "FillProfile";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +44,12 @@ public class FillProfile extends AppCompatActivity {
         double h1 = height * 0.35;
         backcolor.setHeight((int) h1);
 
-        try {
+        if (getIntent() != null) {
             phoneNumber = getIntent().getStringExtra("PhoneNo");
-        }catch (Exception e){
-            Log.e(TAG, "onCreate: "+e);
         }
 
         mAuth = FirebaseAuth.getInstance();
         final String currentUser = mAuth.getCurrentUser().getUid();
-
 
         UserRefs = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Profile").child("ProfileInfo");
 
@@ -99,21 +95,20 @@ public class FillProfile extends AppCompatActivity {
                 map.put("PhoneNo", phoneNumber);
                 UserRefs.updateChildren(map);
 
-                HashMap<String,Object> map1 = new HashMap<>();
-                map1.put("Current_Service_Id","0");
-                map1.put("RequestAcceptedBy","0");
-                map1.put("Receipt","0");
-                map1.put("Payment","0");
-                map1.put("CurrentService","0");
+                HashMap<String, Object> map1 = new HashMap<>();
+                map1.put("Current_Service_Id", "0");
+                map1.put("RequestAcceptedBy", "0");
+                map1.put("Receipt", "0");
+                map1.put("Payment", "0");
+                map1.put("CurrentService", "0");
 
                 databaseReference.updateChildren(map1).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent i = new Intent(FillProfile.this,MainActivity.class);
+                        Intent i = new Intent(FillProfile.this, MainActivity.class);
                         startActivity(i);
                     }
                 });
-
 
 
             }

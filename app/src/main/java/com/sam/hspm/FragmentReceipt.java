@@ -51,49 +51,55 @@ public class FragmentReceipt extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-
-        databaseReference.child("Users").child(uid).child("Current_Service_Id").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    serviceId = dataSnapshot.getValue().toString();
-                    retrieveReceiptData();
+        try {
+            databaseReference.child("Users").child(uid).child("Current_Service_Id").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        serviceId = dataSnapshot.getValue().toString();
+                        retrieveReceiptData();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return v1;
     }
 
     public void retrieveReceiptData() {
-        databaseReference.child("Services").child(serviceId).child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        try {
+            databaseReference.child("Services").child(serviceId).child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
-                        IssuedListwithAmount.add(helper);
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
+                            IssuedListwithAmount.add(helper);
+                        }
+                        if (getActivity() != null) {
+                            adapter = new ReceiptListAdapter(getContext(), R.layout.receipt_adapter_layout, IssuedListwithAmount);
+                            listView.setAdapter(adapter);
+                        }
+                        calculateTotal();
                     }
-                    if (getActivity()!=null) {
-                        adapter = new ReceiptListAdapter(getContext(), R.layout.receipt_adapter_layout, IssuedListwithAmount);
-                        listView.setAdapter(adapter);
-                    }
-                    calculateTotal();
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

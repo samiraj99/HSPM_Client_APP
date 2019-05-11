@@ -92,28 +92,31 @@ public class FragmentAcceptedService extends Fragment {
         getLocationPermission();
         checkLocationState();
 
-
         return v1;
     }
 
     private void updatedEmployeeLocation() {
         if (EmpID != null) {
-            employeeDatabase.child("Users").child(EmpID).child("Location").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Lat = (double) dataSnapshot.child("Lat").getValue();
-                        Lng = (double) dataSnapshot.child("Lng").getValue();
-                        moveCamera(new LatLng(Lat, Lng), 15f, Name);
-                        Log.d(TAG, "onDataChange: LAT" + Lat);
+            try {
+                employeeDatabase.child("Users").child(EmpID).child("Location").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Lat = (double) dataSnapshot.child("Lat").getValue();
+                            Lng = (double) dataSnapshot.child("Lng").getValue();
+                            moveCamera(new LatLng(Lat, Lng), 15f, Name);
+                            Log.d(TAG, "onDataChange: LAT" + Lat);
+                        }
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -124,40 +127,47 @@ public class FragmentAcceptedService extends Fragment {
     }
 
     private void RetrieveEmployeeData(String EmployeeId) {
-        employeeDatabase.child("Users").child(EmployeeId).child("Profile").child("ProfileDetails").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Name = dataSnapshot.child("FullName").getValue().toString();
-                PhoneNo = dataSnapshot.child("PhoneNo").getValue().toString();
-                TV_Name.setText(Name);
-                TV_PhoneNo.setText(PhoneNo);
-                progressDialog.dismiss();
-                updatedEmployeeLocation();
-            }
+        try {
+            employeeDatabase.child("Users").child(EmployeeId).child("Profile").child("ProfileDetails").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Name = dataSnapshot.child("FullName").getValue().toString();
+                    PhoneNo = dataSnapshot.child("PhoneNo").getValue().toString();
+                    TV_Name.setText(Name);
+                    TV_PhoneNo.setText(PhoneNo);
+                    progressDialog.dismiss();
+                    updatedEmployeeLocation();
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void RetrieveEmployeeId() {
-        clientDatabase.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                EmpID = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-                if (!EmpID.equals("0")) {
-                    RetrieveEmployeeData(EmpID);
+        try {
+            clientDatabase.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    EmpID = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
+                    if (!EmpID.equals("0")) {
+                        RetrieveEmployeeData(EmpID);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

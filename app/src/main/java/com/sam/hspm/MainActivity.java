@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageView;
     MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
     FirebaseUser firebaseUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Nav_Logout:
                 firebaseAuth.signOut();
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(loginIntent);
                 break;
         }
@@ -132,23 +133,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void setProfileName() {
-
-        mdDatabaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").child("Name").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                try {
-                    ST_ProfileName = dataSnapshot.getValue().toString();
-                } catch (Exception e) {
-                    Log.d("Exception", "" + e);
+        try {
+            mdDatabaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").child("Name").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try {
+                        ST_ProfileName = dataSnapshot.getValue().toString();
+                    } catch (Exception e) {
+                        Log.d("Exception", "" + e);
+                    }
+                    ProfileName.setText(ST_ProfileName);
                 }
-                ProfileName.setText(ST_ProfileName);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isInternetConnectionAvilable() {
@@ -164,38 +167,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "onStart: Called");
 
         if (isInternetConnectionAvilable()) {
-            mdDatabaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ServiceId = dataSnapshot.child("CurrentService").getValue().toString();
+            try {
+                mdDatabaseReference.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ServiceId = dataSnapshot.child("CurrentService").getValue().toString();
 
-                    Payment = dataSnapshot.child("Payment").getValue().toString();
-                    dialog.dismiss();
-                    if (!ServiceId.equals("0")) {
-                        EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-                        if (!EmployeeId.equals("0")) {
-                            String Receipt = dataSnapshot.child("Receipt").getValue().toString();
-                            if (Receipt.equals("1")) {
-                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
+                        Payment = dataSnapshot.child("Payment").getValue().toString();
+                        dialog.dismiss();
+                        if (!ServiceId.equals("0")) {
+                            EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
+                            if (!EmployeeId.equals("0")) {
+                                String Receipt = dataSnapshot.child("Receipt").getValue().toString();
+                                if (Receipt.equals("1")) {
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
+                                } else {
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
+                                }
                             } else {
-                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
                             }
+                        } else if (Payment.equals("1")) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentPaymentSuccess()).commitAllowingStateLoss();
                         } else {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
                         }
-                    } else if (Payment.equals("1")) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentPaymentSuccess()).commitAllowingStateLoss();
-                    } else {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentHome()).commitAllowingStateLoss();
+                        navigationView.setCheckedItem(R.id.Nav_Home);
                     }
-                    navigationView.setCheckedItem(R.id.Nav_Home);
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             dialog.dismiss();
             imageView.setVisibility(View.VISIBLE);

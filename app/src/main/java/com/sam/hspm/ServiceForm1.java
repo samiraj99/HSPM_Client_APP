@@ -41,6 +41,7 @@ public class ServiceForm1 extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
         BT_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +58,5 @@ public class ServiceForm1 extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 }

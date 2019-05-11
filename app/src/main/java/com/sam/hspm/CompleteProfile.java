@@ -53,20 +53,26 @@ public class CompleteProfile extends AppCompatActivity {
         if (user != null) {
             uid = user.getUid();
         }
-        databaseReference.child("Users").child(uid).child("Profile").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
-                St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
-                Et_Email.setText(St_Email);
-                Et_Name.setText(St_Name);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        try {
+            databaseReference.child("Users").child(uid).child("Profile").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
+                    St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
+                    Et_Email.setText(St_Email);
+                    Et_Name.setText(St_Name);
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,20 +89,24 @@ public class CompleteProfile extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(St_Email)) {
                     Et_Email.setError("Fields can't be Empty");
                 } else {
-                    RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo);
-                    databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Intent i = new Intent(CompleteProfile.this, RequestService.class);
-                                i.putExtra("PC Type", PcType);
-                                i.putExtra("Problem Types", ProblemType);
-                                i.putExtra("Specified Problem", SpecifiedProblem);
-                                startActivity(i);
-                                finish();
+                    try {
+                        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo);
+                        databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Intent i = new Intent(CompleteProfile.this, RequestService.class);
+                                    i.putExtra("PC Type", PcType);
+                                    i.putExtra("Problem Types", ProblemType);
+                                    i.putExtra("Specified Problem", SpecifiedProblem);
+                                    startActivity(i);
+                                    finish();
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

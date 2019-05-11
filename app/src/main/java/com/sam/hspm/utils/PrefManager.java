@@ -1,4 +1,4 @@
-package com.sam.hspm;
+package com.sam.hspm.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

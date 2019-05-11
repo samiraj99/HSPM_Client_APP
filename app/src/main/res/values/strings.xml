@@ -17,7 +17,6 @@
     <string name="profile">Profile</string>
     <string name="hardware">Hardware</string>
     <string name="software">Request Service</string>
-    <string name="address">Address</string>
     <string name="log_out">LOG OUT</string>
     <string name="what_s_the_problem">What\'s the Problem?</string>
     <string name="submit">Submit</string>
@@ -82,4 +81,8 @@
     <string name="slide_4_title">Doorstep Services</string>
     <string name="slide_4_desc">Thats right! Skip the queue and get services at your place</string>
     <string name="other">Other</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_id">Email ID</string>
+    <string name="address">Address</string>
+    <string name="save_and_next">Save and Next</string>
 </resources>

@@ -28,25 +28,23 @@ import static android.view.View.VISIBLE;
 public class ServiceForm2 extends AppCompatActivity {
 
     String PcType;
-    CheckBox Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7 , Ch8;
+    CheckBox Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8;
     List<CheckBox> ListOfCheckBox = new ArrayList<>();
     String ProblemType = "";
     Button Bt_Next;
     TextView specifyProblem;
     EditText ET_SpecifiedProblem;
     String SpecifiedProblem;
-    DatabaseReference databaseReference;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_form2);
+
         if (getIntent() != null) {
             PcType = getIntent().getExtras().getString("PC Type");
         }
+
         ListOfCheckBox.add(Ch1 = findViewById(R.id.CheckBox1));
         ListOfCheckBox.add(Ch2 = findViewById(R.id.CheckBox2));
         ListOfCheckBox.add(Ch3 = findViewById(R.id.CheckBox3));
@@ -58,25 +56,15 @@ public class ServiceForm2 extends AppCompatActivity {
         ET_SpecifiedProblem = findViewById(R.id.EditText_Problem);
         specifyProblem = findViewById(R.id.specifyProblem);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            uid = user.getUid();
-        }
-
-
         Ch8 = findViewById(R.id.CheckBox8);
 
         Ch8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Ch8.isChecked())
-                {
+                if (Ch8.isChecked()) {
                     specifyProblem.setVisibility(VISIBLE);
                     ET_SpecifiedProblem.setVisibility(VISIBLE);
-                }
-                else {
+                } else {
                     ET_SpecifiedProblem.setVisibility(GONE);
                     specifyProblem.setVisibility(GONE);
                 }
@@ -88,7 +76,7 @@ public class ServiceForm2 extends AppCompatActivity {
             public void onClick(View v) {
                 for (CheckBox item : ListOfCheckBox) {
                     if (item.isChecked()) {
-                        ProblemType = ProblemType.concat(" "+item.getText().toString());
+                        ProblemType = ProblemType.concat(" " + item.getText().toString());
                     }
                 }
                 SpecifiedProblem = ET_SpecifiedProblem.getText().toString();
@@ -98,14 +86,12 @@ public class ServiceForm2 extends AppCompatActivity {
                     return;
                 }
 
-                    Intent i = new Intent(ServiceForm2.this, RequestService.class);
-                    i.putExtra("PC Type", PcType);
-                    i.putExtra("Problem Types", ProblemType);
-                    i.putExtra("Specified Problem", SpecifiedProblem);
-                    startActivity(i);
-                    Bt_Next.setEnabled(false);
-
-
+                Intent i = new Intent(ServiceForm2.this, RequestService.class);
+                i.putExtra("PC Type", PcType);
+                i.putExtra("Problem Types", ProblemType);
+                i.putExtra("Specified Problem", SpecifiedProblem);
+                startActivity(i);
+                Bt_Next.setEnabled(false);
             }
         });
     }

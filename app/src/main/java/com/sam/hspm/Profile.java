@@ -70,6 +70,7 @@ public class Profile extends AppCompatActivity {
     List<Address> ST_location;
     Geocoder geocoder;
     String Id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,49 +103,49 @@ public class Profile extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Setting up Profile..!");
         dialog.show();
-        databaseReference.child("Users").child(uid).child("Profile").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
-                St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
-                St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(String.class);
-                St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
-                try {
-                    St_ProfileUrl = dataSnapshot.child("ProfileImage").child("ProfileImageUri").getValue(String.class);
-                    St_ProfileImageFileName = dataSnapshot.child("ProfileImage").child("FileName").getValue(String.class);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                }
-                TIET_Name.setText(St_Name);
-                TV_Name.setText(St_Name);
-                TIET_PhoneNO.setText(St_PhoneNo);
-                ET_Address.setText(St_Address);
-                TV_Email.setText(St_Email);
-                if (St_ProfileUrl != null) {
-                    Picasso.get().load(St_ProfileUrl).into(IV_Profile);
-                }
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (St_Email.length() > 1) {
-                            dialog.dismiss();
-                        }
+        try {
+            databaseReference.child("Users").child(uid).child("Profile").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
+                    St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
+                    St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(String.class);
+                    St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
+                    try {
+                        St_ProfileUrl = dataSnapshot.child("ProfileImage").child("ProfileImageUri").getValue(String.class);
+                        St_ProfileImageFileName = dataSnapshot.child("ProfileImage").child("FileName").getValue(String.class);
+                    } catch (Exception e) {
+                        Log.e("Error", e.getMessage());
                     }
-                }, 2000);
+                    TIET_Name.setText(St_Name);
+                    TV_Name.setText(St_Name);
+                    TIET_PhoneNO.setText(St_PhoneNo);
+                    ET_Address.setText(St_Address);
+                    TV_Email.setText(St_Email);
+                    if (St_ProfileUrl != null) {
+                        Picasso.get().load(St_ProfileUrl).into(IV_Profile);
+                    }
 
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (St_Email.length() > 1) {
+                                dialog.dismiss();
+                            }
+                        }
+                    }, 2000);
+                }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         IV_Edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,26 +211,30 @@ public class Profile extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(St_Address)) {
                     ET_Address.setError("Fields can't be Empty");
                 } else {
-                    RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo, St_Address);
-                    databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                TIET_Name.setEnabled(false);
-                                TIET_PhoneNO.setEnabled(false);
-                                ET_Address.setEnabled(false);
-                                IV_Done.setVisibility(View.INVISIBLE);
-                                IV_Edit.setVisibility(View.VISIBLE);
-                                IV_Auto_Loc_Fetch.setVisibility(View.INVISIBLE);
-                                TV_Auto_Loc.setVisibility(View.INVISIBLE);
-                                TIET_Name.setFocusable(false);
-                                TIET_PhoneNO.setFocusable(false);
-                                Toast.makeText(Profile.this, "Profile has been updated.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(Profile.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                    try {
+                        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo, St_Address);
+                        databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    TIET_Name.setEnabled(false);
+                                    TIET_PhoneNO.setEnabled(false);
+                                    ET_Address.setEnabled(false);
+                                    IV_Done.setVisibility(View.INVISIBLE);
+                                    IV_Edit.setVisibility(View.VISIBLE);
+                                    IV_Auto_Loc_Fetch.setVisibility(View.INVISIBLE);
+                                    TV_Auto_Loc.setVisibility(View.INVISIBLE);
+                                    TIET_Name.setFocusable(false);
+                                    TIET_PhoneNO.setFocusable(false);
+                                    Toast.makeText(Profile.this, "Profile has been updated.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(Profile.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -290,59 +295,65 @@ public class Profile extends AppCompatActivity {
     private void uploadFile() {
 
         if (imageUri != null) {
-            final String filename = String.valueOf(System.currentTimeMillis());
-            final StorageReference reference = storageReference.child(filename + "." + getFileExtension(imageUri));
-            reference.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
+            try {
+                final String filename = String.valueOf(System.currentTimeMillis());
+                final StorageReference reference = storageReference.child(filename + "." + getFileExtension(imageUri));
+                reference.putFile(imageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return reference.getDownloadUrl();
                     }
-                    return reference.getDownloadUrl();
-                }
 
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        UploadImageData upload = new UploadImageData(filename + "." + getFileExtension(imageUri), downloadUri.toString());
-                        databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage")
-                                .setValue(upload).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    if (St_ProfileUrl != null) {
-                                        dialog.dismiss();
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            UploadImageData upload = new UploadImageData(filename + "." + getFileExtension(imageUri), downloadUri.toString());
+                            databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage")
+                                    .setValue(upload).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        if (St_ProfileUrl != null) {
+                                            dialog.dismiss();
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
 
+                        }
                     }
-                }
-            });
-
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(this, "No file selected.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void DeleteProfile() {
-        StorageReference dbStorageRef = storageReference.child(St_ProfileImageFileName);
-        dbStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage").removeValue();
-                uploadFile();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        try {
+            StorageReference dbStorageRef = storageReference.child(St_ProfileImageFileName);
+            dbStorageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    databaseReference.child("Users").child(uid).child("Profile").child("ProfileImage").removeValue();
+                    uploadFile();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(Profile.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void requestPermission() {

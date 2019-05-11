@@ -100,12 +100,12 @@ public class RequestService extends AppCompatActivity {
             SpecifiedProblem = getIntent().getExtras().getString("Specified Problem");
         }
         //Declaring variables
-
-        ET_Address = findViewById(R.id.EditText_Address);
         mauth = FirebaseAuth.getInstance();
         user = mauth.getCurrentUser();
         mreference = FirebaseDatabase.getInstance().getReference();
         uid = user.getUid();
+
+        ET_Address = findViewById(R.id.EditText_Address);
         Submit = findViewById(R.id.Button_Submit1);
         BT_EditAddress = findViewById(R.id.Button_EditAddress);
         ET_searchText = findViewById(R.id.EditText_input_search);
@@ -232,18 +232,22 @@ public class RequestService extends AppCompatActivity {
         Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
         AddressData addressData = new AddressData(coordinates);
         AllData allData = new AllData(data, addressData, uid, "false");
-        id = mreference.child("Services").push().getKey();
 
-        mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    SaveService(id);
-                } else {
-                    Log.e("Error", "Failed to write in users data");
+        try {
+            id = mreference.child("Services").push().getKey();
+            mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        SaveService(id);
+                    } else {
+                        Log.e("Error", "Failed to write in users data");
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void submit2() {
@@ -267,19 +271,23 @@ public class RequestService extends AppCompatActivity {
             final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
             final AddressData addressData = new AddressData(Area, HouseNo, Landdmark, coordinates);
             AllData allData = new AllData(requestData, addressData, uid, "false");
-            id = mreference.child("Services").push().getKey();
 
-            mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        SaveService(id);
-                        dialog.dismiss();
-                    } else {
-                        Log.e("Error", "Failed to write in users data");
+            try {
+                id = mreference.child("Services").push().getKey();
+                mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            SaveService(id);
+                            dialog.dismiss();
+                        } else {
+                            Log.e("Error", "Failed to write in users data");
+                        }
                     }
-                }
-            });
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -383,18 +391,22 @@ public class RequestService extends AppCompatActivity {
     }
 
     private void SaveService(String id) {
-        mreference.child("Users").child(uid).child("Current_Service_Id").setValue(id).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    mreference.child("Users").child(uid).child("CurrentService").setValue(1);
-                    Toast.makeText(RequestService.this, "Request Send.", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(RequestService.this, MainActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
+        try {
+            mreference.child("Users").child(uid).child("Current_Service_Id").setValue(id).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        mreference.child("Users").child(uid).child("CurrentService").setValue(1);
+                        Toast.makeText(RequestService.this, "Request Send.", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(RequestService.this, MainActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void IsServiceOK() {
