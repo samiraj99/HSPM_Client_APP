@@ -1,6 +1,7 @@
 package com.sam.hspm;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,9 +40,9 @@ public class FragmentHistory extends Fragment {
     DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    FirebaseApp employeeApp;
     String uid, serviceId;
     ListView listView;
+    ArrayList<String> ServiceID = new ArrayList<>();
     ArrayList<String> ServiceStatus = new ArrayList<>();
     ArrayList<String> DateTime = new ArrayList<>();
     ArrayList<String> Amount = new ArrayList<>();
@@ -55,7 +57,7 @@ public class FragmentHistory extends Fragment {
         v1 = inflater.inflate(R.layout.fragment_history, container, false);
 
         FirebaseApp.initializeApp(getContext());
-        //Initialization
+
         Log.d(TAG, "onCreateView: Initializing variables");
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -78,6 +80,15 @@ public class FragmentHistory extends Fragment {
         progressDialog.setMessage("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getContext(), HistoryDetails.class);
+                i.putExtra("ServiceId", ServiceID.get(position));
+                startActivity(i);
+            }
+        });
         return v1;
     }
 
@@ -134,16 +145,17 @@ public class FragmentHistory extends Fragment {
     }
 
 
-    private void retrieveData(String sid) {
+    private void retrieveData(final String sid) {
 
         Log.d(TAG, "retrieveData: 1 " + sid);
 
         databaseReference.child("CompletedServices").child(sid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ServiceID.add(sid);
                 ServiceStatus.add("Service Completed");
                 DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
-                Amount.add("₹"+dataSnapshot.child("Total").getValue().toString());
+                Amount.add("₹" + dataSnapshot.child("Total").getValue().toString());
                 customAdapter.notifyDataSetChanged();
                 progressDialog.dismiss();
             }

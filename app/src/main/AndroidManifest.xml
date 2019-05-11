@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,28 +14,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <service
-            android:name=".Services.MyFirebaseMessagingService">
+        <service android:name=".Services.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Services.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".Services.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <!-- Temp for android pie -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-
-        <!--Temp for android pie-->
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -52,14 +50,15 @@
         <activity android:name=".RequestService" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ServiceForm1" />
-        <activity android:name=".WelcomeActivity"/>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".VerifyPhoneActivity"/>
+        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".VerifyPhoneActivity" />
         <activity
             android:name=".ServiceForm2"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".CompleteProfile"></activity>
-        <activity android:name=".FillProfile"></activity>
+        <activity android:name=".CompleteProfile" />
+        <activity android:name=".FillProfile" />
+        <activity android:name=".HistoryDetails"></activity>
     </application>
 
 </manifest>
