@@ -89,6 +89,7 @@ public class RequestService extends AppCompatActivity {
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
     ProgressView progressView;
     ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,10 +130,11 @@ public class RequestService extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (AddressVerified()) {
-                      if ( ! pincode.equals("412115")){
-                          showServiceGuaranteeDialogBox("Submit");
-                      }else {
-                        showConfirmationDialogBox("Submit"); }
+                    if (!pincode.equals("412115")) {
+                        showServiceGuaranteeDialogBox("Submit");
+                    } else {
+                        showConfirmationDialogBox("Submit");
+                    }
 
                 } else {
                     Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
@@ -143,13 +145,14 @@ public class RequestService extends AppCompatActivity {
         BT_Submit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddressVerified()){
-                    if ( ! pincode.equals("412115")){
+                if (AddressVerified()) {
+                    if (!pincode.equals("412115")) {
                         showServiceGuaranteeDialogBox("Submit2");
-                    }else {
-                        showConfirmationDialogBox("Submit2"); }
+                    } else {
+                        showConfirmationDialogBox("Submit2");
+                    }
 
-                }else {
+                } else {
                     Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -170,11 +173,10 @@ public class RequestService extends AppCompatActivity {
         });
 
 
-
     }
 
-    public void showServiceGuaranteeDialogBox(final String btn){
-        final AlertDialog.Builder builder= new AlertDialog.Builder(RequestService.this);
+    public void showServiceGuaranteeDialogBox(final String btn) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(RequestService.this);
         builder.setTitle("Service Guarantee !")
                 .setMessage("Service within 90 Mins not applicable in your Address")
                 .setCancelable(false);
@@ -198,7 +200,7 @@ public class RequestService extends AppCompatActivity {
         builder.show();
     }
 
-    private void showConfirmationDialogBox(final String btn){
+    private void showConfirmationDialogBox(final String btn) {
         //Alert dialog box to confirm order
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RequestService.this);
         alertDialog.setTitle("Confirm Request !!")
@@ -224,7 +226,7 @@ public class RequestService extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void submit(){
+    private void submit() {
         dialog.show();
         RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
         Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
@@ -244,7 +246,7 @@ public class RequestService extends AppCompatActivity {
         });
     }
 
-    private void submit2(){
+    private void submit2() {
 
         try {
             Area = ET_Area.getText().toString();
@@ -259,7 +261,7 @@ public class RequestService extends AppCompatActivity {
             ET_HouseNo.setError("Fields can't be empty");
         } else if (Landdmark.isEmpty()) {
             ET_Landmark.setError("Fields can't be empty");
-        }else {
+        } else {
             dialog.show();
             RequestData requestData = new RequestData(PcType, ProblemType, SpecifiedProblem);
             final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
@@ -283,7 +285,7 @@ public class RequestService extends AppCompatActivity {
 
     private boolean AddressVerified() {
 
-        String[] AreaPinCodes  = {"411043", "412115", "411057", "411027", "411007", "411019 ", "411021", "411045", "411061", "411038","411033","411042" };
+        String[] AreaPinCodes = {"411043", "412115", "411057", "411027", "411007", "411019 ", "411021", "411045", "411061", "411038", "411033", "411042"};
 
         if (pincode != null) {
             for (String AreaPinCode : AreaPinCodes) {
@@ -583,6 +585,7 @@ public class RequestService extends AppCompatActivity {
         getLocationPermission();
 
     }
+
     @Override
     protected void onDestroy() {
         dialog.dismiss();
