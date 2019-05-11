@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class FragmentPaymentSuccess extends Fragment {
@@ -32,7 +33,7 @@ public class FragmentPaymentSuccess extends Fragment {
     RatingBar ratingBar;
     TextView TV_RatingBar, TV_Employee_Name;
     FirebaseAuth firebaseAuth;
-    DatabaseReference clientDatabase, employeeDatabase;
+    DatabaseReference clientDatabase, employeeDatabase ,UserRef;
     FirebaseDatabase firebaseDatabase;
     String uid, empId;
     FirebaseApp employeeApp;
@@ -74,6 +75,7 @@ public class FragmentPaymentSuccess extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
         employeeDatabase = firebaseDatabase.getReference();
 
+        UserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -103,6 +105,14 @@ public class FragmentPaymentSuccess extends Fragment {
         BT_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                final HashMap<String,Object> map = new HashMap<>();
+                map.put("Current_Service_Id","0");
+                map.put("RequestAcceptedBy","0");
+                map.put("Receipt","0");
+                map.put("Payment","0");
+
                 progressDialog.setMessage("Submitting");
                 progressDialog.show();
                 rating = ((int) ratingBar.getRating());
@@ -112,25 +122,20 @@ public class FragmentPaymentSuccess extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 //TODO: move service from services to history
-                                clientDatabase.child("Users").child(uid).child("Current_Service_Id").setValue(0);
-                                clientDatabase.child("Users").child(uid).child("RequestAcceptedBy").setValue(0);
-                                clientDatabase.child("Users").child(uid).child("Receipt").setValue(0);
                                 clientDatabase.child("Services").child(CurrentServiceId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        clientDatabase.child("Users").child(uid).child("History").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                                        clientDatabase.child("CompletedServices").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                                             @Override
                                             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                                 if (databaseError != null) {
                                                     Log.e(TAG, "onComplete: Copy Failed");
                                                 } else {
-                                                    clientDatabase.child("Users").child(uid).child("History").
-                                                            child(CurrentServiceId).child("Uid").removeValue();
-                                                    clientDatabase.child("Users").child(uid).child("History")
-                                                            .child(CurrentServiceId).child("Status").removeValue();
-
+                                                    clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
                                                     clientDatabase.child("Services").child(CurrentServiceId).removeValue();
-                                                    clientDatabase.child("Users").child(uid).child("Payment").setValue(0);
+                                                    UserRef.child("History").push().setValue(CurrentServiceId);
+                                                    employeeDatabase.child("Users").child(empId).child("History").push().setValue(CurrentServiceId);
+                                                    UserRef.updateChildren(map);
                                                     progressDialog.dismiss();
                                                 }
                                             }

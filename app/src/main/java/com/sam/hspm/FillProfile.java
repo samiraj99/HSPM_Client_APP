@@ -2,6 +2,7 @@ package com.sam.hspm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,7 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -54,7 +57,7 @@ public class FillProfile extends AppCompatActivity {
 
         UserRefs = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Profile").child("ProfileInfo");
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser);
 
         fname = findViewById(R.id.fname);
         email = findViewById(R.id.email);
@@ -96,17 +99,22 @@ public class FillProfile extends AppCompatActivity {
                 map.put("PhoneNo", phoneNumber);
                 UserRefs.updateChildren(map);
 
-                databaseReference.child("Users").child(currentUser).child("Current_Service_Id").setValue(0);
-                databaseReference.child("Users").child(currentUser).child("RequestAcceptedBy").setValue(0);
-                databaseReference.child("Users").child(currentUser).child("Receipt").setValue(0);
-                databaseReference.child("Users").child(currentUser).child("Payment").setValue(0);
-                databaseReference.child("Users").child(currentUser).child("CurrentService").setValue(0).addOnSuccessListener(new OnSuccessListener<Void>() {
+                HashMap<String,Object> map1 = new HashMap<>();
+                map1.put("Current_Service_Id","0");
+                map1.put("RequestAcceptedBy","0");
+                map1.put("Receipt","0");
+                map1.put("Payment","0");
+                map1.put("CurrentService","0");
+
+                databaseReference.updateChildren(map1).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         Intent i = new Intent(FillProfile.this,MainActivity.class);
                         startActivity(i);
                     }
                 });
+
+
 
             }
         });

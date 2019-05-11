@@ -24,7 +24,7 @@ import java.util.List;
 public class ServiceForm2 extends AppCompatActivity {
 
     String PcType;
-    CheckBox Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7;
+    CheckBox Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7 , Ch8;
     List<CheckBox> ListOfCheckBox = new ArrayList<>();
     String ProblemType = "";
     Button Bt_Next;
@@ -60,6 +60,11 @@ public class ServiceForm2 extends AppCompatActivity {
         }
 
 
+        Ch8 = findViewById(R.id.CheckBox8);
+
+        if (Ch8.isChecked()){
+            ET_SpecifiedProblem.setEnabled(true);
+        }
 
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override

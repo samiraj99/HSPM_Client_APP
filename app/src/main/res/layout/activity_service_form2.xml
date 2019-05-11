@@ -104,6 +104,14 @@
                 android:layout_margin="10dp"
                 android:text="@string/chip_level_servicing"
                 android:textSize="20sp" />
+            <CheckBox
+                android:id="@+id/CheckBox8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/other"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
         <TextView
@@ -123,7 +131,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/TextView2"
             android:layout_margin="10dp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:enabled="false"
+            />
 
         <Button
             android:id="@+id/Button_Next"

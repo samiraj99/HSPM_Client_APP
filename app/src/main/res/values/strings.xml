@@ -81,4 +81,5 @@
 
     <string name="slide_4_title">Doorstep Services</string>
     <string name="slide_4_desc">Thats right! Skip the queue and get services at your place</string>
+    <string name="other">Other</string>
 </resources>
