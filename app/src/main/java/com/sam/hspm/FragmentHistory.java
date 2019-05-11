@@ -35,29 +35,19 @@ import java.util.Locale;
 public class FragmentHistory extends Fragment {
 
     View v1;
-    DatabaseReference databaseReference, employeeDatabase;
+    DatabaseReference databaseReference;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
-    FirebaseDatabase firebaseDatabase;
     FirebaseApp employeeApp;
-    String uid;
+    String uid, serviceId;
     ListView listView;
-    ArrayList<String> AddressList = new ArrayList<>();
-    ArrayList<String> PcTypeList = new ArrayList<>();
-    ArrayList<String> ProblemTypeList = new ArrayList<>();
-    ArrayList<String> EmployeeName = new ArrayList<>();
-    ArrayList<String> AcceptDate = new ArrayList<>();
+    ArrayList<String> ServiceStatus = new ArrayList<>();
+    ArrayList<String> DateTime = new ArrayList<>();
+    ArrayList<String> Amount = new ArrayList<>();
     private static final String TAG = "FragmentHistory";
-    String RequestAcceptedBy;
     CustomAdapter customAdapter;
     ProgressDialog progressDialog;
     TextView TextView_NoService;
-
-    @Override
-    public void onDestroy() {
-        employeeApp.delete();
-        super.onDestroy();
-    }
 
     @Nullable
     @Override
@@ -71,31 +61,20 @@ public class FragmentHistory extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+
         if (firebaseUser != null) {
             uid = firebaseUser.getUid();
-        }
-
-        //Employee Database
-        if(employeeApp == null){
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setApplicationId(getString(R.string.ApplicationId))
-                    .setApiKey(getString(R.string.ApiKey))
-                    .setDatabaseUrl(getString(R.string.DatabaseUrl))
-                    .build();
-            FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
-            employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
-            firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
-            employeeDatabase = firebaseDatabase.getReference();
         }
 
         listView = v1.findViewById(R.id.ListView);
         TextView_NoService = v1.findViewById(R.id.TextView_NoService);
 
-        if (EmployeeName!=null) {
+        if (Amount != null) {
             customAdapter = new CustomAdapter();
             listView.setAdapter(customAdapter);
         }
-        progressDialog  = new ProgressDialog(getContext());
+
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Loading");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -108,12 +87,13 @@ public class FragmentHistory extends Fragment {
         databaseReference.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("History")){
+                if (dataSnapshot.hasChild("History")) {
                     databaseReference.child("Users").child(uid).child("History").addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                             if (dataSnapshot.exists()) {
-                                retrieveData(dataSnapshot);
+                                serviceId = dataSnapshot.getValue(String.class);
+                                retrieveData(serviceId);
                             }
 
                         }
@@ -135,10 +115,10 @@ public class FragmentHistory extends Fragment {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.d(TAG, "onCancelled: DatabaseError "+databaseError);
+                            Log.d(TAG, "onCancelled: DatabaseError " + databaseError);
                         }
                     });
-                }else{
+                } else {
                     progressDialog.dismiss();
                     TextView_NoService.setVisibility(View.VISIBLE);
                 }
@@ -154,39 +134,18 @@ public class FragmentHistory extends Fragment {
     }
 
 
+    private void retrieveData(String sid) {
 
-    private void retrieveData(DataSnapshot dataSnapshot) {
+        Log.d(TAG, "retrieveData: 1 " + sid);
 
-        Log.d(TAG, "retrieveData: 1 "+ dataSnapshot.getValue());
-
-        for (DataSnapshot ds : dataSnapshot.child("Address").getChildren()) {
-            try {
-                Co_Ordinates co_ordinates = ds.getValue(Co_Ordinates.class);
-                assert co_ordinates != null;
-                String Address = convertAddress(new LatLng(co_ordinates.Lat, co_ordinates.Lng));
-                AddressList.add(Address);
-            } catch (Exception e) {
-                Log.d(TAG, "retrieveData: Exception " + e.getMessage());
-            }
-        }
-        AcceptDate.add(dataSnapshot.child("DateTime").child("Date").getValue().toString()+ " " +dataSnapshot.child("DateTime").child("Time").getValue().toString());
-        PcTypeList.add(dataSnapshot.child("Problem").child("PcType").getValue().toString());
-        ProblemTypeList.add(dataSnapshot.child("Problem").child("ProblemType").getValue().toString());
-
-        RequestAcceptedBy = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-        retrieveEmployeeData(RequestAcceptedBy);
-    }
-
-    private void retrieveEmployeeData(String requestAcceptedBy) {
-
-        employeeDatabase.child("Users").child(requestAcceptedBy).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("CompletedServices").child(sid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    EmployeeName.add(dataSnapshot.child("Name").getValue().toString());
-                    customAdapter.notifyDataSetChanged();
-                    progressDialog.dismiss();
-                }
+                ServiceStatus.add("Service Completed");
+                DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
+                Amount.add("₹"+dataSnapshot.child("Total").getValue().toString());
+                customAdapter.notifyDataSetChanged();
+                progressDialog.dismiss();
             }
 
             @Override
@@ -197,10 +156,11 @@ public class FragmentHistory extends Fragment {
 
     }
 
+
     class CustomAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return AddressList.size();
+            return ServiceStatus.size();
         }
 
         @Override
@@ -216,47 +176,17 @@ public class FragmentHistory extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             view = getLayoutInflater().inflate(R.layout.history_custom_listview, null);
-            TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate;
+            TextView serviceStatus, dateAndTime, amount;
 
-            TV_AcceptDate = view.findViewById(R.id.AcceptDate);
-            TV_Address = view.findViewById(R.id.Address);
-            TV_ProblemType = view.findViewById(R.id.ProblemType);
-            TV_Employee_Name = view.findViewById(R.id.Name);
-            TV_PcType = view.findViewById(R.id.PcType);
+            serviceStatus = view.findViewById(R.id.servicestatus);
+            dateAndTime = view.findViewById(R.id.dateandtime);
+            amount = view.findViewById(R.id.amount);
 
-            TV_AcceptDate.setText(AcceptDate.get(position));
-            TV_Address.setText(AddressList.get(position));
-            TV_ProblemType.setText(ProblemTypeList.get(position));
-            TV_PcType.setText(PcTypeList.get(position));
-            TV_Employee_Name.setText(EmployeeName.get(position));
+            serviceStatus.setText(ServiceStatus.get(position));
+            dateAndTime.setText(DateTime.get(position));
+            amount.setText(Amount.get(position));
 
             return view;
         }
     }
-
-    public static class Co_Ordinates {
-        public double Lat, Lng;
-
-        public Co_Ordinates() {
-        }
-
-        public Co_Ordinates(double lat, double lng) {
-            Lat = lat;
-            Lng = lng;
-        }
-
-    }
-
-    private String convertAddress(LatLng latLng) {
-        String address = null;
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        try {
-            List<Address> Location = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            address = Location.get(0).getAddressLine(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return address;
-    }
-
 }

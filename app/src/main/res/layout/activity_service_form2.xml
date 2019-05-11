@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
             app:progress_current="50"
             app:progress_max="100"
             app:progress_reached_bar_height="10dp"
@@ -43,10 +43,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/TextView1"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
             <CheckBox
@@ -104,6 +104,7 @@
                 android:layout_margin="10dp"
                 android:text="@string/chip_level_servicing"
                 android:textSize="20sp" />
+
             <CheckBox
                 android:id="@+id/CheckBox8"
                 android:layout_width="match_parent"
@@ -115,37 +116,36 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/TextView2"
+            android:id="@+id/specifyProblem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/LinerLayout"
-            android:layout_marginStart="20sp"
             android:layout_marginLeft="25sp"
+            android:layout_marginStart="20sp"
             android:text="@string/specify_problem"
             android:textColor="@color/primaryText"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/EditText_Problem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/TextView2"
+            android:layout_below="@+id/specifyProblem"
             android:layout_margin="10dp"
             android:inputType="text"
-            android:enabled="false"
-            />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/Button_Next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/EditText_Problem"
             android:layout_alignParentBottom="true"
+            android:layout_below="@+id/EditText_Problem"
             android:layout_margin="10dp"
             android:background="@color/colorPrimary"
             android:text="@string/next"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
     </RelativeLayout>
 </ScrollView>

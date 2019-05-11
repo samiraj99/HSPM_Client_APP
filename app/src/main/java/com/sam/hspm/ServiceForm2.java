@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class ServiceForm2 extends AppCompatActivity {
 
     String PcType;
@@ -28,6 +32,7 @@ public class ServiceForm2 extends AppCompatActivity {
     List<CheckBox> ListOfCheckBox = new ArrayList<>();
     String ProblemType = "";
     Button Bt_Next;
+    TextView specifyProblem;
     EditText ET_SpecifiedProblem;
     String SpecifiedProblem;
     DatabaseReference databaseReference;
@@ -51,6 +56,7 @@ public class ServiceForm2 extends AppCompatActivity {
         ListOfCheckBox.add(Ch7 = findViewById(R.id.CheckBox7));
         Bt_Next = findViewById(R.id.Button_Next);
         ET_SpecifiedProblem = findViewById(R.id.EditText_Problem);
+        specifyProblem = findViewById(R.id.specifyProblem);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -62,9 +68,20 @@ public class ServiceForm2 extends AppCompatActivity {
 
         Ch8 = findViewById(R.id.CheckBox8);
 
-        if (Ch8.isChecked()){
-            ET_SpecifiedProblem.setEnabled(true);
-        }
+        Ch8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Ch8.isChecked())
+                {
+                    specifyProblem.setVisibility(VISIBLE);
+                    ET_SpecifiedProblem.setVisibility(VISIBLE);
+                }
+                else {
+                    ET_SpecifiedProblem.setVisibility(GONE);
+                    specifyProblem.setVisibility(GONE);
+                }
+            }
+        });
 
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override

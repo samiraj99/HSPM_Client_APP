@@ -24,6 +24,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     private static final String TAG = "FirebaseService";
+    NotificationCompat.Builder notificationBuilder;
 
 
     @Override
@@ -31,7 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String dataType = remoteMessage.getData().get("data_type");
 
-        if(dataType.equals("employee_assign")){
+        if (dataType.equals("employee_assign")) {
             Log.d(TAG, "onMessageReceived: new incoming message.");
             String title = remoteMessage.getData().get("title");
             String message = remoteMessage.getData().get("message");
@@ -43,10 +44,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     /**
      * Build a push notification for a chat message
+     *
      * @param title
      * @param message
      */
-    private void sendMessageNotification(String title, String message, String messageId){
+    private void sendMessageNotification(String title, String message, String messageId) {
         Log.d(TAG, "sendChatmessageNotification: building a chatmessage notification");
 
 //		//get the notification id
@@ -60,14 +62,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channelId = "HSPM_Notification";
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_launcher_round)
-                        .setContentTitle(title)
-                        .setContentText(message)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+        if (android.os.Build.VERSION.SDK_INT >= 24) {
+            notificationBuilder = new NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.drawable.ic_launcher_round)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(this, channelId)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setContentIntent(pendingIntent);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -83,11 +94,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(notificationId/* ID of notification */, notificationBuilder.build());
     }
 
-    private int buildNotificationId(String id){
+    private int buildNotificationId(String id) {
         Log.d(TAG, "buildNotificationId: building a notification id.");
 
         int notificationId = 0;
-        for(int i = 0; i < 9; i++){
+        for (int i = 0; i < 9; i++) {
             notificationId = notificationId + id.charAt(0);
         }
         Log.d(TAG, "buildNotificationId: id: " + id);
