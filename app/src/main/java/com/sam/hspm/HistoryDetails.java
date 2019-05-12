@@ -3,6 +3,7 @@ package com.sam.hspm;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ import java.util.Locale;
 public class HistoryDetails extends AppCompatActivity {
 
     TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate, ViewReceipt;
+    ImageView back;
     String serviceId;
     DatabaseReference databaseReference;
     FirebaseAuth mAuth;
@@ -75,6 +78,7 @@ public class HistoryDetails extends AppCompatActivity {
         TV_Employee_Name = findViewById(R.id.Name);
         TV_PcType = findViewById(R.id.PcType);
         ViewReceipt = findViewById(R.id.viewReceipt);
+        back = findViewById(R.id.back);
 
         //Employee Database
         if (employeeApp == null) {
@@ -110,7 +114,6 @@ public class HistoryDetails extends AppCompatActivity {
 
                     RequestAcceptedBy = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
                     retrieveEmployeeData(RequestAcceptedBy);
-
                 }
 
                 @Override
@@ -122,6 +125,15 @@ public class HistoryDetails extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HistoryDetails.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
+        });
+
         ViewReceipt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,12 +142,14 @@ public class HistoryDetails extends AppCompatActivity {
                 listView = alertLayout.findViewById(R.id.listview1);
                 TV_Total = alertLayout.findViewById(R.id.tvTotal);
 
+                retrieveReceiptData();
+
                 final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryDetails.this);
                 builder.setView(alertLayout);
-                retrieveReceiptData();
                 builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        IssuedListwithAmount = new ArrayList<>();
                         dialog.dismiss();
                     }
                 });
