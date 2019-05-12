@@ -90,78 +90,74 @@ public class FragmentHome extends Fragment {
             }
         });
 
-        try {
-            mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        mdDatabaseReference.child("Advertise").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    try {
-                        count = (int) dataSnapshot.getChildrenCount();
-                        for (int i = 1; i <= count; i++) {
+                try {
+                    count = (int) dataSnapshot.getChildrenCount();
+                    for (int i = 1; i <= count; i++) {
 
-                            String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
-                            imageURL.add(s);
-                        }
-
-                        SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
-
-                        viewPager.setAdapter(viewPagerAdapter);
-
-                        dotscount = count;
-                        dots = new ImageView[dotscount];
-
-                        for (i = 0; i < dotscount; i++) {
-
-                            dots[i] = new ImageView(getContext());
-                            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
-
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                            params.setMargins(8, 0, 8, 0);
-
-                            sliderDotspanel.addView(dots[i], params);
-
-                        }
-
-                        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
-                        Timer timer = new Timer();
-                        timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
-
-                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                            @Override
-                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                            }
-
-                            @Override
-                            public void onPageSelected(int position) {
-
-                                for (int i = 0; i < dotscount; i++) {
-                                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
-                                }
-
-                                dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
-
-                            }
-
-                            @Override
-                            public void onPageScrollStateChanged(int state) {
-
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e("Error", e.getMessage());
+                        String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
+                        imageURL.add(s);
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
 
+                    viewPager.setAdapter(viewPagerAdapter);
+
+                    dotscount = count;
+                    dots = new ImageView[dotscount];
+
+                    for (i = 0; i < dotscount; i++) {
+
+                        dots[i] = new ImageView(getContext());
+                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                        params.setMargins(8, 0, 8, 0);
+
+                        sliderDotspanel.addView(dots[i], params);
+
+                    }
+
+                    dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                    Timer timer = new Timer();
+                    timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
+
+                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                        }
+
+                        @Override
+                        public void onPageSelected(int position) {
+
+                            for (int i = 0; i < dotscount; i++) {
+                                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                            }
+
+                            dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+
+                        }
+
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return v1;
     }

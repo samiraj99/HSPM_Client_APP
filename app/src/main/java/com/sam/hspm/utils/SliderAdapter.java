@@ -43,7 +43,6 @@ public class SliderAdapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_slider, null);
 
-        System.out.println(imageURL);
         ImageView imageView = view.findViewById(R.id.imageView);
 
         Picasso.get().load(imageURL.get(position)).into(imageView);
