@@ -106,6 +106,8 @@ public class FillProfile extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Intent i = new Intent(FillProfile.this, MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        finish();
                         startActivity(i);
                     }
                 });

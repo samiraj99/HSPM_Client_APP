@@ -2,103 +2,113 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#b2e4fa">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
+    <ImageView
+        android:id="@+id/head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        >
+        android:layout_height="170dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/header" />
 
-        <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical">
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/head"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
-                android:id="@+id/linearLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:gravity="center_horizontal"
+                android:layout_below="@+id/head"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:gravity="center_horizontal|center_vertical"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/hspm_logo"
-                    android:contentDescription="TODO"
-                    android:padding="10dp"
-                    android:tint="#FFF" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="10dp"
-                    android:text="LOGIN"
-                    android:textColor="#fff"
-                    android:textSize="22sp" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearLayout1"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="30dp">
-
-                <ImageView
-                    android:id="@+id/imageView_userIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@color/colorPrimaryDark"
-                    android:contentDescription="ToDO"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_call_black_24dp"
-                    android:tint="#fff" />
-
-                <EditText
-                    android:id="@+id/editTextPhone"
+                <LinearLayout
+                    android:id="@+id/linearLayout1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/imageView_userIcon"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/imageView_userIcon"
-                    android:hint="10 digit Mobile Number"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:paddingLeft="20dp"
-                    android:textSize="15sp" />
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp"
+                        android:text="LOGIN"
+                        android:textColor="#fff"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonContinue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_below="@+id/relativeLayout1"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:background="@color/colorPrimary"
-                android:fontFamily="sans-serif-medium"
-                android:text="Continue"
-                android:textColor="#fff" />
-        </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/relativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/linearLayout1"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp">
 
+                    <ImageView
+                        android:id="@+id/imageView_userIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@color/colorPrimary"
+                        android:contentDescription="ToDO"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_call_black_24dp"
+                        android:tint="#fff" />
 
-    </android.support.v7.widget.CardView>
+                    <EditText
+                        android:id="@+id/editTextPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/imageView_userIcon"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/imageView_userIcon"
+                        android:hint="10 digit Mobile Number"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:paddingLeft="20dp"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buttonContinue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativeLayout1"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@color/colorPrimary"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Continue"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/head1"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_alignParentBottom="true"
+        android:rotation="180"
+        android:scaleType="fitXY"
+        android:src="@drawable/header" />
+
 </RelativeLayout>
