@@ -58,7 +58,9 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:background="@drawable/cerclebackgroundgreen"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:src="@drawable/rent"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -102,7 +104,9 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:background="@drawable/cerclebackgroundyello"
-                        android:padding="10dp"/>
+                        android:padding="10dp"
+                        android:src="@drawable/assembledpc"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -159,7 +163,7 @@
                         android:layout_height="64dp"
                         android:background="@drawable/cerclebackgroundpurple"
                         android:padding="10dp"
-                        android:src="@drawable/software"/>
+                        android:src="@drawable/services" />
 
                     <TextView
                         android:layout_width="wrap_content"
