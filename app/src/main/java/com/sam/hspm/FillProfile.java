@@ -117,6 +117,11 @@ public class FillProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onUserLeaveHint() {
+        FirebaseAuth.getInstance().signOut();
+        super.onUserLeaveHint();
+    }
 
     @Override
     public void onBackPressed() {
