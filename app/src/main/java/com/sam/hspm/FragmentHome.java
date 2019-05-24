@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.security.AccessController.getContext;
+
 public class FragmentHome extends Fragment {
 
     ViewPager viewPager;
