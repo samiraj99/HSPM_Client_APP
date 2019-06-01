@@ -56,7 +56,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".CompleteProfile" />
         <activity android:name=".FillProfile" />
-        <activity android:name=".HistoryDetails" />
+        <activity android:name=".CompletedServicesDetails" />
+        <activity android:name=".PendingServicesDetails"/>
     </application>
 
 </manifest>

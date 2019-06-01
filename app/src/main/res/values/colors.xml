@@ -69,4 +69,9 @@
 
     <color name="black_overlay">#66000000</color>
 
+    <color name="colorBackground">#151B29</color>
+    <color name="colorYellow">#F5FA55</color>
+    <color name="colorGreen">#76ff03</color>
+    <color name="colorRed">#d50000</color>
+
 </resources>
