@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class HistoryDetails extends AppCompatActivity {
+public class CompletedServicesDetails extends AppCompatActivity {
 
     TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate, ViewReceipt;
     ImageView back;
@@ -52,7 +52,7 @@ public class HistoryDetails extends AppCompatActivity {
     View alertLayout;
     private ListView listView;
     private TextView TV_Total;
-    private static final String TAG = "HistoryDetails";
+    private static final String TAG = "CompletedServicesDetail";
 
     @Override
     public void onDestroy() {
@@ -63,7 +63,7 @@ public class HistoryDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_details);
+        setContentView(R.layout.activity_completed_services_details);
 
         if (getIntent() != null) {
             serviceId = getIntent().getStringExtra("ServiceId");
@@ -87,14 +87,14 @@ public class HistoryDetails extends AppCompatActivity {
                     .setApiKey(getString(R.string.ApiKey))
                     .setDatabaseUrl(getString(R.string.DatabaseUrl))
                     .build();
-            FirebaseApp.initializeApp(HistoryDetails.this, options, "EmployeeDatabase");
+            FirebaseApp.initializeApp(CompletedServicesDetails.this, options, "EmployeeDatabase");
             employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
             firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
             employeeDatabase = firebaseDatabase.getReference();
         }
 
         try {
-            progressDialog = new ProgressDialog(HistoryDetails.this);
+            progressDialog = new ProgressDialog(CompletedServicesDetails.this);
             progressDialog.setMessage("Loading");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -128,7 +128,7 @@ public class HistoryDetails extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(HistoryDetails.this, MainActivity.class);
+                Intent i = new Intent(CompletedServicesDetails.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
@@ -144,7 +144,7 @@ public class HistoryDetails extends AppCompatActivity {
 
                 retrieveReceiptData();
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(HistoryDetails.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(CompletedServicesDetails.this);
                 builder.setView(alertLayout);
                 builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
                     @Override
@@ -192,7 +192,7 @@ public class HistoryDetails extends AppCompatActivity {
                             ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
                             IssuedListwithAmount.add(helper);
                         }
-                        adapter = new ReceiptListAdapter(HistoryDetails.this, R.layout.receipt_adapter_layout, IssuedListwithAmount);
+                        adapter = new ReceiptListAdapter(CompletedServicesDetails.this, R.layout.receipt_adapter_layout, IssuedListwithAmount);
                         listView.setAdapter(adapter);
                         calculateTotal();
                     }
@@ -224,7 +224,7 @@ public class HistoryDetails extends AppCompatActivity {
 
     private String convertAddress(LatLng latLng) {
         String address = null;
-        Geocoder geocoder = new Geocoder(HistoryDetails.this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(CompletedServicesDetails.this, Locale.getDefault());
         try {
             List<Address> Location = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             address = Location.get(0).getAddressLine(0);

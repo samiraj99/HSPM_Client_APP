@@ -1,88 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#D3E6F3">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="#efefef">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:elevation="5dp"
-        android:id="@+id/CardView"
-        >
+<include layout="@layout/accept" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="30dp">
+<!-- Adding bottom sheet after main content -->
+<include layout="@layout/bottom_sheet" />
 
-            <TextView
-                android:id="@+id/text_service_accept_by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:text="@string/service_is_accept_by"
-                android:textColor="#000"
-                android:textSize="25sp" />
-
-            <TextView
-                android:id="@+id/Text_Employee_Name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_service_accept_by"
-                android:layout_marginStart="20dp"
-                android:text="@string/nam_e"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                />
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:id="@+id/TextView_Employee_Name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_service_accept_by"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/Text_Employee_Name"
-                android:textColor="#000"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/Text_Employee_Phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_Employee_Name"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/phoneno"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TextView_Employee_Phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_Employee_Name"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/Text_Employee_Phone"
-                android:textColor="#000"
-                android:textSize="20sp" />
-
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/CardView"
-        tools:context=".MapsActivity" />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

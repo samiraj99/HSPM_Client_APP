@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sam.hspm.utils.ProblemDetails;
 
+import static java.security.AccessController.getContext;
+
 public class FragmentCurrentServices extends Fragment {
     @Nullable
     View v;
