@@ -86,4 +86,5 @@
     <string name="address">Address</string>
     <string name="save_and_next">Save and Next</string>
     <string name="mobile">Mobile</string>
+    <string name="buttons_ports"><![CDATA[Buttons & Ports]]></string>
 </resources>

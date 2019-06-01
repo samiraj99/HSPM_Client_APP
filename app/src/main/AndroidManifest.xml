@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReviewActivity"></activity>
+        <activity android:name=".MobileForm3"></activity>
+        <activity android:name=".MobileForm2" />
+        <activity android:name=".ReviewActivity" />
 
         <service android:name=".Services.MyFirebaseMessagingService">
             <intent-filter>

@@ -3,6 +3,7 @@ package com.sam.hspm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,24 +17,28 @@ import java.util.List;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class ServiceForm2 extends AppCompatActivity {
+public class MobileForm3 extends AppCompatActivity {
 
-    String PcType;
+    String Brand;
+    private static final String TAG = "MobileForm3";
     CheckBox Ch1, Ch2, Ch3, Ch4, Ch5, Ch6, Ch7, Ch8;
     List<CheckBox> ListOfCheckBox = new ArrayList<>();
-    String ProblemType = "";
     Button Bt_Next;
-    TextView specifyProblem;
     EditText ET_SpecifiedProblem;
     String SpecifiedProblem;
+    TextView specifyProblem;
+    String ProblemType = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_service_form2);
+        setContentView(R.layout.activity_mobile_form3);
 
-        if (getIntent() != null) {
-            PcType = getIntent().getExtras().getString("PC Type");
+        try {
+            Brand = getIntent().getExtras().getString("Brand");
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: " + e.getMessage());
         }
 
         ListOfCheckBox.add(Ch1 = findViewById(R.id.CheckBox1));
@@ -44,7 +49,6 @@ public class ServiceForm2 extends AppCompatActivity {
         ListOfCheckBox.add(Ch6 = findViewById(R.id.CheckBox6));
         ListOfCheckBox.add(Ch7 = findViewById(R.id.CheckBox7));
 
-        Bt_Next = findViewById(R.id.Button_Next);
         ET_SpecifiedProblem = findViewById(R.id.EditText_Problem);
         specifyProblem = findViewById(R.id.specifyProblem);
 
@@ -63,6 +67,8 @@ public class ServiceForm2 extends AppCompatActivity {
             }
         });
 
+        Bt_Next = findViewById(R.id.Button_Next);
+
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +80,7 @@ public class ServiceForm2 extends AppCompatActivity {
                 SpecifiedProblem = ET_SpecifiedProblem.getText().toString();
 
                 if (ProblemType.isEmpty()) {
-                    Toast.makeText(ServiceForm2.this, "Please select any one option.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MobileForm3.this, "Please select any one option.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -83,14 +89,16 @@ public class ServiceForm2 extends AppCompatActivity {
                 }
 
 
-                Intent i = new Intent(ServiceForm2.this, RequestService.class);
-                i.putExtra("PC Type", PcType);
+                Intent i = new Intent(MobileForm3.this, RequestService.class);
+                i.putExtra("PC Type", "Mobile " + Brand);
                 i.putExtra("Problem Types", ProblemType);
                 i.putExtra("Specified Problem", SpecifiedProblem);
                 startActivity(i);
                 Bt_Next.setEnabled(false);
             }
         });
+
+
     }
 
     @Override

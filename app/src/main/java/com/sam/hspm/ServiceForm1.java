@@ -40,7 +40,8 @@ public class ServiceForm1 extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.RadioButtonMobile:
-                        //Intent mobile = new Intent(ServiceForm1.this,);
+                        Intent mobile = new Intent(ServiceForm1.this, MobileForm2.class);
+                        startActivity(mobile);
                 }
 
             }
@@ -58,8 +59,8 @@ public class ServiceForm1 extends AppCompatActivity {
 
                 SelectedButton = findViewById(selectedId);
                 if (SelectedButton.getText().equals("Mobile")) {
-
-
+                    Intent mobile = new Intent(ServiceForm1.this, MobileForm2.class);
+                    startActivity(mobile);
                 } else {
                     Intent i = new Intent(ServiceForm1.this, ServiceForm2.class);
                     i.putExtra(key, SelectedButton.getText().toString());

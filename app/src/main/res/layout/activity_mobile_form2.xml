@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MobileForm2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:layout_gravity="fill_vertical"
+        android:focusableInTouchMode="true">
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            app:progress_current="25"
+            app:progress_max="100"
+            app:progress_reached_bar_height="10dp"
+            app:progress_reached_color="@color/colorPrimaryDark"
+            app:progress_text_size="20dp"
+            app:progress_unreached_bar_height="5dp" />
+
+        <TextView
+            android:id="@+id/TextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progressBar"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="Select Brand of Mobile."
+            android:textColor="@color/primaryText"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+
+        <RadioGroup
+            android:id="@+id/RadioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp">
+
+
+            <RadioButton
+                android:id="@+id/RadioButton_samsung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Samsung"
+                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_xiaom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xiaomi"
+                android:paddingStart="10dp"
+                android:textSize="20sp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_lenovo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lenovo"
+                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_oneplus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OnePlus"
+                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_apple"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Apple"
+                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_oppo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Oppo"
+                android:paddingStart="10dp"
+                android:textSize="20sp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_vivo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vivo"
+                android:paddingStart="10dp"
+                android:textSize="20sp"
+                android:layout_margin="10dp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other"
+                android:paddingStart="10dp"
+                android:textSize="20sp"
+                android:layout_margin="10dp" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/TextView_SpecifyProblem"
+            android:layout_below="@+id/RadioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please Specify"
+            android:layout_marginStart="20sp"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/EditText_SpecifyProblem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView_SpecifyProblem"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/TextView_SpModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please Specify Your Phone Model"
+            android:layout_below="@+id/EditText_SpecifyProblem"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
+
+        <EditText
+            android:id="@+id/EditText_Model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TextView_SpModel"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+
+            />
+
+        <Button
+            android:id="@+id/Button_Next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/EditText_Model"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/next"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+</ScrollView>
