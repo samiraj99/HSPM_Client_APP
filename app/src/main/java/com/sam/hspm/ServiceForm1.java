@@ -33,12 +33,16 @@ public class ServiceForm1 extends AppCompatActivity {
                 switch (checkedId) {
                     case R.id.RadioButtonDesktop:
                         i.putExtra(key, "Desktop");
+                        startActivity(i);
                         break;
                     case R.id.RadioButtonLaptop:
                         i.putExtra(key, "Laptop");
+                        startActivity(i);
                         break;
+                    case R.id.RadioButtonMobile:
+                        //Intent mobile = new Intent(ServiceForm1.this,);
                 }
-                startActivity(i);
+
             }
         });
 
@@ -53,9 +57,14 @@ public class ServiceForm1 extends AppCompatActivity {
                 }
 
                 SelectedButton = findViewById(selectedId);
-                Intent i = new Intent(ServiceForm1.this, ServiceForm2.class);
-                i.putExtra(key, SelectedButton.getText().toString());
-                startActivity(i);
+                if (SelectedButton.getText().equals("Mobile")) {
+
+
+                } else {
+                    Intent i = new Intent(ServiceForm1.this, ServiceForm2.class);
+                    i.putExtra(key, SelectedButton.getText().toString());
+                    startActivity(i);
+                }
             }
         });
     }

@@ -71,7 +71,7 @@
     <string name="start">GOT IT</string>
 
     <string name="slide_1_desc">Just getting started? Lets take a look at some of the great features of this app</string>
-
+    `
     <string name="slide_2_title">Superfast Service</string>
     <string name="slide_2_desc">Always on time because faster is better</string>
 
@@ -85,4 +85,5 @@
     <string name="email_id">Email ID</string>
     <string name="address">Address</string>
     <string name="save_and_next">Save and Next</string>
+    <string name="mobile">Mobile</string>
 </resources>

@@ -134,8 +134,8 @@ public class FragmentPaymentSuccess extends Fragment {
                                                     } else {
                                                         clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
                                                         clientDatabase.child("Services").child(CurrentServiceId).removeValue();
-                                                        UserRef.child("History").push().setValue(CurrentServiceId);
-                                                        employeeDatabase.child("Users").child(empId).child("History").push().setValue(CurrentServiceId);
+                                                        UserRef.child("History").child("CompletedServices").push().setValue(CurrentServiceId);
+                                                        employeeDatabase.child("Users").child(empId).child("History").child("CompletedServices").push().setValue(CurrentServiceId);
                                                         UserRef.updateChildren(map);
                                                         progressDialog.dismiss();
                                                     }

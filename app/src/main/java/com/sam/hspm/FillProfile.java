@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -101,6 +99,7 @@ public class FillProfile extends AppCompatActivity {
                 map1.put("Receipt", "0");
                 map1.put("Payment", "0");
                 map1.put("CurrentService", "0");
+                map1.put("IsPending", "0");
 
                 databaseReference.updateChildren(map1).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.security.AccessController.getContext;
-
 public class FragmentHome extends Fragment {
 
     ViewPager viewPager;
@@ -48,6 +46,7 @@ public class FragmentHome extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseUser user;
     private String uid;
+    private static final String TAG = "FragmentHome";
 
     @Nullable
     @Override
@@ -96,62 +95,66 @@ public class FragmentHome extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                try {
-                    count = (int) dataSnapshot.getChildrenCount();
-                    for (int i = 1; i <= count; i++) {
+                if (dataSnapshot.exists()) {
 
-                        String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
-                        imageURL.add(s);
-                    }
+                    try {
+                        count = (int) dataSnapshot.getChildrenCount();
+                        for (int i = 1; i <= count; i++) {
 
-                    SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
+                            String s = dataSnapshot.child(String.valueOf(i)).child("Image").getValue().toString();
+                            imageURL.add(s);
+                        }
 
-                    viewPager.setAdapter(viewPagerAdapter);
+                        SliderAdapter viewPagerAdapter = new SliderAdapter(getContext(), imageURL);
 
-                    dotscount = count;
-                    dots = new ImageView[dotscount];
+                        viewPager.setAdapter(viewPagerAdapter);
 
-                    for (i = 0; i < dotscount; i++) {
+                        dotscount = count;
+                        dots = new ImageView[dotscount];
 
-                        dots[i] = new ImageView(getContext());
-                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                        for (i = 0; i < dotscount; i++) {
 
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            dots[i] = new ImageView(getContext());
+                            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
 
-                        params.setMargins(8, 0, 8, 0);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                        sliderDotspanel.addView(dots[i], params);
+                            params.setMargins(8, 0, 8, 0);
 
-                    }
-
-                    dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
-                    Timer timer = new Timer();
-                    timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
-
-                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                        @Override
-                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            sliderDotspanel.addView(dots[i], params);
 
                         }
 
-                        @Override
-                        public void onPageSelected(int position) {
+                        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                        Timer timer = new Timer();
+                        timer.scheduleAtFixedRate(new SliderTimer(), 2000, 4000);
 
-                            for (int i = 0; i < dotscount; i++) {
-                                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                            @Override
+                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                             }
 
-                            dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                            @Override
+                            public void onPageSelected(int position) {
 
-                        }
+                                if (getContext() != null) {
+                                    for (int i = 0; i < dotscount; i++) {
+                                        dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.nonactive_dot));
+                                    }
 
-                        @Override
-                        public void onPageScrollStateChanged(int state) {
+                                    dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+                                }
+                            }
 
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
+                            @Override
+                            public void onPageScrollStateChanged(int state) {
+
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, "onDataChange: " + e.getMessage());
+                    }
                 }
             }
 

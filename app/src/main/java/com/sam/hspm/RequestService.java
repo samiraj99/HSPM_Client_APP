@@ -145,18 +145,35 @@ public class RequestService extends AppCompatActivity {
         BT_Submit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddressVerified()) {
-                    if (!pincode.equals("412115")) {
-                        showServiceGuaranteeDialogBox("Submit2");
-                    } else {
-                        showConfirmationDialogBox("Submit2");
-                    }
 
-                } else {
-                    Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
+                try {
+                    Area = ET_Area.getText().toString();
+                    HouseNo = ET_HouseNo.getText().toString();
+                    Landdmark = ET_Landmark.getText().toString();
+                } catch (Exception e) {
+                    Log.e(TAG, "onClick: Exception" + e.getMessage());
                 }
 
+                if (Area.isEmpty()) {
+                    ET_Area.setError("Fields can't be empty");
+                } else if (HouseNo.isEmpty()) {
+                    ET_HouseNo.setError("Fields can't be empty");
+                } else if (Landdmark.isEmpty()) {
+                    ET_Landmark.setError("Fields can't be empty");
+                } else {
 
+                    if (AddressVerified()) {
+                        if (!pincode.equals("412115")) {
+                            showServiceGuaranteeDialogBox("Submit2");
+                        } else {
+                            showConfirmationDialogBox("Submit2");
+                        }
+
+                    } else {
+                        Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
             }
         });
 
@@ -189,16 +206,14 @@ public class RequestService extends AppCompatActivity {
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (btn.equals("Submit"))
-                    submit();
-                if (btn.equals("Submit2"))
-                    submit2();
+                next(btn);
             }
 
         });
         builder.create();
         builder.show();
     }
+
 
     private void showConfirmationDialogBox(final String btn) {
         //Alert dialog box to confirm order
@@ -215,10 +230,7 @@ public class RequestService extends AppCompatActivity {
         alertDialog.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (btn.equals("Submit"))
-                    submit();
-                if (btn.equals("Submit2"))
-                    submit2();
+                next(btn);
             }
 
         });
@@ -226,69 +238,27 @@ public class RequestService extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void submit() {
-        dialog.show();
-        RequestData data = new RequestData(PcType, ProblemType, SpecifiedProblem);
-        Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
-        AddressData addressData = new AddressData(coordinates);
-        AllData allData = new AllData(data, addressData, uid, "false");
+    void next(String btn) {
 
-        try {
-            id = mreference.child("Services").push().getKey();
-            mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        SaveService(id);
-                    } else {
-                        Log.e("Error", "Failed to write in users data");
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+        Intent i = new Intent(RequestService.this, ReviewActivity.class);
+        i.putExtra("PC Type", PcType);
+        i.putExtra("Problem Types", ProblemType);
+        i.putExtra("Specified Problem", SpecifiedProblem);
+        i.putExtra("Latitude", LatLng.latitude);
+        i.putExtra("Longitude", LatLng.longitude);
+        i.putExtra("Address", address);
+
+        if (btn.equals("Submit")) {
+            i.putExtra("SubmitType", "Submit");
         }
-    }
+        if (btn.equals("Submit2")) {
+            i.putExtra("SubmitType", "Submit2");
+            i.putExtra("Area", Area);
+            i.putExtra("HouseNo", HouseNo);
+            i.putExtra("Landmark", Landdmark);
 
-    private void submit2() {
-
-        try {
-            Area = ET_Area.getText().toString();
-            HouseNo = ET_HouseNo.getText().toString();
-            Landdmark = ET_Landmark.getText().toString();
-        } catch (Exception e) {
-            Log.e(TAG, "onClick: Exception" + e.getMessage());
         }
-        if (Area.isEmpty()) {
-            ET_Area.setError("Fields can't be empty");
-        } else if (HouseNo.isEmpty()) {
-            ET_HouseNo.setError("Fields can't be empty");
-        } else if (Landdmark.isEmpty()) {
-            ET_Landmark.setError("Fields can't be empty");
-        } else {
-            dialog.show();
-            RequestData requestData = new RequestData(PcType, ProblemType, SpecifiedProblem);
-            final Coordinates coordinates = new Coordinates(LatLng.latitude, LatLng.longitude);
-            final AddressData addressData = new AddressData(Area, HouseNo, Landdmark, coordinates);
-            AllData allData = new AllData(requestData, addressData, uid, "false");
-
-            try {
-                id = mreference.child("Services").push().getKey();
-                mreference.child("Services").child(id).setValue(allData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            SaveService(id);
-                            dialog.dismiss();
-                        } else {
-                            Log.e("Error", "Failed to write in users data");
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        startActivity(i);
     }
 
     private boolean AddressVerified() {
@@ -390,24 +360,6 @@ public class RequestService extends AppCompatActivity {
         });
     }
 
-    private void SaveService(String id) {
-        try {
-            mreference.child("Users").child(uid).child("Current_Service_Id").setValue(id).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        mreference.child("Users").child(uid).child("CurrentService").setValue(1);
-                        Toast.makeText(RequestService.this, "Request Send.", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(RequestService.this, MainActivity.class);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(i);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void IsServiceOK() {
         Log.d(TAG, "IsServiceOK: Checking Google Service Version");

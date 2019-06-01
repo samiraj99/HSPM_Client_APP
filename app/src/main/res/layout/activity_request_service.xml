@@ -127,7 +127,7 @@
                 android:layout_margin="10dp"
                 android:layout_toEndOf="@+id/Button_EditAddress"
                 android:background="@color/colorPrimary"
-                android:text="@string/submit_request"
+                android:text="@string/next"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 />
@@ -184,7 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/colorPrimary"
-            android:text="@string/submit_request"
+            android:text="@string/next"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:visibility="gone"
