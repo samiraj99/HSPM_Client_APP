@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,7 +104,7 @@ public class CompletedServicesDetails extends AppCompatActivity {
                     ProblemDetails p = dataSnapshot.child("Problem").getValue(ProblemDetails.class);
                     TV_PcType.setText(p.getPcType());
                     TV_ProblemType.setText(p.getProblemType());
-                    TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Time").getValue(String.class));
+                    TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Time").getValue(String.class));
                     for (DataSnapshot ds : dataSnapshot.child("Address").getChildren()) {
                         Co_Ordinates co_ordinates = ds.getValue(Co_Ordinates.class);
                         assert co_ordinates != null;

@@ -8,10 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
-import android.support.design.widget.BottomSheetBehavior;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -21,12 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.os.CountDownTimer;
 import android.widget.ProgressBar;
-
-import java.util.concurrent.TimeUnit;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,7 +36,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,10 +43,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static java.security.AccessController.getContext;
 
 public class FragmentAcceptedService extends Fragment {
 
@@ -73,7 +73,7 @@ public class FragmentAcceptedService extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
     String uid;
-    String EmpID, Name, PhoneNo, EmpImage;
+    String EmpID, Name, PhoneNo, EmpImage, CurrentServiceId, AcceptTime;
     TextView TV_Name, TV_PhoneNo;
     ImageView TV_EmpImage;
     ProgressDialog progressDialog;
@@ -84,6 +84,9 @@ public class FragmentAcceptedService extends Fragment {
     private GoogleMap map;
     private static final float DEFAULT_ZOOM = 15f;
     double Lat = 0, Lng = 0;
+    long difference;
+    Date date1 = null;
+    Date date2 = null;
 
     @Nullable
     @Override
@@ -136,7 +139,7 @@ public class FragmentAcceptedService extends Fragment {
         progressDialog.setMessage("Loading...!");
         progressDialog.show();
 
-        startStop();
+
         RetrieveEmployeeId();
         getLocationPermission();
         checkLocationState();
@@ -207,14 +210,39 @@ public class FragmentAcceptedService extends Fragment {
         }
     }
 
+    private void retrieveTime() {
+        clientDatabase.child("Services").child(CurrentServiceId).child("DateTime").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    AcceptTime = dataSnapshot.child("Accepted").child("Time").getValue().toString();
+                    startStop();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void RetrieveEmployeeId() {
         try {
             clientDatabase.child("Users").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    EmpID = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
-                    if (!EmpID.equals("0")) {
-                        RetrieveEmployeeData(EmpID);
+                    try {
+                        if (dataSnapshot.exists()) {
+                            EmpID = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
+                            if (!EmpID.equals("0")) {
+                                RetrieveEmployeeData(EmpID);
+                            }
+                            CurrentServiceId = dataSnapshot.child("Current_Service_Id").getValue().toString();
+                            retrieveTime();
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "onDataChange: " + e.getMessage());
                     }
                 }
 
@@ -346,7 +374,24 @@ public class FragmentAcceptedService extends Fragment {
     //====================================================================================================
     //Timer related operations downward from here
     private void startStop() {
-        timeCountInMilliSeconds = (90 * 60 * 1000);
+        Date cTime = Calendar.getInstance().getTime();
+        String currentTime = cTime.getHours() + ":" + cTime.getMinutes();
+
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+
+        try {
+            if (AcceptTime != null) {
+                date1 = simpleDateFormat.parse(AcceptTime);
+                date2 = simpleDateFormat.parse(currentTime);
+                difference = date2.getTime() - date1.getTime();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        timeCountInMilliSeconds = (90 * 60 * 1000) - difference;
         setProgressBarValues();
         startCountDownTimer();
     }
@@ -373,7 +418,7 @@ public class FragmentAcceptedService extends Fragment {
 
     private void setProgressBarValues() {
 
-        progressBarCircle.setMax((int) timeCountInMilliSeconds / 1000);
+        progressBarCircle.setMax((90 * 60 * 1000) / 1000);
         progressBarCircle.setProgress((int) timeCountInMilliSeconds / 1000);
     }
 
