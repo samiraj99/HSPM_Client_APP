@@ -145,15 +145,17 @@ public class PendingServices extends Fragment {
 
         Log.d(TAG, "retrieveData: 1 " + sid);
         try {
-            databaseReference.child("PendingServices").child(sid).addValueEventListener(new ValueEventListener() {
+            databaseReference.child("PendingServices").child(sid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ServiceID.add(sid);
-                    ServiceStatus.add("Service Pending");
-                    DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
-                    Amount.add(dataSnapshot.child("EstimateTime").getValue().toString());
-                    customAdapter.notifyDataSetChanged();
-                    progressDialog.dismiss();
+                    if (dataSnapshot.exists()) {
+                        ServiceID.add(sid);
+                        ServiceStatus.add("Service Pending");
+                        DateTime.add(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue().toString());
+                        Amount.add(dataSnapshot.child("EstimateCost").getValue().toString());
+                        customAdapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
                 }
 
                 @Override

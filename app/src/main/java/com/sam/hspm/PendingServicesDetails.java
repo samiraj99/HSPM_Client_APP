@@ -7,7 +7,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -103,7 +102,7 @@ public class PendingServicesDetails extends AppCompatActivity {
                         ProblemDetails p = dataSnapshot.child("Problem").getValue(ProblemDetails.class);
                         TV_PcType.setText(p.getPcType());
                         TV_ProblemType.setText(p.getProblemType());
-                        TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Time").getValue(String.class));
+                        TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue(String.class));
                         for (DataSnapshot ds : dataSnapshot.child("Address").getChildren()) {
                             Co_Ordinates co_ordinates = ds.getValue(Co_Ordinates.class);
                             assert co_ordinates != null;
@@ -134,6 +133,7 @@ public class PendingServicesDetails extends AppCompatActivity {
                 Intent i = new Intent(PendingServicesDetails.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                employeeApp.delete();
             }
         });
 
@@ -161,33 +161,6 @@ public class PendingServicesDetails extends AppCompatActivity {
         }
     }
 
-    public void retrieveReceiptData() {
-        Log.d(TAG, "retrieveReceiptData: Called");
-        try {
-            databaseReference.child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.exists()) {
-                        Log.d(TAG, "onDataChange: In if");
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            ReceiptHelper helper = ds.getValue(ReceiptHelper.class);
-                            IssuedListwithAmount.add(helper);
-                        }
-                        adapter = new ReceiptListAdapter(PendingServicesDetails.this, R.layout.receipt_adapter_layout, IssuedListwithAmount);
-                        listView.setAdapter(adapter);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static class Co_Ordinates {
         public double Lat, Lng;
@@ -213,5 +186,11 @@ public class PendingServicesDetails extends AppCompatActivity {
             e.printStackTrace();
         }
         return address;
+    }
+
+    @Override
+    public void onBackPressed() {
+        employeeApp.delete();
+        super.onBackPressed();
     }
 }

@@ -178,8 +178,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/Name"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_toEndOf="@id/TextView_Name"
+                        android:layout_marginTop="12dp"
+                        android:layout_toEndOf="@id/TextView_PhoneNo"
                         android:textSize="15sp" />
 
 

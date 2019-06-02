@@ -31,7 +31,7 @@ public class FragmentHistory extends Fragment {
 
         viewPager = v1.findViewById(R.id.pager);
 
-        Pager adapter = new Pager(getFragmentManager(), tabLayout.getTabCount());
+        Pager adapter = new Pager(getChildFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(adapter);
 

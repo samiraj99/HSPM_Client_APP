@@ -42,6 +42,7 @@ public class FragmentPaymentSuccess extends Fragment {
     Button BT_submit;
     int rating;
     private static final String TAG = "FragmentPaymentSuccess";
+    boolean IsPending;
 
     @Nullable
     @Override
@@ -105,61 +106,100 @@ public class FragmentPaymentSuccess extends Fragment {
         BT_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                final HashMap<String, Object> map = new HashMap<>();
-                map.put("Current_Service_Id", "0");
-                map.put("RequestAcceptedBy", "0");
-                map.put("Receipt", "0");
-                map.put("Payment", "0");
-
-                progressDialog.setMessage("Submitting");
-                progressDialog.show();
-                rating = ((int) ratingBar.getRating());
-                if (rating != 0) {
-                    try {
-                        clientDatabase.child("Services").child(CurrentServiceId).child("Ratings").setValue(rating).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    //TODO: move service from services to history
-                                    clientDatabase.child("Services").child(CurrentServiceId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            clientDatabase.child("CompletedServices").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
-                                                @Override
-                                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                                    if (databaseError != null) {
-                                                        Log.e(TAG, "onComplete: Copy Failed");
-                                                    } else {
-                                                        clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
-                                                        clientDatabase.child("Services").child(CurrentServiceId).removeValue();
-                                                        UserRef.child("History").child("CompletedServices").push().setValue(CurrentServiceId);
-                                                        employeeDatabase.child("Users").child(empId).child("History").child("CompletedServices").push().setValue(CurrentServiceId);
-                                                        UserRef.updateChildren(map);
-                                                        progressDialog.dismiss();
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                if (IsPending) {
+                    submit("PendingServices");
+                } else {
+                    submit("Services");
                 }
             }
         });
 
         return v1;
+    }
+
+    void submit(final String serviceType) {
+
+        final HashMap<String, Object> map = new HashMap<>();
+        map.put("Current_Service_Id", "0");
+        map.put("RequestAcceptedBy", "0");
+        map.put("Receipt", "0");
+        map.put("Payment", "0");
+        map.put("IsPending", "0");
+
+        progressDialog.setMessage("Submitting");
+        progressDialog.show();
+
+        rating = ((int) ratingBar.getRating());
+        if (rating != 0) {
+            try {
+                clientDatabase.child(serviceType).child(CurrentServiceId).child("Ratings").setValue(rating).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                            clientDatabase.child(serviceType).child(CurrentServiceId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    clientDatabase.child("CompletedServices").child(CurrentServiceId).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                                        @Override
+                                        public void onComplete(@Nullable final DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                            if (databaseError != null) {
+                                                Log.e(TAG, "onComplete: Copy Failed");
+                                            } else {
+                                                clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
+                                                clientDatabase.child("Services").child(CurrentServiceId).removeValue();
+                                                UserRef.child("History").child("CompletedServices").push().setValue(CurrentServiceId);
+                                                employeeDatabase.child("Users").child(empId).child("History").child("CompletedServices").push().setValue(CurrentServiceId);
+                                                UserRef.updateChildren(map);
+
+                                                if (!IsPending) {
+                                                    progressDialog.dismiss();
+                                                }
+
+                                                if (IsPending) {
+                                                    clientDatabase.child("Users").child(uid).child("History").child("PendingServices").child(CurrentServiceId).removeValue();
+                                                    employeeDatabase.child("Users").child(empId).child("History").child("PendingServices").child(CurrentServiceId).removeValue();
+                                                    progressDialog.dismiss();
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    void getEmpId(String currentServiceId) {
+
+        if (IsPending) {
+            clientDatabase.child("PendingServices").child(currentServiceId).child("RequestAcceptedBy").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        empId = dataSnapshot.getValue().toString();
+                        getEmployeeDetails(empId);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     // Fetching Employee ID from Client database
@@ -169,9 +209,9 @@ public class FragmentPaymentSuccess extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        empId = Objects.requireNonNull(dataSnapshot.child("RequestAcceptedBy").getValue()).toString();
                         CurrentServiceId = Objects.requireNonNull(dataSnapshot.child("Current_Service_Id").getValue()).toString();
-                        getEmployeeDetails(empId);
+                        IsPending = Objects.equals(dataSnapshot.child("IsPending").getValue(), "1");
+                        getEmpId(CurrentServiceId);
                         // progressDialog.dismiss();
                     }
                 }
@@ -198,6 +238,7 @@ public class FragmentPaymentSuccess extends Fragment {
                         EmpName = Objects.requireNonNull(dataSnapshot.child("FullName").getValue()).toString();
                         String temp = "Please rate " + EmpName;
                         TV_Employee_Name.setText(temp);
+                        // progressDialog.dismiss();
                     }
                 }
 

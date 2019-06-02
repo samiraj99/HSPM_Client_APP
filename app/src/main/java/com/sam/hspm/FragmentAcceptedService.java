@@ -115,15 +115,17 @@ public class FragmentAcceptedService extends Fragment {
         FirebaseApp.initializeApp(getContext());
         clientDatabase = FirebaseDatabase.getInstance().getReference();
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setApplicationId(getString(R.string.ApplicationId))
-                .setApiKey(getString(R.string.ApiKey))
-                .setDatabaseUrl(getString(R.string.DatabaseUrl))
-                .build();
-        FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
-        employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
-        firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
-        employeeDatabase = firebaseDatabase.getReference();
+        if (employeeApp == null) {
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setApplicationId(getString(R.string.ApplicationId))
+                    .setApiKey(getString(R.string.ApiKey))
+                    .setDatabaseUrl(getString(R.string.DatabaseUrl))
+                    .build();
+            FirebaseApp.initializeApp(getContext(), options, "EmployeeDatabase");
+            employeeApp = FirebaseApp.getInstance("EmployeeDatabase");
+            firebaseDatabase = FirebaseDatabase.getInstance(employeeApp);
+            employeeDatabase = firebaseDatabase.getReference();
+        }
 
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();

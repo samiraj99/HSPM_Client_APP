@@ -150,7 +150,7 @@ public class CompletedServices extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     ServiceID.add(sid);
                     ServiceStatus.add("Service Completed");
-                    DateTime.add(dataSnapshot.child("DateTime").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Time").getValue().toString());
+                    DateTime.add(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue().toString());
                     Amount.add("₹" + dataSnapshot.child("Total").getValue().toString());
                     customAdapter.notifyDataSetChanged();
                     progressDialog.dismiss();

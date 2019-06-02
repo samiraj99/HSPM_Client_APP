@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String uid;
     String ST_ProfileName;
     TextView ProfileName;
-    String ServiceId, EmployeeId, Payment;
+    String ServiceId, EmployeeId, Payment, IsPending;
     ProgressDialog dialog;
     private static final String TAG = "MainActivity";
     ImageView imageView;
@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         ServiceId = dataSnapshot.child("CurrentService").getValue().toString();
 
                         Payment = dataSnapshot.child("Payment").getValue().toString();
+                        IsPending = dataSnapshot.child("IsPending").getValue().toString();
                         dialog.dismiss();
                         if (!ServiceId.equals("0")) {
                             EmployeeId = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
@@ -184,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 } else {
                                     getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentAcceptedService()).commitAllowingStateLoss();
                                 }
+                            } else if (IsPending.equals("1")) {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentReceipt()).commitAllowingStateLoss();
                             } else {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_Container, new FragmentCurrentServices()).commitAllowingStateLoss();
                             }

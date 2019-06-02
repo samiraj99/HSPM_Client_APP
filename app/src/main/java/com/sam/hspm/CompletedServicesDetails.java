@@ -104,7 +104,7 @@ public class CompletedServicesDetails extends AppCompatActivity {
                     ProblemDetails p = dataSnapshot.child("Problem").getValue(ProblemDetails.class);
                     TV_PcType.setText(p.getPcType());
                     TV_ProblemType.setText(p.getProblemType());
-                    TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Time").getValue(String.class));
+                    TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue(String.class));
                     for (DataSnapshot ds : dataSnapshot.child("Address").getChildren()) {
                         Co_Ordinates co_ordinates = ds.getValue(Co_Ordinates.class);
                         assert co_ordinates != null;
@@ -131,6 +131,7 @@ public class CompletedServicesDetails extends AppCompatActivity {
                 Intent i = new Intent(CompletedServicesDetails.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+                employeeApp.delete();
             }
         });
 
@@ -242,5 +243,11 @@ public class CompletedServicesDetails extends AppCompatActivity {
         }
         TV_Total.setText(String.valueOf(Total));
         progressDialog.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        employeeApp.delete();
+        super.onBackPressed();
     }
 }

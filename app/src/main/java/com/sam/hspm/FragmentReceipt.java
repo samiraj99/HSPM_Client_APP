@@ -22,6 +22,7 @@ import com.sam.hspm.utils.ReceiptHelper;
 import com.sam.hspm.utils.ReceiptListAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FragmentReceipt extends Fragment {
 
@@ -35,6 +36,7 @@ public class FragmentReceipt extends Fragment {
     ListView listView;
     TextView TV_Total;
     ProgressDialog progressDialog;
+    boolean IsPending;
 
     @Nullable
     @Override
@@ -52,12 +54,17 @@ public class FragmentReceipt extends Fragment {
         progressDialog.show();
 
         try {
-            databaseReference.child("Users").child(uid).child("Current_Service_Id").addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        serviceId = dataSnapshot.getValue().toString();
-                        retrieveReceiptData();
+                        serviceId = dataSnapshot.child("Current_Service_Id").getValue().toString();
+                        IsPending = Objects.equals(dataSnapshot.child("IsPending").getValue(), "1");
+                        if (IsPending) {
+                            retrieveReceiptData("PendingServices");
+                        } else {
+                            retrieveReceiptData("Services");
+                        }
                     }
                 }
 
@@ -73,9 +80,9 @@ public class FragmentReceipt extends Fragment {
         return v1;
     }
 
-    public void retrieveReceiptData() {
+    public void retrieveReceiptData(String serviceType) {
         try {
-            databaseReference.child("Services").child(serviceId).child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child(serviceType).child(serviceId).child("Receipt").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
