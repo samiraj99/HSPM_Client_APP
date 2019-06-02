@@ -162,32 +162,36 @@
                         android:layout_toEndOf="@id/TextView_Name"
                         android:textSize="15sp" />
 
+                    <TextView
+                        android:id="@+id/TextView_PhoneNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/TextView_Name"
+                        android:layout_marginTop="10dp"
+                        android:text="Phone No:"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/PhoneNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/Name"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/TextView_Name"
+                        android:textSize="15sp" />
+
+
                     <View
                         android:id="@+id/vline"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_below="@id/Name"
+                        android:layout_below="@id/PhoneNo"
                         android:layout_marginTop="20dp"
                         android:background="@color/deeppurple" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/vline"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="10dp">
 
-                        <TextView
-                            android:id="@+id/viewReceipt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:text="Deliver Device"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
 
                 </RelativeLayout>
 

@@ -37,6 +37,7 @@ public class MobileForm3 extends AppCompatActivity {
 
         try {
             Brand = getIntent().getExtras().getString("Brand");
+            Log.d(TAG, "onCreate: Brand3 " + Brand);
         } catch (Exception e) {
             Log.e(TAG, "onCreate: " + e.getMessage());
         }

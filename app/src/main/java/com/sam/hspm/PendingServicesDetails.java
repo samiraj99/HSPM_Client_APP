@@ -1,16 +1,13 @@
 package com.sam.hspm;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,7 +33,7 @@ import java.util.Locale;
 
 public class PendingServicesDetails extends AppCompatActivity {
 
-    TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate, Deliver;
+    TextView TV_ProblemType, TV_Address, TV_Employee_Name, TV_PcType, TV_AcceptDate;
     ImageView back;
     String serviceId;
     DatabaseReference databaseReference;
@@ -51,6 +48,8 @@ public class PendingServicesDetails extends AppCompatActivity {
     private ArrayList<ReceiptHelper> IssuedListwithAmount = new ArrayList<>();
     private ListView listView;
     private static final String TAG = "PendingServicesDetails";
+    TextView TV_Emp_PhoneNo;
+
 
     @Override
     public void onDestroy() {
@@ -75,8 +74,8 @@ public class PendingServicesDetails extends AppCompatActivity {
         TV_ProblemType = findViewById(R.id.ProblemType);
         TV_Employee_Name = findViewById(R.id.Name);
         TV_PcType = findViewById(R.id.PcType);
-        Deliver = findViewById(R.id.viewReceipt);
         back = findViewById(R.id.back);
+        TV_Emp_PhoneNo = findViewById(R.id.PhoneNo);
 
         //Employee Database
         if (employeeApp == null) {
@@ -96,6 +95,7 @@ public class PendingServicesDetails extends AppCompatActivity {
             progressDialog.setMessage("Loading");
             progressDialog.setCancelable(false);
             progressDialog.show();
+
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -138,14 +138,6 @@ public class PendingServicesDetails extends AppCompatActivity {
         });
 
 
-
-        Deliver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
-        });
-
     }
 
     private void retrieveEmployeeData(String requestAcceptedBy) {
@@ -154,8 +146,10 @@ public class PendingServicesDetails extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     TV_Employee_Name.setText(dataSnapshot.child("FullName").getValue(String.class));
+                    TV_Emp_PhoneNo.setText(dataSnapshot.child("PhoneNo").getValue(String.class));
                     progressDialog.dismiss();
                 }
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

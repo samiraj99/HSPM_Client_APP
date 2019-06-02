@@ -69,6 +69,7 @@ public class MobileForm2 extends AppCompatActivity {
 
 
                 SelectedButton = findViewById(selectedId);
+
                 if (SelectedButton.getText().equals("Other")) {
                     textView.setVisibility(View.VISIBLE);
                     editText.setVisibility(View.VISIBLE);
@@ -80,11 +81,12 @@ public class MobileForm2 extends AppCompatActivity {
                         return;
                     }
                     Intent i = new Intent(MobileForm2.this, MobileForm3.class);
-                    i.putExtra("Brand ", OtherBrand + Model);
+                    i.putExtra("Brand", OtherBrand + " " + Model);
                     startActivity(i);
                 } else {
+                    String Brand = SelectedButton.getText().toString();
                     Intent i = new Intent(MobileForm2.this, MobileForm3.class);
-                    i.putExtra("Brand ", SelectedButton.getText().toString() + Model);
+                    i.putExtra("Brand", Brand + " " + Model);
                     startActivity(i);
                 }
             }
