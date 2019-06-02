@@ -47,6 +47,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -87,6 +88,8 @@ public class FragmentAcceptedService extends Fragment {
     long difference;
     Date date1 = null;
     Date date2 = null;
+    boolean IsReached;
+    String reachedTime;
 
     @Nullable
     @Override
@@ -176,6 +179,9 @@ public class FragmentAcceptedService extends Fragment {
 
     @Override
     public void onDestroy() {
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
         employeeApp.delete();
         super.onDestroy();
     }
@@ -213,11 +219,15 @@ public class FragmentAcceptedService extends Fragment {
     }
 
     private void retrieveTime() {
-        clientDatabase.child("Services").child(CurrentServiceId).child("DateTime").addListenerForSingleValueEvent(new ValueEventListener() {
+        clientDatabase.child("Services").child(CurrentServiceId).child("DateTime").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    AcceptTime = dataSnapshot.child("Accepted").child("Time").getValue().toString();
+                    AcceptTime = Objects.requireNonNull(dataSnapshot.child("Accepted").child("Time").getValue()).toString();
+                    IsReached = dataSnapshot.hasChild("Reached");
+                    if (IsReached) {
+                        reachedTime = Objects.requireNonNull(dataSnapshot.child("Reached").child("Time").getValue()).toString();
+                    }
                     startStop();
                 }
             }
@@ -394,7 +404,7 @@ public class FragmentAcceptedService extends Fragment {
 
 
         timeCountInMilliSeconds = (90 * 60 * 1000) - difference;
-        setProgressBarValues();
+        setProgressBarValues(timeCountInMilliSeconds);
         startCountDownTimer();
     }
 
@@ -414,14 +424,34 @@ public class FragmentAcceptedService extends Fragment {
                 progressBarCircle.setProgress(0);
             }
 
-        }.start();
-        countDownTimer.start();
+        };
+        if (IsReached) {
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+
+            try {
+                if (AcceptTime != null) {
+                    date1 = simpleDateFormat.parse(AcceptTime);
+                    date2 = simpleDateFormat.parse(reachedTime);
+                    difference = date2.getTime() - date1.getTime();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            setProgressBarValues((90 * 60 * 1000) - difference);
+            textViewTime.setText(hmsTimeFormatter((90 * 60 * 1000) - difference));
+            countDownTimer.cancel();
+        } else {
+            countDownTimer.start();
+        }
     }
 
-    private void setProgressBarValues() {
+    private void setProgressBarValues(long time) {
 
         progressBarCircle.setMax((90 * 60 * 1000) / 1000);
-        progressBarCircle.setProgress((int) timeCountInMilliSeconds / 1000);
+        progressBarCircle.setProgress((int) time / 1000);
     }
 
 

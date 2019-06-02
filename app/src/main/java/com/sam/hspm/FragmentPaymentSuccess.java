@@ -181,10 +181,10 @@ public class FragmentPaymentSuccess extends Fragment {
         }
     }
 
-    void getEmpId(String currentServiceId) {
+    void getEmpId(String currentServiceId, String serviceType) {
 
-        if (IsPending) {
-            clientDatabase.child("PendingServices").child(currentServiceId).child("RequestAcceptedBy").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        clientDatabase.child(serviceType).child(currentServiceId).child("RequestAcceptedBy").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -199,7 +199,7 @@ public class FragmentPaymentSuccess extends Fragment {
 
                 }
             });
-        }
+
     }
 
     // Fetching Employee ID from Client database
@@ -211,7 +211,9 @@ public class FragmentPaymentSuccess extends Fragment {
                     if (dataSnapshot.exists()) {
                         CurrentServiceId = Objects.requireNonNull(dataSnapshot.child("Current_Service_Id").getValue()).toString();
                         IsPending = Objects.equals(dataSnapshot.child("IsPending").getValue(), "1");
-                        getEmpId(CurrentServiceId);
+                        if (IsPending)
+                            getEmpId(CurrentServiceId, "PendingServices");
+                        else getEmpId(CurrentServiceId, "Services");
                         // progressDialog.dismiss();
                     }
                 }

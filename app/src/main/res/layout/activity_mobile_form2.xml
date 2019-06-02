@@ -9,9 +9,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
         android:layout_gravity="fill_vertical"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:paddingBottom="20dp">
 
         <com.daimajia.numberprogressbar.NumberProgressBar
             android:id="@+id/progressBar"
@@ -54,83 +54,111 @@
                 android:id="@+id/RadioButton_samsung"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Samsung"
-                android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:layout_margin="10dp" />
+                android:text="Samsung"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_xiaom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="xiaomi"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:textSize="20sp"
-                android:layout_margin="10dp" />
+                android:text="xiaomi"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_lenovo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lenovo"
-                android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:layout_margin="10dp" />
+                android:text="Lenovo"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_oneplus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="OnePlus"
-                android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:layout_margin="10dp" />
+                android:text="OnePlus"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_apple"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Apple"
-                android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:layout_margin="10dp" />
+                android:text="Apple"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_oppo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Oppo"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:textSize="20sp"
-                android:layout_margin="10dp" />
+                android:text="Oppo"
+                android:textSize="20sp" />
 
             <RadioButton
                 android:id="@+id/RadioButton_vivo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vivo"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:textSize="20sp"
-                android:layout_margin="10dp" />
+                android:text="Vivo"
+                android:textSize="20sp" />
 
             <RadioButton
-                android:id="@+id/RadioButton_other"
+                android:id="@+id/RadioButton_Sony"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Other"
+                android:layout_margin="10dp"
                 android:paddingStart="10dp"
-                android:textSize="20sp"
-                android:layout_margin="10dp" />
+                android:text="Sony"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/RadioButton_Moto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingStart="10dp"
+                android:text="Moto"
+                android:textSize="20sp" />
+
+
+            <RadioButton
+                android:id="@+id/RadioButton_honor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingStart="10dp"
+                android:text="Honor"
+                android:textSize="20sp" />
+
+            <!-- <RadioButton
+                 android:id="@+id/RadioButton_other"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="10dp"
+                 android:paddingStart="10dp"
+                 android:text="Other"
+                 android:textSize="20sp" /> -->
 
         </RadioGroup>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/TextView_SpecifyProblem"
-            android:layout_below="@+id/RadioGroup1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please Specify"
+            android:layout_below="@+id/RadioGroup1"
             android:layout_marginStart="20sp"
+            android:text="Please Specify"
             android:textSize="15sp"
             android:visibility="gone" />
 
@@ -147,13 +175,14 @@
             android:id="@+id/TextView_SpModel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please Specify Your Phone Model"
             android:layout_below="@+id/EditText_SpecifyProblem"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Please Specify Your Phone Model"
+            android:textColor="#000"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#000"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/EditText_Model"
@@ -161,16 +190,25 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/TextView_SpModel"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone" />-->
 
-            />
+        <Spinner
+            android:id="@+id/spinner_model"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/RadioGroup1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
+            android:prompt="@string/select_model" />
 
         <Button
             android:id="@+id/Button_Next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/EditText_Model"
+            android:layout_below="@+id/spinner_model"
             android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
             android:background="@color/colorPrimary"
