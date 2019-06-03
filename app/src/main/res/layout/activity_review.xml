@@ -26,10 +26,11 @@
         android:layout_margin="10dp"
         android:layout_below="@+id/TextView_Review">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/relativeLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_margin="10dp"
             android:elevation="5dp"
             android:padding="10dp">
@@ -109,7 +110,7 @@
                 android:layout_toRightOf="@+id/specifiedproblem"
                 android:textSize="17sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </android.support.design.card.MaterialCardView>
 
@@ -175,21 +176,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="Total : -"
+                android:text="Base/Diagnostics of ₹129 adjustable against the final bill "
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textAllCaps="true" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/TextView_Cost"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="129/-"
-                android:textColor="#000"
-                android:textSize="20sp" />
 
         </RelativeLayout>
 
