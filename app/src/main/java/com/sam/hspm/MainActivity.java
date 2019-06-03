@@ -113,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 selectedFragment = new FragmentHistory();
                 break;
             case R.id.Nav_Help:
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+                Intent helpIntent = new Intent(MainActivity.this, ContactUs.class);
+                startActivity(helpIntent);
                 break;
             case R.id.Nav_Logout:
                 firebaseAuth.signOut();

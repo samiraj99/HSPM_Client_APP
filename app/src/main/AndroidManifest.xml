@@ -60,6 +60,7 @@
         <activity android:name=".FillProfile" />
         <activity android:name=".CompletedServicesDetails" />
         <activity android:name=".PendingServicesDetails"/>
+        <activity android:name=".ContactUs"/>
     </application>
 
 </manifest>
