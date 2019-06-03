@@ -3,7 +3,6 @@ package com.sam.hspm;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ public class FragmentHistory extends Fragment {
     ViewPager view_pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[]={"Completed Services","Pending \nServices"};
+    CharSequence[] Titles = {"Completed Services", "Pending \nServices"};
     int Numboftabs =2;
     View v1;
 

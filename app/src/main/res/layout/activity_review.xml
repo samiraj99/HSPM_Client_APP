@@ -1,206 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.rey.material.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReviewActivity"
-    android:background="@drawable/grad">
+    android:background="@drawable/grad"
+    tools:context=".ReviewActivity">
 
     <TextView
         android:id="@+id/TextView_Review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Review Order"
-        android:textSize="25sp"
         android:layout_above="@+id/CardView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:text="Review Order"
         android:textColor="#000"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
-
-    <android.support.design.card.MaterialCardView
-        android:id="@+id/CardView1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/TextView_Review">
 
-        <LinearLayout
-            android:id="@+id/relativeLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/TextView_P1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="@string/problem_is"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/pctype"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_P1"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Device Type: "
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/pctypedetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_P1"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/pctype"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/problemtype"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pctype"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Problem Type: "
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/problemtypedetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pctype"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/problemtype"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/specifiedproblem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/problemtypedetails"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Specified Problem : "
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/specifiedproblemdetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/problemtypedetails"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/specifiedproblem"
-                android:textSize="17sp" />
-
-        </LinearLayout>
-
-    </android.support.design.card.MaterialCardView>
-
-    <android.support.design.card.MaterialCardView
-        android:id="@+id/CardView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/CardView1">
-
         <RelativeLayout
-            android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            android:padding="10dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/TextView_Address"
-                android:layout_width="wrap_content"
+            <android.support.design.card.MaterialCardView
+                android:id="@+id/CardView1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+
+                android:layout_margin="10dp">
+
+                <LinearLayout
+                    android:id="@+id/relativeLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/TextView_P1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/problem_is"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/pctype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/TextView_P1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Device Type: "
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/pctypedetails"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/TextView_P1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/pctype"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/problemtype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pctype"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Problem Type: "
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/problemtypedetails"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pctype"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/problemtype"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/specifiedproblem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/problemtypedetails"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Specified Problem : "
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/specifiedproblemdetails"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/problemtypedetails"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/specifiedproblem"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </android.support.design.card.MaterialCardView>
+
+            <android.support.design.card.MaterialCardView
+                android:id="@+id/CardView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/CardView1"
+                android:layout_margin="10dp">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/TextView_Address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="Address"
+                        android:textAllCaps="true"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/TextView_Address1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/TextView_Address"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                </RelativeLayout>
+
+            </android.support.design.card.MaterialCardView>
+
+
+            <android.support.design.card.MaterialCardView
+                android:id="@+id/CardView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/CardView2"
+                android:layout_margin="10dp">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/TextView_Cost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Base/Diagnostics of ₹129 adjustable against the final bill."
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
+
+
+            </android.support.design.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/Button_Submit1"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="Address"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textAllCaps="true" />
-
-            <TextView
-                android:id="@+id/TextView_Address1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView_Address"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="30dp"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                android:text="@string/submit_request"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:layout_below="@id/CardView3" />
 
         </RelativeLayout>
-
-    </android.support.design.card.MaterialCardView>
-
-
-    <android.support.design.card.MaterialCardView
-        android:id="@+id/CardView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/CardView2">
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/TextView_Cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Base/Diagnostics of ₹129 adjustable against the final bill "
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textAllCaps="true" />
-
-        </RelativeLayout>
-
-    </android.support.design.card.MaterialCardView>
+    </ScrollView>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/CardView3"
-        android:layout_margin="20dp" />
-
-    <Button
-        android:id="@+id/Button_Submit1"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/submit_request"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-</com.rey.material.widget.RelativeLayout>
+</RelativeLayout>

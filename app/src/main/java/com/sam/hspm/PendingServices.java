@@ -152,7 +152,7 @@ public class PendingServices extends Fragment {
                         ServiceID.add(sid);
                         ServiceStatus.add("Service Pending");
                         DateTime.add(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue().toString() + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue().toString());
-                        Amount.add(dataSnapshot.child("EstimateCost").getValue().toString());
+                        Amount.add(dataSnapshot.child("EstimateTime").getValue().toString());
                         customAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
                     }

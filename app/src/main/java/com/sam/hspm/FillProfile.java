@@ -1,5 +1,7 @@
 package com.sam.hspm;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,10 +9,13 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,7 +27,7 @@ import java.util.HashMap;
 
 public class FillProfile extends AppCompatActivity {
 
-    private TextView backcolor;
+    private TextView backcolor, txttc;
     private FirebaseAuth mAuth;
     private DatabaseReference UserRefs, databaseReference;
     private EditText fname, email;
@@ -30,7 +35,7 @@ public class FillProfile extends AppCompatActivity {
     private Button save;
     String phoneNumber;
     private static final String TAG = "FillProfile";
-
+    CheckBox ch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class FillProfile extends AppCompatActivity {
         fnamewrap = findViewById(R.id.fnameWrapper);
         emailwrap = findViewById(R.id.emailWrapper);
 //        addwrap = findViewById(R.id.addWrapper);
+        txttc = findViewById(R.id.tc);
+        ch = findViewById(R.id.check);
         save = findViewById(R.id.save);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +73,10 @@ public class FillProfile extends AppCompatActivity {
                 String fullname = fname.getText().toString();
                 String emailid = email.getText().toString();
 
-
+                if (!ch.isChecked()) {
+                    Toast.makeText(FillProfile.this, "Please Accepted Policy.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (TextUtils.isEmpty(fullname) && (fullname.length() > 10)) {
                     fnamewrap.setError("Enter Full Number");
                 } else {
@@ -107,6 +117,26 @@ public class FillProfile extends AppCompatActivity {
 
             }
         });
+
+        txttc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = getLayoutInflater();
+                v = inflater.inflate(R.layout.activity_tc, null);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(FillProfile.this);
+                builder.setTitle("Terms and Conditions HSPM Solutions");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setView(v);
+                builder.create();
+                builder.show();
+            }
+        });
+
     }
 
     @Override

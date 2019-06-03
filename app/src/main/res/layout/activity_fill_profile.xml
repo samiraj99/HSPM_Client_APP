@@ -19,11 +19,11 @@
     </TextView>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -91,21 +91,37 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <!--<android.support.design.widget.TextInputLayout
+                    <android.support.design.widget.TextInputLayout
                         android:id="@+id/addWrapper"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/emailWrapper"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="0dp">
 
-                        <EditText
-                            android:id="@+id/address"
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp">
+
+                        <CheckBox
+                            android:id="@+id/check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Accept" />
+
+                        <TextView
+                            android:id="@+id/tc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
-                            android:inputType="textMultiLine" />
 
-                    </android.support.design.widget.TextInputLayout>-->
+                            android:layout_marginTop="7dp"
+                            android:layout_toRightOf="@id/check"
+                            android:text=" Terms and conditions"
+                            android:textColor="#2196f3" />
+
+                    </RelativeLayout>
 
                     <Button
                         android:id="@+id/save"

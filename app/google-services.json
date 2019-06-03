@@ -15,27 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "638610105243-a5a9hi719cq672381417q45qg7fqed60.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sam.hspm",
-            "certificate_hash": "524c3d34a4e301c9aabe3cb40da02b014878ef1a"
-          }
-        },
-        {
-          "client_id": "638610105243-p8h6lhtp9qc5s50b44s2u2188r26akoj.apps.googleusercontent.com",
+          "client_id": "638610105243-6uk2f8citbl84qlue5jg8u66qo2p0u0q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sam.hspm",
             "certificate_hash": "c00c6a73ab3e8bcbc8fb5933ed4ce040c22e8ea5"
-          }
-        },
-        {
-          "client_id": "638610105243-nuii55db2o1i66vkc8v7so1aj43nkepu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sam.hspm",
-            "certificate_hash": "447025f11cf5e3f57d4804ee9555bcb99f1fb365"
           }
         },
         {
@@ -49,20 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "638610105243-9aicfh2e6ddvocc5r9smnlkhkp8llfq0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

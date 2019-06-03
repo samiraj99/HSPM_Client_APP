@@ -1,7 +1,9 @@
 package com.sam.hspm;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,11 +17,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView imageView;
     MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
     FirebaseUser firebaseUser;
+    View v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(loginIntent);
+                break;
+            case R.id.Nav_Tnc:
+                LayoutInflater inflater = getLayoutInflater();
+                v = inflater.inflate(R.layout.activity_tc, null);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Terms and Conditions HSPM Solutions");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setView(v);
+                builder.create();
+                builder.show();
                 break;
         }
 
