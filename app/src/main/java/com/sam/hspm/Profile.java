@@ -1,13 +1,10 @@
 package com.sam.hspm;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -42,10 +38,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.sam.hspm.utils.RegistrationData;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,19 +74,19 @@ public class Profile extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         TIET_Name = findViewById(R.id.Profile_first_name);
         TIET_PhoneNO = findViewById(R.id.Profile_PhoneNo);
-        ET_Address = findViewById(R.id.Profile_Address);
+        //ET_Address = findViewById(R.id.Profile_Address);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        BT_LogOut = findViewById(R.id.Button_LogOut);
+        //BT_LogOut = findViewById(R.id.Button_LogOut);
         if (user != null) {
             uid = user.getUid();
         }
         IV_Profile = findViewById(R.id.ImageView_Profile);
         IV_Edit_Profile = findViewById(R.id.ImageView_Edit_Profile);
         IV_Back = findViewById(R.id.ImageView_Arrow_Back);
-        IV_Edit = findViewById(R.id.ImageView_Edit);
-        IV_Done = findViewById(R.id.ImageView_Done);
-        IV_Auto_Loc_Fetch = findViewById(R.id.ImageView_Auto_Location);
-        TV_Auto_Loc = findViewById(R.id.TextView_Auto_Loc);
+        //IV_Edit = findViewById(R.id.ImageView_Edit);
+        //IV_Done = findViewById(R.id.ImageView_Done);
+        //IV_Auto_Loc_Fetch = findViewById(R.id.ImageView_Auto_Location);
+        //TV_Auto_Loc = findViewById(R.id.TextView_Auto_Loc);
         TV_Email = findViewById(R.id.Profile_image_email);
         TV_Name = findViewById(R.id.Profile_Image_first_name);
 
@@ -111,7 +105,7 @@ public class Profile extends AppCompatActivity {
                     St_Name = dataSnapshot.child("ProfileInfo").child("Name").getValue(String.class);
                     St_Email = dataSnapshot.child("ProfileInfo").child("Email").getValue(String.class);
                     St_PhoneNo = dataSnapshot.child("ProfileInfo").child("PhoneNo").getValue(String.class);
-                    St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
+                    //St_Address = dataSnapshot.child("ProfileInfo").child("Address").getValue(String.class);
                     try {
                         St_ProfileUrl = dataSnapshot.child("ProfileImage").child("ProfileImageUri").getValue(String.class);
                         St_ProfileImageFileName = dataSnapshot.child("ProfileImage").child("FileName").getValue(String.class);
@@ -121,7 +115,7 @@ public class Profile extends AppCompatActivity {
                     TIET_Name.setText(St_Name);
                     TV_Name.setText(St_Name);
                     TIET_PhoneNO.setText(St_PhoneNo);
-                    ET_Address.setText(St_Address);
+                    // ET_Address.setText(St_Address);
                     TV_Email.setText(St_Email);
                     if (St_ProfileUrl != null) {
                         Picasso.get().load(St_ProfileUrl).into(IV_Profile);
@@ -147,106 +141,106 @@ public class Profile extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        IV_Edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TIET_Name.setEnabled(true);
-                TIET_PhoneNO.setEnabled(true);
-                ET_Address.setEnabled(true);
-                IV_Done.setVisibility(View.VISIBLE);
-                IV_Edit.setVisibility(View.INVISIBLE);
-                IV_Auto_Loc_Fetch.setVisibility(View.VISIBLE);
-                TV_Auto_Loc.setVisibility(View.VISIBLE);
-
-                TIET_Name.setFocusable(true);
-                TIET_Name.setFocusableInTouchMode(true);
-                TIET_Name.requestFocus();
-
-                TV_Auto_Loc.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.setMessage("Loading Address");
-                        dialog.show();
-                        if (ActivityCompat.checkSelfPermission(Profile.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            dialog.dismiss();
-                            Toast.makeText(Profile.this, "Failed to Detect Address.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        client.getLastLocation().addOnSuccessListener(Profile.this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-                                    try {
-                                        ST_location = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                                        String address = ST_location.get(0).getAddressLine(0);
-                                        ET_Address.setText(address);
-                                        dialog.dismiss();
-                                    } catch (IOException e) {
-                                        Toast.makeText(Profile.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-
-        IV_Done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                St_Name = TIET_Name.getText().toString().trim();
-                St_PhoneNo = TIET_PhoneNO.getText().toString().trim();
-                St_Address = ET_Address.getText().toString();
-
-                if (TextUtils.isEmpty(St_Name)) {
-                    TIET_Name.setError("Fields can't be Empty");
-                } else if (TextUtils.isEmpty(St_PhoneNo)) {
-                    TIET_PhoneNO.setError("Fields can't be Empty");
-                } else if (St_PhoneNo.length() != 10) {
-                    TIET_PhoneNO.setError("Enter Valid Phone No.");
-                } else if (TextUtils.isEmpty(St_Address)) {
-                    ET_Address.setError("Fields can't be Empty");
-                } else {
-                    try {
-                        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo, St_Address);
-                        databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    TIET_Name.setEnabled(false);
-                                    TIET_PhoneNO.setEnabled(false);
-                                    ET_Address.setEnabled(false);
-                                    IV_Done.setVisibility(View.INVISIBLE);
-                                    IV_Edit.setVisibility(View.VISIBLE);
-                                    IV_Auto_Loc_Fetch.setVisibility(View.INVISIBLE);
-                                    TV_Auto_Loc.setVisibility(View.INVISIBLE);
-                                    TIET_Name.setFocusable(false);
-                                    TIET_PhoneNO.setFocusable(false);
-                                    Toast.makeText(Profile.this, "Profile has been updated.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(Profile.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        BT_LogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                auth.signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
+//        IV_Edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TIET_Name.setEnabled(true);
+//                TIET_PhoneNO.setEnabled(true);
+//                ET_Address.setEnabled(true);
+//                IV_Done.setVisibility(View.VISIBLE);
+//                IV_Edit.setVisibility(View.INVISIBLE);
+//                IV_Auto_Loc_Fetch.setVisibility(View.VISIBLE);
+//                TV_Auto_Loc.setVisibility(View.VISIBLE);
+//
+//                TIET_Name.setFocusable(true);
+//                TIET_Name.setFocusableInTouchMode(true);
+//                TIET_Name.requestFocus();
+//
+//                TV_Auto_Loc.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.setMessage("Loading Address");
+//                        dialog.show();
+//                        if (ActivityCompat.checkSelfPermission(Profile.this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Profile.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                            dialog.dismiss();
+//                            Toast.makeText(Profile.this, "Failed to Detect Address.", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                        client.getLastLocation().addOnSuccessListener(Profile.this, new OnSuccessListener<Location>() {
+//                            @Override
+//                            public void onSuccess(Location location) {
+//                                if (location != null) {
+//                                    try {
+//                                        ST_location = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+//                                        String address = ST_location.get(0).getAddressLine(0);
+//                                        ET_Address.setText(address);
+//                                        dialog.dismiss();
+//                                    } catch (IOException e) {
+//                                        Toast.makeText(Profile.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                        dialog.dismiss();
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+//        });
+//
+//
+//        IV_Done.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                St_Name = TIET_Name.getText().toString().trim();
+//                St_PhoneNo = TIET_PhoneNO.getText().toString().trim();
+//                St_Address = ET_Address.getText().toString();
+//
+//                if (TextUtils.isEmpty(St_Name)) {
+//                    TIET_Name.setError("Fields can't be Empty");
+//                } else if (TextUtils.isEmpty(St_PhoneNo)) {
+//                    TIET_PhoneNO.setError("Fields can't be Empty");
+//                } else if (St_PhoneNo.length() != 10) {
+//                    TIET_PhoneNO.setError("Enter Valid Phone No.");
+//                } else if (TextUtils.isEmpty(St_Address)) {
+//                    ET_Address.setError("Fields can't be Empty");
+//                } else {
+//                    try {
+//                        RegistrationData data = new RegistrationData(St_Name, St_Email, St_PhoneNo, St_Address);
+//                        databaseReference.child("Users").child(uid).child("Profile").child("ProfileInfo").setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    TIET_Name.setEnabled(false);
+//                                    TIET_PhoneNO.setEnabled(false);
+//                                    ET_Address.setEnabled(false);
+//                                    IV_Done.setVisibility(View.INVISIBLE);
+//                                    IV_Edit.setVisibility(View.VISIBLE);
+//                                    IV_Auto_Loc_Fetch.setVisibility(View.INVISIBLE);
+//                                    TV_Auto_Loc.setVisibility(View.INVISIBLE);
+//                                    TIET_Name.setFocusable(false);
+//                                    TIET_PhoneNO.setFocusable(false);
+//                                    Toast.makeText(Profile.this, "Profile has been updated.", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    Toast.makeText(Profile.this, "Check Internet Connection.", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+//        BT_LogOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                auth.signOut();
+//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//            }
+//        });
         IV_Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -25,7 +25,7 @@ public class FillProfile extends AppCompatActivity {
     private TextView backcolor;
     private FirebaseAuth mAuth;
     private DatabaseReference UserRefs, databaseReference;
-    private EditText fname, email, address;
+    private EditText fname, email;
     private TextInputLayout fnamewrap, emailwrap, addwrap;
     private Button save;
     String phoneNumber;
@@ -55,10 +55,9 @@ public class FillProfile extends AppCompatActivity {
 
         fname = findViewById(R.id.fname);
         email = findViewById(R.id.email);
-        address = findViewById(R.id.address);
         fnamewrap = findViewById(R.id.fnameWrapper);
         emailwrap = findViewById(R.id.emailWrapper);
-        addwrap = findViewById(R.id.addWrapper);
+//        addwrap = findViewById(R.id.addWrapper);
         save = findViewById(R.id.save);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +65,7 @@ public class FillProfile extends AppCompatActivity {
             public void onClick(View v) {
                 String fullname = fname.getText().toString();
                 String emailid = email.getText().toString();
-                String homeaddress = address.getText().toString();
+
 
                 if (TextUtils.isEmpty(fullname) && (fullname.length() > 10)) {
                     fnamewrap.setError("Enter Full Number");
@@ -80,16 +79,10 @@ public class FillProfile extends AppCompatActivity {
                     emailwrap.setErrorEnabled(false);
                 }
 
-                if (TextUtils.isEmpty(homeaddress)) {
-                    addwrap.setError("Enter Account Holders Name");
-                } else {
-                    addwrap.setErrorEnabled(false);
-                }
 
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("Name", fullname);
                 map.put("Email", emailid);
-                map.put("Address", homeaddress);
                 map.put("PhoneNo", phoneNumber);
                 UserRefs.updateChildren(map);
 
@@ -124,7 +117,7 @@ public class FillProfile extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        FirebaseAuth.getInstance().getCurrentUser().delete();
+        FirebaseAuth.getInstance().signOut();
         super.onBackPressed();
     }
 }
