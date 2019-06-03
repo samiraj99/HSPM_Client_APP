@@ -147,7 +147,7 @@ public class FragmentPaymentSuccess extends Fragment {
                                                 Log.e(TAG, "onComplete: Copy Failed");
                                             } else {
                                                 clientDatabase.child("CompletedServices").child(CurrentServiceId).child("Status").removeValue();
-                                                clientDatabase.child("Services").child(CurrentServiceId).removeValue();
+                                                clientDatabase.child(serviceType).child(CurrentServiceId).removeValue();
                                                 UserRef.child("History").child("CompletedServices").push().setValue(CurrentServiceId);
                                                 employeeDatabase.child("Users").child(empId).child("History").child("CompletedServices").push().setValue(CurrentServiceId);
                                                 UserRef.updateChildren(map);
