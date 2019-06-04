@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -128,8 +129,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.Nav_Tnc:
                 LayoutInflater inflater = getLayoutInflater();
                 v = inflater.inflate(R.layout.activity_tc, null);
+                WebView w = v.findViewById(R.id.WebView);
+                w.loadUrl("https://www.hspmsolutions.com/terms-and-conditions/");
                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Terms and Conditions HSPM Solutions");
+                builder.setTitle("Terms and Conditions \n");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -140,6 +143,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 builder.create();
                 builder.show();
                 break;
+            case R.id.Nav_PrivacyPolicy:
+                LayoutInflater inflater1 = getLayoutInflater();
+                v = inflater1.inflate(R.layout.activity_tc, null);
+                WebView w1 = v.findViewById(R.id.WebView);
+                w1.loadUrl("https://www.hspmsolutions.com/privacy-policy/");
+                final AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+                builder1.setTitle("Privacy Policy \n");
+                builder1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder1.setView(v);
+                builder1.create();
+                builder1.show();
+                break;
+
         }
 
         if (selectedFragment != null) {

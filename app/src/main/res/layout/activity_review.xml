@@ -146,7 +146,6 @@
                         android:layout_marginTop="10dp"
                         android:gravity="center_horizontal"
                         android:text="Address"
-                        android:textAllCaps="true"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -184,7 +183,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:text="Base/Diagnostics of ₹129 adjustable against the final bill."
+                        android:text="Consultation / Diagnostic charge of ₹129 adjustable against the final bill."
                         android:textAllCaps="true"
                         android:textStyle="bold" />
 

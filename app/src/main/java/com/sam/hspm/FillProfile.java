@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -73,18 +74,21 @@ public class FillProfile extends AppCompatActivity {
                 String fullname = fname.getText().toString();
                 String emailid = email.getText().toString();
 
-                if (!ch.isChecked()) {
-                    Toast.makeText(FillProfile.this, "Please Accepted Policy.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (TextUtils.isEmpty(fullname) && (fullname.length() > 10)) {
                     fnamewrap.setError("Enter Full Number");
+                    return;
                 } else {
                     fnamewrap.setErrorEnabled(false);
                 }
 
+                if (!ch.isChecked()) {
+                    Toast.makeText(FillProfile.this, "Please Accepted Policy.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (TextUtils.isEmpty(emailid) && !emailid.matches(Patterns.EMAIL_ADDRESS.toString())) {
                     emailwrap.setError("Enter Valid Email");
+                    return;
                 } else {
                     emailwrap.setErrorEnabled(false);
                 }
@@ -123,8 +127,10 @@ public class FillProfile extends AppCompatActivity {
             public void onClick(View v) {
                 LayoutInflater inflater = getLayoutInflater();
                 v = inflater.inflate(R.layout.activity_tc, null);
+                WebView w = v.findViewById(R.id.WebView);
+                w.loadUrl("https://www.hspmsolutions.com/terms-and-conditions/");
                 final AlertDialog.Builder builder = new AlertDialog.Builder(FillProfile.this);
-                builder.setTitle("Terms and Conditions HSPM Solutions");
+                builder.setTitle("Terms and Conditions \n");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

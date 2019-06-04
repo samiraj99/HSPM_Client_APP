@@ -14,15 +14,21 @@
             android:title="@string/history" />
     </group>
 
-    <item
-        android:id="@+id/Nav_Help"
-        android:icon="@drawable/ic_help_black_24dp"
-        android:title="@string/help" />
 
     <item
         android:id="@+id/Nav_Tnc"
         android:icon="@drawable/ic_content_paste_black_24dp"
-        android:title="Terms and Conditions" />
+        android:title="@string/terms_and_conditions" />
+
+    <item
+        android:id="@+id/Nav_PrivacyPolicy"
+        android:icon="@drawable/ic_lock_outline_black_24dp"
+        android:title="@string/privacy_policy" />
+
+    <item
+        android:id="@+id/Nav_Help"
+        android:icon="@drawable/ic_help_black_24dp"
+        android:title="@string/help" />
 
     <item
         android:id="@+id/Nav_Logout"
