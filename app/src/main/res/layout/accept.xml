@@ -4,30 +4,24 @@
     android:layout_height="match_parent"
     android:background="@drawable/grad">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/CardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:elevation="5dp"
-        android:layout_centerHorizontal="true">
-
         <RelativeLayout
+            android:id="@id/CardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:padding="10dp">
 
             <ProgressBar
                 android:id="@+id/progressBarCircle"
                 style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/drawable_circle_dark_blue"
                 android:indeterminate="false"
                 android:max="100"
                 android:progress="100"
-                android:progressDrawable="@drawable/drawable_circle_green"
+                android:progressDrawable="@drawable/drawable_circle_yellow"
                 android:rotation="-90" />
 
             <TextView
@@ -36,12 +30,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="00:00:00"
-                android:textColor="@color/colorGreen"
+                android:textColor="@color/colorYellow"
                 android:textSize="19sp" />
 
         </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -52,8 +44,7 @@
         android:layout_below="@+id/CardView"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="66dp"
         tools:context=".MapsActivity" />
-
 
 </RelativeLayout>
