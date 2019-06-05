@@ -195,7 +195,7 @@ public class RequestService extends AppCompatActivity {
     public void showServiceGuaranteeDialogBox(final String btn) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(RequestService.this);
         builder.setTitle("Service Guarantee !")
-                .setMessage("Service within 90 Mins not applicable in your Address")
+                .setMessage("Your area is not eligible for 90 minutes service guarantee but our technician will reach you ASAP.")
                 .setCancelable(false);
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -203,7 +203,7 @@ public class RequestService extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 next(btn);
@@ -218,8 +218,8 @@ public class RequestService extends AppCompatActivity {
     private void showConfirmationDialogBox(final String btn) {
         //Alert dialog box to confirm order
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RequestService.this);
-        alertDialog.setTitle("Confirm Request !!")
-                .setMessage("Are you Sure?\nYou want to confirm request?")
+        alertDialog.setTitle("Confirm Request !")
+                .setMessage("Are you Sure, you want to confirm request ?")
                 .setCancelable(false);
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -227,7 +227,7 @@ public class RequestService extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        alertDialog.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 next(btn);

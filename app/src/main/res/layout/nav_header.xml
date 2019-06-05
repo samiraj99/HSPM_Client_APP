@@ -11,7 +11,7 @@
         android:id="@+id/ImageView_UserImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@drawable/ic_user" />
     <TextView
         android:id="@+id/TextView_UserName"
         android:layout_width="wrap_content"

@@ -87,7 +87,7 @@ public class FragmentHome extends Fragment {
         Assemble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Comming Soon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
             }
         });
 
