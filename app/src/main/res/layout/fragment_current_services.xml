@@ -127,6 +127,11 @@
             android:textColor="#ffffff"
             android:textSize="25sp" />
 
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -25,7 +25,7 @@
             android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
             android:padding="20dp"
-            android:text="Help"
+            android:text="   Help"
             android:textColor="#ffffff"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -51,7 +51,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_weight="0"
                 android:text="Phone No :"
-                android:textColor="#000000"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -60,14 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_weight="0"
-                android:text="+919810067414"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="0"
+                android:layout_marginTop="5dp"
                 android:text="+919518778191"
                 android:textSize="15sp" />
 
@@ -85,7 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Email ID : "
-                android:textColor="#000000"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -93,6 +84,7 @@
                 android:id="@+id/mailid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_weight="0.35"
                 android:paddingBottom="10dp"
                 android:text="support@hspmsolutions.com"
