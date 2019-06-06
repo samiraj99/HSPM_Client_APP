@@ -103,17 +103,17 @@ public class PendingServicesDetails extends AppCompatActivity {
                         TV_PcType.setText(p.getPcType());
                         TV_ProblemType.setText(p.getProblemType());
                         TV_AcceptDate.setText(dataSnapshot.child("DateTime").child("Accepted").child("Date").getValue(String.class) + ", " + dataSnapshot.child("DateTime").child("Accepted").child("Time").getValue(String.class));
-                        for (DataSnapshot ds : dataSnapshot.child("Address").getChildren()) {
-                            Co_Ordinates co_ordinates = ds.getValue(Co_Ordinates.class);
-                            assert co_ordinates != null;
-                            Address = convertAddress(new LatLng(co_ordinates.Lat, co_ordinates.Lng));
-                        }
+
+                        CompletedServicesDetails.Co_Ordinates co_ordinates = new CompletedServicesDetails.Co_Ordinates();
+                        co_ordinates.Lat = (double) dataSnapshot.child("Address").child("Co_Ordinates").child("Lat").getValue();
+                        co_ordinates.Lng = (double) dataSnapshot.child("Address").child("Co_Ordinates").child("Lng").getValue();
+                        Address = convertAddress(new LatLng(co_ordinates.Lat, co_ordinates.Lng));
+
                         TV_Address.setText(Address);
 
                         RequestAcceptedBy = dataSnapshot.child("RequestAcceptedBy").getValue().toString();
                         retrieveEmployeeData(RequestAcceptedBy);
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -131,7 +131,7 @@ public class PendingServicesDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PendingServicesDetails.this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 employeeApp.delete();
             }
