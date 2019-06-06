@@ -66,7 +66,7 @@ public class ServiceForm2 extends AppCompatActivity {
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProblemType = " ";
+                ProblemType = "";
                 for (CheckBox item : ListOfCheckBox) {
                     if (item.isChecked()) {
                         ProblemType = ProblemType.concat(" " + item.getText().toString());
