@@ -43,12 +43,12 @@ public class ServiceForm2 extends AppCompatActivity {
         ListOfCheckBox.add(Ch5 = findViewById(R.id.CheckBox5));
         ListOfCheckBox.add(Ch6 = findViewById(R.id.CheckBox6));
         ListOfCheckBox.add(Ch7 = findViewById(R.id.CheckBox7));
+        ListOfCheckBox.add(Ch8 = findViewById(R.id.CheckBox8));
 
         Bt_Next = findViewById(R.id.Button_Next);
         ET_SpecifiedProblem = findViewById(R.id.EditText_Problem);
         specifyProblem = findViewById(R.id.specifyProblem);
 
-        Ch8 = findViewById(R.id.CheckBox8);
 
         Ch8.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +66,7 @@ public class ServiceForm2 extends AppCompatActivity {
         Bt_Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ProblemType = " ";
                 for (CheckBox item : ListOfCheckBox) {
                     if (item.isChecked()) {
                         ProblemType = ProblemType.concat(" " + item.getText().toString());
@@ -78,8 +79,13 @@ public class ServiceForm2 extends AppCompatActivity {
                     return;
                 }
 
-                if (SpecifiedProblem.isEmpty()) {
-                    SpecifiedProblem = "Not Specified";
+                if (Ch8.isChecked()) {
+                    if (SpecifiedProblem.isEmpty()) {
+                        ET_SpecifiedProblem.setError("Specify Problem.");
+                        return;
+                    }
+                } else {
+                    SpecifiedProblem = "Not Specify.";
                 }
 
 

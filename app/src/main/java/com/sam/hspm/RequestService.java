@@ -27,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,15 +69,14 @@ public class RequestService extends AppCompatActivity {
     private static final float DEFAULT_ZOOM = 15f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(18.569871, 73.680315), new LatLng(18.580548, 73.993418));
-    private static int flag = 0;
     private static LatLng LatLng;
     String PcType, uid, ProblemType, SpecifiedProblem;
     String id, Area, HouseNo, Landdmark;
-    Button Submit, BT_EditAddress, BT_Submit2;
+    Button Submit;
+    Button BT_Submit2;
     TextInputEditText ET_Address, ET_Area, ET_HouseNo, ET_Landmark;
     TextInputLayout IL_Area, IL_HouseNo, IL_Landmark;
     AutoCompleteTextView ET_searchText;
-    RelativeLayout ButtonLayout;
     ImageView IV_gps;
     FirebaseUser user;
     String address;
@@ -106,15 +104,12 @@ public class RequestService extends AppCompatActivity {
         uid = user.getUid();
 
         ET_Address = findViewById(R.id.EditText_Address);
-        Submit = findViewById(R.id.Button_Submit1);
-        BT_EditAddress = findViewById(R.id.Button_EditAddress);
         ET_searchText = findViewById(R.id.EditText_input_search);
         IV_gps = findViewById(R.id.ic_gps);
         BT_Submit2 = findViewById(R.id.Button_Submit2);
         IL_Area = findViewById(R.id.InputLayout_Area);
         IL_HouseNo = findViewById(R.id.InputLayout_HouseNo);
         IL_Landmark = findViewById(R.id.InputLayout_Landmark);
-        ButtonLayout = findViewById(R.id.Button_layout);
         ET_Area = findViewById(R.id.EditText_Area);
         ET_HouseNo = findViewById(R.id.EditText_HouseNo);
         ET_Landmark = findViewById(R.id.EditText_Landmark);
@@ -126,22 +121,6 @@ public class RequestService extends AppCompatActivity {
         dialog.setCancelable(false);
         progressView.start();
 
-        Submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (AddressVerified()) {
-                    if (!pincode.equals("412115")) {
-                        showServiceGuaranteeDialogBox("Submit");
-                    } else {
-                        showConfirmationDialogBox("Submit");
-                    }
-
-                } else {
-                    Toast.makeText(RequestService.this, "WE ARE NOT THERE YET!", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
         BT_Submit2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +138,7 @@ public class RequestService extends AppCompatActivity {
                 } else if (HouseNo.isEmpty()) {
                     ET_HouseNo.setError("Fields can't be empty");
                 } else if (Landdmark.isEmpty()) {
-                    ET_Landmark.setError("Fields can't be empty");
+                    Landdmark = "Landmark not specified.";
                 } else {
 
                     if (AddressVerified()) {
@@ -174,18 +153,6 @@ public class RequestService extends AppCompatActivity {
                     }
 
                 }
-            }
-        });
-
-        BT_EditAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flag = 1;
-                ButtonLayout.setVisibility(View.GONE);
-                IL_Area.setVisibility(View.VISIBLE);
-                IL_HouseNo.setVisibility(View.VISIBLE);
-                IL_Landmark.setVisibility(View.VISIBLE);
-                BT_Submit2.setVisibility(View.VISIBLE);
             }
         });
 
@@ -263,7 +230,7 @@ public class RequestService extends AppCompatActivity {
 
     private boolean AddressVerified() {
 
-        String[] AreaPinCodes = {"412115", "411017", "411018", "411019", "411026", "411027", "411029", "411033", "411034", "411035", "411039", "411044", "411045", "411046", "411043", "411008", "411010", "411005", "411007", "411015", "411016", "411042", "411043", "411044", "411045", "411046", "411038", "411047"};
+        String[] AreaPinCodes = {"412115", "411017", "411018", "412061", "411019", "411026", "411027", "411061", "411020", "411029", "411069", "411033", "411034", "411035", "411039", "411044", "411045", "411046", "411043", "411008", "411010", "411005", "411031", "411012", "411007", "411015", "411016", "411042", "411043", "411044", "411045", "411046", "411038", "411047", "411064", "411078"};
 
         if (pincode != null) {
             for (String AreaPinCode : AreaPinCodes) {
@@ -489,16 +456,7 @@ public class RequestService extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (flag == 1) {
-            ButtonLayout.setVisibility(View.VISIBLE);
-            IL_Area.setVisibility(View.GONE);
-            IL_HouseNo.setVisibility(View.GONE);
-            IL_Landmark.setVisibility(View.GONE);
-            BT_Submit2.setVisibility(View.GONE);
-            flag = 0;
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     public static class Coordinates {
