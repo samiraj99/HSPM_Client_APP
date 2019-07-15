@@ -106,6 +106,31 @@
                         android:layout_marginTop="15dp">
 
                         <CheckBox
+                            android:id="@+id/check1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Downloaded From"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/downloads"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginTop="7dp"
+                            android:layout_toRightOf="@id/check1"
+                            android:textSize="14sp"
+                            android:text=" 5 Minutes Engineering"
+                            android:textColor="#2196f3" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp">
+
+                        <CheckBox
                             android:id="@+id/check"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

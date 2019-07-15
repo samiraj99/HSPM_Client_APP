@@ -34,9 +34,10 @@ public class FillProfile extends AppCompatActivity {
     private EditText fname, email;
     private TextInputLayout fnamewrap, emailwrap, addwrap;
     private Button save;
-    String phoneNumber;
+    String phoneNumber, uid;
     private static final String TAG = "FillProfile";
-    CheckBox ch;
+    CheckBox ch, ch1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +54,12 @@ public class FillProfile extends AppCompatActivity {
         }
 
         mAuth = FirebaseAuth.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
         final String currentUser = mAuth.getCurrentUser().getUid();
 
         UserRefs = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser).child("Profile").child("ProfileInfo");
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         fname = findViewById(R.id.fname);
         email = findViewById(R.id.email);
@@ -66,6 +68,7 @@ public class FillProfile extends AppCompatActivity {
 //        addwrap = findViewById(R.id.addWrapper);
         txttc = findViewById(R.id.tc);
         ch = findViewById(R.id.check);
+        ch1 = findViewById(R.id.check1);
         save = findViewById(R.id.save);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +95,15 @@ public class FillProfile extends AppCompatActivity {
                 } else {
                     emailwrap.setErrorEnabled(false);
                 }
+                if (ch1.isChecked()) {
+                    HashMap<String, Object> map2 = new HashMap<>();
+                    map2.put("Downloads/" + uid, "5_Minutes_Engg");
+                    databaseReference.updateChildren(map2);
+                } else {
+                    HashMap<String, Object> map2 = new HashMap<>();
+                    map2.put(uid, "NA");
+                    databaseReference.updateChildren(map2);
+                }
 
 
                 HashMap<String, Object> map = new HashMap<>();
@@ -108,7 +120,7 @@ public class FillProfile extends AppCompatActivity {
                 map1.put("CurrentService", "0");
                 map1.put("IsPending", "0");
 
-                databaseReference.updateChildren(map1).addOnCompleteListener(new OnCompleteListener<Void>() {
+                databaseReference.child("Users").child(currentUser).updateChildren(map1).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Intent i = new Intent(FillProfile.this, MainActivity.class);

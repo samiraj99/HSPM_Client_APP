@@ -6,8 +6,7 @@
 
     <include
         layout="@layout/accept"
-        android:id="@+id/Map_sheet"
-        android:layout_marginBottom="20dp"/>
+        android:id="@+id/Map_sheet" />
 
 <!-- Adding bottom sheet after main content -->
     <include
